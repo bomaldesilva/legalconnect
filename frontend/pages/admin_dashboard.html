@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegalConnect | Admin Dashboard</title>
+  <meta name="description" content="LegalConnect admin control panel — platform metrics, lawyer verifications, and system health overview.">
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Admin Sidebar ──────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="admin_dashboard.html" aria-label="LegalConnect Admin">
+      <span class="brand-mark">LC</span>
+      <span class="brand-name">LegalConnect</span>
+    </a>
+
+    <div class="nav-group">
+      <div class="nav-group-header">
+        <p class="nav-group-label">Overview</p>
+      </div>
+      <nav class="nav-list">
+        <a class="nav-link active" href="admin_dashboard.html">
+          <span class="nav-icon">⊞</span> Dashboard
+        </a>
+        <a class="nav-link" href="admin_verifications.html">
+          <span class="nav-icon">✓</span> Verifications
+          <span class="badge" id="pendingVerifBadge" style="margin-left:auto;font-size:10px;background:#fef3c7;color:#92400e;border-radius:999px;padding:0 6px;height:18px;line-height:18px;display:none;"></span>
+        </a>
+        <a class="nav-link" href="admin_users.html">
+          <span class="nav-icon">👤</span> Users
+        </a>
+      </nav>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-header">
+        <p class="nav-group-label">Management</p>
+      </div>
+      <nav class="nav-list">
+        <a class="nav-link" href="admin_legal_categories.html">
+          <span class="nav-icon">⊟</span> Legal Categories
+        </a>
+        <a class="nav-link" href="lawyer_availability_slots.html">
+          <span class="nav-icon">◷</span> Availability Slots
+        </a>
+        <a class="nav-link" href="lawyer_consultation_packages.html">
+          <span class="nav-icon">◈</span> Packages
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <p class="sidebar-footer-text">LegalConnect · Admin Portal<br>University Project</p>
+    </div>
+  </aside>
+
+  <!-- ── Main Page ──────────────────────────────────────────────────────── -->
+  <main class="page">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div>
+          <p class="topbar-title">Admin Dashboard</p>
+          <p class="topbar-subtitle" id="currentDate">Loading…</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" title="Notifications" onclick="location.href='notifications.html'">
+          🔔
+          <span class="notif-btn__badge" id="notifCount" style="display:none;">3</span>
+        </button>
+        <div class="avatar avatar--md avatar--navy" style="cursor:pointer;" title="Admin">A</div>
+        <span class="phase-pill">Admin</span>
+      </div>
+    </header>
+
+    <section class="content">
+
+      <!-- Section heading -->
+      <div class="section-head">
+        <div class="section-head__text">
+          <h1>Platform Overview</h1>
+          <p>Real-time metrics and system activity for the LegalConnect platform.</p>
+        </div>
+        <a class="btn primary" href="admin_verifications.html">Review Verifications</a>
+      </div>
+
+      <!-- ── KPI Stat Cards ────────────────────────────────────────────── -->
+      <div class="grid three" style="margin-bottom:28px;">
+        <div class="stat-card stat-card--teal">
+          <div class="stat-card__icon-wrap">⚖</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Active Legal Categories</p>
+            <p class="stat-card__value" id="kpiCategories">—</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--success">
+          <div class="stat-card__icon-wrap">◷</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Available Slots</p>
+            <p class="stat-card__value" id="kpiSlots">—</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--warning">
+          <div class="stat-card__icon-wrap">✓</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Pending Verifications</p>
+            <p class="stat-card__value" id="kpiVerifications">—</p>
+            <p class="stat-card__delta" id="kpiVerifNote" style="font-size:11px;color:var(--muted);margin-top:2px;"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second row stat cards -->
+      <div class="grid three" style="margin-bottom:28px;">
+        <div class="stat-card stat-card--info">
+          <div class="stat-card__icon-wrap">◈</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Active Packages</p>
+            <p class="stat-card__value" id="kpiPackages">—</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--navy">
+          <div class="stat-card__icon-wrap">👤</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Total Users</p>
+            <p class="stat-card__value"><!-- DEMO -->4</p>
+            <p class="stat-card__delta" style="font-size:11px;color:var(--muted);">2 Lawyers · 1 Client · 1 Admin</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--danger">
+          <div class="stat-card__icon-wrap">☑</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Appointments</p>
+            <p class="stat-card__value"><!-- DEMO -->0</p>
+            <p class="stat-card__delta" style="font-size:11px;color:var(--muted);">Module 5 — coming next</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Two-column layout ─────────────────────────────────────────── -->
+      <div class="grid two" style="align-items:start;">
+
+        <!-- Left: Quick Actions + System Status -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Quick Actions</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <a class="btn primary" href="admin_verifications.html" style="justify-content:flex-start;">
+                <span>✓</span> Review Lawyer Verifications
+              </a>
+              <a class="btn secondary" href="admin_users.html" style="justify-content:flex-start;">
+                <span>👤</span> Manage Users
+              </a>
+              <a class="btn secondary" href="admin_legal_categories.html" style="justify-content:flex-start;">
+                <span>⊟</span> Manage Legal Categories
+              </a>
+              <a class="btn secondary" href="lawyer_availability_slots.html" style="justify-content:flex-start;">
+                <span>◷</span> Manage Availability Slots
+              </a>
+              <a class="btn secondary" href="lawyer_consultation_packages.html" style="justify-content:flex-start;">
+                <span>◈</span> Manage Consultation Packages
+              </a>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">System Status</p>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">API Status</span>
+              <span class="detail-row__value"><span class="badge active">Online</span></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Database</span>
+              <span class="detail-row__value"><span class="badge active">Connected</span></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Authentication</span>
+              <span class="detail-row__value"><span class="badge inactive">Phase 2</span></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Payment Gateway</span>
+              <span class="detail-row__value"><span class="badge inactive">Phase 3</span></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Demo Lawyer</span>
+              <span class="detail-row__value" style="font-size:13px;">ID: 2 — Demo Lawyer</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">API Base</span>
+              <span class="detail-row__value" id="apiBase" style="font-size:11px;word-break:break-all;"></span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Recent Activity Timeline + Legal Category Stats -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Platform Activity</p>
+              <span class="badge active" style="font-size:11px;">Live</span>
+            </div>
+            <div class="timeline" id="activityTimeline">
+              <!-- Populated by JS -->
+              <div class="empty-state" style="padding:32px 0;">
+                <div class="empty-state__icon">◷</div>
+                <p>Loading activity…</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Legal Categories</p>
+              <a href="admin_legal_categories.html" class="btn secondary" style="height:30px;font-size:12px;padding:0 10px;">View All</a>
+            </div>
+            <div id="categoryList">
+              <div class="empty-state" style="padding:24px 0;">
+                <p>Loading categories…</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── Implementation Roadmap ────────────────────────────────────── -->
+      <div class="panel" style="margin-top:24px;">
+        <div class="panel-header">
+          <p class="panel-title">Development Roadmap</p>
+          <span class="badge active" style="font-size:11px;">3 / 11 modules done</span>
+        </div>
+        <div class="grid two" style="gap:12px;">
+          <div>
+            <div class="stepper">
+              <div class="stepper-step done">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">✓</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Module 1 — Legal Categories</p>
+                  <p class="stepper-step__desc">Full CRUD complete</p>
+                </div>
+              </div>
+              <div class="stepper-step done">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">✓</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Module 2 — Availability Slots</p>
+                  <p class="stepper-step__desc">Full CRUD complete</p>
+                </div>
+              </div>
+              <div class="stepper-step done">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">✓</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Module 3 — Consultation Packages</p>
+                  <p class="stepper-step__desc">Full CRUD complete</p>
+                </div>
+              </div>
+              <div class="stepper-step active">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">4</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Module 4 — Lawyer Profile</p>
+                  <p class="stepper-step__desc">In planning</p>
+                </div>
+              </div>
+              <div class="stepper-step">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">5</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Module 5 — Appointments</p>
+                  <p class="stepper-step__desc">Pending</p>
+                </div>
+              </div>
+              <div class="stepper-step">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">6</div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Module 6 — Payments</p>
+                  <p class="stepper-step__desc">Pending</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="stepper">
+              <div class="stepper-step">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">7</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Module 7 — Cases</p>
+                  <p class="stepper-step__desc">Pending</p>
+                </div>
+              </div>
+              <div class="stepper-step">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">8</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Module 8 — Documents</p>
+                  <p class="stepper-step__desc">Pending</p>
+                </div>
+              </div>
+              <div class="stepper-step">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">9</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Module 9 — Lawyer Assistant</p>
+                  <p class="stepper-step__desc">Pending</p>
+                </div>
+              </div>
+              <div class="stepper-step">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">10</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Module 10 — Legal Knowledge</p>
+                  <p class="stepper-step__desc">Pending</p>
+                </div>
+              </div>
+              <div class="stepper-step">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">11</div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Module 11 — External APIs</p>
+                  <p class="stepper-step__desc">Future phase</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+</div>
+
+<!-- Mobile bottom nav -->
+<nav class="mobile-nav">
+  <div class="mobile-nav__items">
+    <a class="mobile-nav__item active" href="admin_dashboard.html">
+      <span class="mobile-nav__icon">⊞</span>Dashboard
+    </a>
+    <a class="mobile-nav__item" href="admin_verifications.html">
+      <span class="mobile-nav__icon">✓</span>Verify
+    </a>
+    <a class="mobile-nav__item" href="admin_users.html">
+      <span class="mobile-nav__icon">👤</span>Users
+    </a>
+    <a class="mobile-nav__item" href="admin_legal_categories.html">
+      <span class="mobile-nav__icon">⊟</span>Categories
+    </a>
+  </div>
+</nav>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/pages/admin_dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegalConnect | User Management</title>
+  <meta name="description" content="Admin user management — view, search, filter, and manage all platform users by role.">
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ────────────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="admin_dashboard.html" aria-label="LegalConnect Admin">
+      <span class="brand-mark">LC</span>
+      <span class="brand-name">LegalConnect</span>
+    </a>
+    <div class="nav-group">
+      <p class="nav-group-label">Overview</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="admin_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+        <a class="nav-link" href="admin_verifications.html"><span class="nav-icon">✓</span> Verifications</a>
+        <a class="nav-link active" href="admin_users.html"><span class="nav-icon">👤</span> Users</a>
+      </nav>
+    </div>
+    <div class="nav-group">
+      <p class="nav-group-label">Management</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="admin_legal_categories.html"><span class="nav-icon">⊟</span> Legal Categories</a>
+        <a class="nav-link" href="lawyer_availability_slots.html"><span class="nav-icon">◷</span> Availability Slots</a>
+        <a class="nav-link" href="lawyer_consultation_packages.html"><span class="nav-icon">◈</span> Packages</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <p class="sidebar-footer-text">LegalConnect · Admin Portal<br>University Project</p>
+    </div>
+  </aside>
+
+  <!-- ── Main ───────────────────────────────────────────────────────────── -->
+  <main class="page">
+
+    <header class="topbar">
+      <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div>
+          <p class="topbar-title">User Management</p>
+          <p class="topbar-subtitle">Admin — View and manage all platform users</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" title="Notifications">🔔</button>
+        <div class="avatar avatar--md avatar--navy" title="Admin">A</div>
+        <span class="phase-pill">Admin</span>
+      </div>
+    </header>
+
+    <section class="content">
+
+      <div class="breadcrumb">
+        <a href="admin_dashboard.html">Dashboard</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">User Management</span>
+      </div>
+
+      <div class="section-head">
+        <div class="section-head__text">
+          <h1>Platform Users</h1>
+          <p>Manage all registered users — Lawyers, Clients, Assistants, and Admins.</p>
+        </div>
+      </div>
+
+      <!-- ── Info alert ──────────────────────────────────────────────── -->
+      <div class="inline-alert inline-alert--info" style="margin-bottom:24px;">
+        <span class="inline-alert__icon">ℹ</span>
+        <div><strong>Authentication not implemented yet</strong> — User data shown below is seeded demo data from the database. Full user management will be available after Module 4 (Authentication) is implemented.</div>
+      </div>
+
+      <!-- ── KPI Cards ────────────────────────────────────────────────── -->
+      <div class="grid three" style="margin-bottom:28px;" id="userKpiGrid">
+        <div class="stat-card stat-card--info">
+          <div class="stat-card__icon-wrap">⚖</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Lawyers</p>
+            <p class="stat-card__value" id="kpiLawyers">—</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--teal">
+          <div class="stat-card__icon-wrap">👤</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Clients</p>
+            <p class="stat-card__value" id="kpiClients">—</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--navy">
+          <div class="stat-card__icon-wrap">☑</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Admins</p>
+            <p class="stat-card__value" id="kpiAdmins">—</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── User Table ────────────────────────────────────────────────── -->
+      <div class="panel">
+        <div class="panel-header">
+          <p class="panel-title">All Users</p>
+          <span class="badge active" id="userCount" style="font-size:11px;"></span>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search name or email..." autocomplete="off">
+          </div>
+          <div class="filter-group">
+            <button class="filter-chip selected" data-filter="all" type="button">All</button>
+            <button class="filter-chip" data-filter="Admin" type="button">Admin</button>
+            <button class="filter-chip" data-filter="Lawyer" type="button">Lawyer</button>
+            <button class="filter-chip" data-filter="Client" type="button">Client</button>
+            <button class="filter-chip" data-filter="Assistant" type="button">Assistant</button>
+          </div>
+          <span class="results-count" id="resultsCount"></span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="userRows">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+  </main>
+</div>
+
+<!-- View User Modal -->
+<div id="userModalOverlay" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(13,31,60,.45);backdrop-filter:blur(4px);display:none;place-items:center;">
+  <div class="lc-modal" style="width:min(500px,calc(100vw - 32px));">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <h2 style="font-size:18px;font-weight:800;color:var(--navy);" id="userModalTitle">User Details</h2>
+      <button class="btn secondary icon-btn" onclick="closeUserModal()">✕</button>
+    </div>
+    <div id="userModalContent"></div>
+    <div class="form-actions" style="margin-top:16px;">
+      <button class="btn secondary" type="button" onclick="closeUserModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav__items">
+    <a class="mobile-nav__item" href="admin_dashboard.html"><span class="mobile-nav__icon">⊞</span>Home</a>
+    <a class="mobile-nav__item" href="admin_verifications.html"><span class="mobile-nav__icon">✓</span>Verify</a>
+    <a class="mobile-nav__item active" href="admin_users.html"><span class="mobile-nav__icon">👤</span>Users</a>
+  </div>
+</nav>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/pages/admin_users.js"></script>
+</body>
+</html>

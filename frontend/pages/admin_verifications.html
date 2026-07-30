@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegalConnect | Lawyer Verification</title>
+  <meta name="description" content="Admin review of lawyer verification submissions — approve or reject Bar and Supreme Court credentials.">
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ────────────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="admin_dashboard.html" aria-label="LegalConnect Admin">
+      <span class="brand-mark">LC</span>
+      <span class="brand-name">LegalConnect</span>
+    </a>
+    <div class="nav-group">
+      <p class="nav-group-label">Overview</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="admin_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+        <a class="nav-link active" href="admin_verifications.html"><span class="nav-icon">✓</span> Verifications</a>
+        <a class="nav-link" href="admin_users.html"><span class="nav-icon">👤</span> Users</a>
+      </nav>
+    </div>
+    <div class="nav-group">
+      <p class="nav-group-label">Management</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="admin_legal_categories.html"><span class="nav-icon">⊟</span> Legal Categories</a>
+        <a class="nav-link" href="lawyer_availability_slots.html"><span class="nav-icon">◷</span> Availability Slots</a>
+        <a class="nav-link" href="lawyer_consultation_packages.html"><span class="nav-icon">◈</span> Packages</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <p class="sidebar-footer-text">LegalConnect · Admin Portal<br>University Project</p>
+    </div>
+  </aside>
+
+  <!-- ── Main ───────────────────────────────────────────────────────────── -->
+  <main class="page">
+
+    <header class="topbar">
+      <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div>
+          <p class="topbar-title">Lawyer Verifications</p>
+          <p class="topbar-subtitle">Admin — Review and approve lawyer credentials</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" title="Notifications">🔔</button>
+        <div class="avatar avatar--md avatar--navy" title="Admin">A</div>
+        <span class="phase-pill">Admin</span>
+      </div>
+    </header>
+
+    <section class="content">
+
+      <div class="breadcrumb">
+        <a href="admin_dashboard.html">Dashboard</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Lawyer Verifications</span>
+      </div>
+
+      <div class="section-head">
+        <div class="section-head__text">
+          <h1>Lawyer Verification Queue</h1>
+          <p>Review submitted Bar Association and Supreme Court credentials before approving lawyers.</p>
+        </div>
+      </div>
+
+      <!-- ── Info alert: backend pending ─────────────────────────────── -->
+      <div class="inline-alert inline-alert--info" style="margin-bottom:24px;">
+        <span class="inline-alert__icon">ℹ</span>
+        <div>
+          <strong>Module 4 Backend Pending</strong> — The lawyer verification API is part of Module 4 (Lawyer Profile Management), which is currently in planning. This page shows the UI with demo placeholder data. The verification workflow will be fully functional once Module 4 backend is implemented.
+        </div>
+      </div>
+
+      <!-- ── KPI Cards ────────────────────────────────────────────────── -->
+      <div class="grid three" style="margin-bottom:28px;">
+        <div class="stat-card stat-card--warning">
+          <div class="stat-card__icon-wrap">⏳</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Pending Review</p>
+            <p class="stat-card__value">1</p><!-- DEMO -->
+          </div>
+        </div>
+        <div class="stat-card stat-card--success">
+          <div class="stat-card__icon-wrap">✓</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Approved</p>
+            <p class="stat-card__value">0</p><!-- DEMO -->
+          </div>
+        </div>
+        <div class="stat-card stat-card--danger">
+          <div class="stat-card__icon-wrap">✕</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Rejected</p>
+            <p class="stat-card__value">0</p><!-- DEMO -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Filter Toolbar ───────────────────────────────────────────── -->
+      <div class="panel">
+        <div class="panel-header">
+          <p class="panel-title">Verification Submissions</p>
+          <span class="badge inactive" style="font-size:11px;">1 demo record</span>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search lawyer name or ID..." autocomplete="off">
+          </div>
+          <div class="filter-group">
+            <button class="filter-chip selected" data-filter="all" type="button">All</button>
+            <button class="filter-chip" data-filter="Pending" type="button">Pending</button>
+            <button class="filter-chip" data-filter="Approved" type="button">Approved</button>
+            <button class="filter-chip" data-filter="Rejected" type="button">Rejected</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Lawyer</th>
+                <th>Bar Cert. No.</th>
+                <th>SC Cert. No.</th>
+                <th>Submitted</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="verificationRows">
+              <!-- DEMO DATA — replace with API when Module 4 is ready -->
+              <tr>
+                <td class="cell-num">1</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="avatar avatar--sm avatar--teal">D</div>
+                    <div>
+                      <p style="font-weight:600;color:var(--navy);font-size:14px;">Demo Lawyer</p>
+                      <p style="font-size:12px;color:var(--muted);">demo.lawyer@legalconnect.lk</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="cell-muted">BASL-2024-001</td>
+                <td class="cell-muted">SC-ENR-789</td>
+                <td class="cell-muted" style="font-size:12px;">2026-07-30</td>
+                <td><span class="verif-badge verif-badge--pending">⏳ Pending</span></td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn primary" type="button" onclick="openVerifyModal(1,'Demo Lawyer')" style="height:34px;font-size:12px;padding:0 12px;">Review</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── Verification Workflow Explanation ────────────────────────── -->
+      <div class="panel" style="margin-top:24px;">
+        <div class="panel-header">
+          <p class="panel-title">Verification Workflow</p>
+        </div>
+        <div class="grid two" style="gap:24px;align-items:start;">
+          <div>
+            <div class="stepper">
+              <div class="stepper-step done">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">✓</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Lawyer Registers</p>
+                  <p class="stepper-step__desc">Account created with Pending status</p>
+                </div>
+              </div>
+              <div class="stepper-step active">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">2</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Submits Credentials</p>
+                  <p class="stepper-step__desc">Bar Cert No, SC Enrolment No, NIC document</p>
+                </div>
+              </div>
+              <div class="stepper-step">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">3</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Admin Reviews</p>
+                  <p class="stepper-step__desc">Approves or Rejects with remarks</p>
+                </div>
+              </div>
+              <div class="stepper-step">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">4</div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Lawyer Activated</p>
+                  <p class="stepper-step__desc">Verified badge shown on profile; available for bookings</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="inline-alert inline-alert--warning">
+              <span class="inline-alert__icon">⚠</span>
+              <div>
+                <strong>Sri Lanka Bar Association Alignment</strong><br>
+                Verification checks Bar Association of Sri Lanka (BASL) membership number and Supreme Court enrolment number. Admins must manually cross-reference with official BASL records before approving.
+              </div>
+            </div>
+            <div class="inline-alert inline-alert--info" style="margin-top:12px;">
+              <span class="inline-alert__icon">ℹ</span>
+              <div>
+                This system does not provide legal verification authority. Approval only grants platform access.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+</div>
+
+<!-- Review Modal -->
+<div id="reviewModalOverlay" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(13,31,60,.45);backdrop-filter:blur(4px);place-items:center;display:none;">
+  <div class="lc-modal" style="width:min(560px,calc(100vw - 32px));">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <h2 style="font-size:18px;font-weight:800;color:var(--navy);" id="reviewModalTitle">Review Verification</h2>
+      <button class="btn secondary icon-btn" onclick="closeReviewModal()">✕</button>
+    </div>
+
+    <div class="inline-alert inline-alert--warning" id="reviewAlertBanner">
+      <span class="inline-alert__icon">⚠</span>
+      <div>You are reviewing credentials for <strong id="reviewLawyerName"></strong>. This action will activate or restrict the lawyer's account.</div>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-row__label">Bar Cert. No.</span>
+      <span class="detail-row__value">BASL-2024-001</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-row__label">SC Enrolment No.</span>
+      <span class="detail-row__value">SC-ENR-789</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-row__label">NIC Document</span>
+      <span class="detail-row__value"><span class="badge inactive">Document path only</span></span>
+    </div>
+
+    <div class="field" style="margin-top:16px;">
+      <label for="reviewRemarks">Admin Remarks</label>
+      <textarea id="reviewRemarks" placeholder="Optional remarks for the lawyer..." rows="3"></textarea>
+    </div>
+
+    <div class="form-actions" style="margin-top:16px;">
+      <button class="btn primary" type="button" onclick="submitReview('Approved')" style="background:linear-gradient(135deg,#0a6640,#047857);">✓ Approve</button>
+      <button class="btn danger" type="button" onclick="submitReview('Rejected')">✕ Reject</button>
+      <button class="btn secondary" type="button" onclick="closeReviewModal()" style="margin-left:auto;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav__items">
+    <a class="mobile-nav__item" href="admin_dashboard.html"><span class="mobile-nav__icon">⊞</span>Home</a>
+    <a class="mobile-nav__item active" href="admin_verifications.html"><span class="mobile-nav__icon">✓</span>Verify</a>
+    <a class="mobile-nav__item" href="admin_users.html"><span class="mobile-nav__icon">👤</span>Users</a>
+  </div>
+</nav>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script>
+'use strict';
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('sidebar--open');
+});
+
+// Filter chips
+document.querySelectorAll('.filter-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+  });
+});
+
+let currentReviewId = null;
+
+function openVerifyModal(id, name) {
+  currentReviewId = id;
+  document.getElementById('reviewLawyerName').textContent = name;
+  const overlay = document.getElementById('reviewModalOverlay');
+  overlay.style.display = 'grid';
+  setTimeout(() => overlay.style.opacity = '1', 10);
+}
+
+function closeReviewModal() {
+  document.getElementById('reviewModalOverlay').style.display = 'none';
+}
+
+function submitReview(status) {
+  const remarks = document.getElementById('reviewRemarks').value;
+  // Backend API will be connected in Module 4
+  LC.showToast(`Review action: ${status}. Backend connection pending Module 4.`, status === 'Approved' ? 'success' : 'error');
+  closeReviewModal();
+}
+</script>
+</body>
+</html>

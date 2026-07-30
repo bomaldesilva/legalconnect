@@ -12,26 +12,28 @@
 
       <!-- ── Sidebar ──────────────────────────────────────────────────────── -->
       <aside class="sidebar" id="sidebar">
-        <a class="brand" href="phase1_dashboard.html" aria-label="LegalConnect home">
+        <a class="brand" href="admin_dashboard.html" aria-label="LegalConnect Admin">
           <span class="brand-mark">LC</span>
           <span class="brand-name">LegalConnect</span>
         </a>
-
-        <p class="nav-label">Main Menu</p>
-        <nav class="nav-list" aria-label="Main navigation">
-          <a class="nav-link" href="phase1_dashboard.html">
-            <span class="nav-icon">⊞</span> Dashboard
-          </a>
-          <a class="nav-link active" href="admin_legal_categories.html">
-            <span class="nav-icon">⊟</span> Legal Categories
-          </a>
-          <a class="nav-link" href="lawyer_availability_slots.html">
-            <span class="nav-icon">◷</span> Availability Slots
-          </a>
-        </nav>
-
+        <div class="nav-group">
+          <p class="nav-group-label">Overview</p>
+          <nav class="nav-list">
+            <a class="nav-link" href="admin_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+            <a class="nav-link" href="admin_verifications.html"><span class="nav-icon">✓</span> Verifications</a>
+            <a class="nav-link" href="admin_users.html"><span class="nav-icon">👤</span> Users</a>
+          </nav>
+        </div>
+        <div class="nav-group">
+          <p class="nav-group-label">Management</p>
+          <nav class="nav-list">
+            <a class="nav-link active" href="admin_legal_categories.html"><span class="nav-icon">⊟</span> Legal Categories</a>
+            <a class="nav-link" href="lawyer_availability_slots.html"><span class="nav-icon">◷</span> Availability Slots</a>
+            <a class="nav-link" href="lawyer_consultation_packages.html"><span class="nav-icon">◈</span> Packages</a>
+          </nav>
+        </div>
         <div class="sidebar-footer">
-          <p class="sidebar-footer-text">LegalConnect · Phase 1 MVP<br>University Project</p>
+          <p class="sidebar-footer-text">LegalConnect · Admin Portal<br>University Project</p>
         </div>
       </aside>
 
