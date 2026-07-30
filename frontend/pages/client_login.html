@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalConnect | Client Login</title>
+    <meta name="description" content="Client login for LegalConnect — book legal consultations and connect with expert lawyers.">
+    <link rel="stylesheet" href="../css/auth.css">
+  </head>
+  <body>
+
+    <!-- Background -->
+    <div class="auth-bg"></div>
+
+    <!-- Ambient glow — teal accent for clients -->
+    <div class="ambient-glow glow-1" style="background:#0ea5a0;"></div>
+    <div class="ambient-glow glow-2" style="background:#1e3a68;"></div>
+
+    <!-- Page -->
+    <div class="auth-page">
+
+      <!-- Top bar -->
+      <div class="auth-topbar">
+        <a class="auth-brand" href="login.html" aria-label="Back to portal">
+          <div class="auth-brand-mark">LC</div>
+          <span class="auth-brand-name">LegalConnect</span>
+        </a>
+        <a class="back-link" href="login.html">← Back to Portal</a>
+      </div>
+
+      <!-- Two-column body -->
+      <div class="login-body">
+
+        <!-- Left — hero copy -->
+        <div class="login-hero">
+          <span class="login-hero-tag">⚖ Client Access</span>
+          <h1>Legal Support You Can Trust, Guidance When You Need It Most.</h1>
+          <p>
+            We are a dedicated legal platform committed to delivering trusted legal
+            guidance with integrity and expertise. Our mission is to protect your rights.
+          </p>
+          <div class="hero-stat-row">
+            <div class="hero-stat">
+              <strong>2.5k+</strong>
+              <span>Happy Clients</span>
+            </div>
+            <div class="hero-stat">
+              <strong>520</strong>
+              <span>Cases Solved</span>
+            </div>
+            <div class="hero-stat">
+              <strong>4.8★</strong>
+              <span>Average Rating</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right — login card -->
+        <div class="login-panel">
+          <div class="login-card">
+
+            <div class="login-card-header">
+              <div class="login-role-badge teal">Client Portal</div>
+              <h2>Sign In to Your Account</h2>
+              <p class="subtitle">Access your consultations and legal documents.</p>
+            </div>
+
+            <!-- Phase 1 notice -->
+            <div class="auth-notice info">
+              ℹ Authentication is not yet implemented in Phase 1. This UI is a preview only.
+            </div>
+
+            <form id="clientLoginForm" novalidate>
+              <div class="auth-fields">
+
+                <div class="auth-field">
+                  <label for="clientEmail">Email Address</label>
+                  <input
+                    id="clientEmail"
+                    type="email"
+                    placeholder="you@example.com"
+                    autocomplete="username"
+                    required>
+                </div>
+
+                <div class="auth-field">
+                  <div class="field-row">
+                    <label for="clientPassword">Password</label>
+                    <a class="forgot-link" href="#">Forgot password?</a>
+                  </div>
+                  <input
+                    id="clientPassword"
+                    type="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required>
+                </div>
+
+              </div>
+
+              <button class="auth-submit teal" type="submit" id="clientSubmit">
+                Sign In →
+              </button>
+            </form>
+
+            <div class="auth-divider"><span>don't have an account?</span></div>
+
+            <div class="auth-footer-note">
+              <a href="#">Create a new account</a>
+              &nbsp;·&nbsp;
+              <a href="phase1_dashboard.html">Demo Dashboard →</a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      const form   = document.getElementById('clientLoginForm');
+      const submit = document.getElementById('clientSubmit');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submit.disabled = true;
+        submit.textContent = 'Signing in…';
+
+        // Phase 1: redirect to dashboard after brief delay (no real auth yet)
+        setTimeout(() => {
+          window.location.href = 'phase1_dashboard.html';
+        }, 900);
+      });
+    </script>
+  </body>
+</html>

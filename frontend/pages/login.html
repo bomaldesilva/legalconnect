@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalConnect | Welcome</title>
+    <meta name="description" content="LegalConnect — Legal consultation and lawyer practice management platform. Sign in as an admin or client.">
+    <link rel="stylesheet" href="../css/auth.css">
+  </head>
+  <body>
+
+    <!-- Background -->
+    <div class="auth-bg"></div>
+
+    <!-- Ambient glows -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <!-- Page -->
+    <div class="auth-page">
+
+      <!-- Top bar -->
+      <div class="auth-topbar">
+        <div class="auth-brand">
+          <div class="auth-brand-mark">LC</div>
+          <span class="auth-brand-name">LegalConnect</span>
+        </div>
+        <div class="auth-topbar-actions" style="font-size:13px;color:rgba(255,255,255,.4);font-weight:500;">
+          Phase 1 MVP &nbsp;·&nbsp; University Project
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="portal-body">
+
+        <!-- Headline -->
+        <div class="portal-headline">
+          <span class="portal-eyebrow">⚖ Legal Consultation Platform</span>
+          <h1>Law Made <em>Simple,</em><br>Experts Help Anytime.</h1>
+          <p>Connect with qualified lawyers, manage consultations, and get the legal support you need — all in one place.</p>
+        </div>
+
+        <!-- Role selection -->
+        <div class="role-cards">
+
+          <!-- Client card -->
+          <a class="role-card" href="client_login.html" id="clientCard">
+            <div class="role-icon teal">⚖</div>
+            <h2>Client Portal</h2>
+            <p>Book consultations, manage your cases, and connect with expert lawyers across all practice areas.</p>
+            <div class="role-card-cta">
+              <span class="role-tag">For Clients</span>
+              <div class="role-arrow">↗</div>
+            </div>
+          </a>
+
+          <!-- Admin card -->
+          <a class="role-card admin-card" href="admin_login.html" id="adminCard">
+            <div class="role-icon gold">🛡</div>
+            <h2>Admin Portal</h2>
+            <p>Manage legal categories, lawyer availability slots, platform settings, and administrative controls.</p>
+            <div class="role-card-cta">
+              <span class="role-tag">For Administrators</span>
+              <div class="role-arrow">↗</div>
+            </div>
+          </a>
+
+        </div>
+
+        <!-- Stats -->
+        <div class="portal-stats">
+          <div class="stat-item">
+            <div class="stat-value">485</div>
+            <div class="stat-label">Contracted</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">85</div>
+            <div class="stat-label">Experts</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">98%</div>
+            <div class="stat-label">Client Satisfaction</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">520+</div>
+            <div class="stat-label">Cases Solved</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      // Animate stat counters
+      document.querySelectorAll('.stat-value').forEach((el) => {
+        const raw    = el.textContent.trim();
+        const suffix = raw.replace(/[\d]/g, '');
+        const target = parseInt(raw.replace(/\D/g, ''), 10);
+        const dur    = 1200;
+        const start  = performance.now();
+
+        function step(now) {
+          const p = Math.min((now - start) / dur, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(ease * target) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+
+        // Delay slightly so page renders first
+        setTimeout(() => requestAnimationFrame(step), 400);
+      });
+    </script>
+  </body>
+</html>

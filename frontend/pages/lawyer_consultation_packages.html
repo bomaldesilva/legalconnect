@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalConnect | Consultation Packages</title>
+    <link rel="stylesheet" href="../css/main.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="phase1_dashboard.html" aria-label="LegalConnect home">
+          <span class="brand-mark">LC</span>
+          <span class="brand-name">LegalConnect</span>
+        </a>
+        <p class="nav-label">Main Menu</p>
+        <nav class="nav-list" aria-label="Main navigation">
+          <a class="nav-link" href="phase1_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+          <a class="nav-link" href="admin_legal_categories.html"><span class="nav-icon">⊟</span> Legal Categories</a>
+          <a class="nav-link" href="lawyer_availability_slots.html"><span class="nav-icon">◷</span> Availability Slots</a>
+          <a class="nav-link active" href="lawyer_consultation_packages.html"><span class="nav-icon">◈</span> Packages</a>
+          <a class="nav-link" href="appointments.html"><span class="nav-icon">☑</span> Appointments</a>
+          <a class="nav-link" href="payment_records.html"><span class="nav-icon">₱</span> Payments</a>
+        </nav>
+        <div class="sidebar-footer">
+          <p class="sidebar-footer-text">LegalConnect · Core Modules<br>University Project</p>
+        </div>
+      </aside>
+
+      <main class="page">
+        <header class="topbar">
+          <div class="topbar-left">
+            <p class="topbar-title">Consultation Packages</p>
+            <p class="topbar-subtitle">Lawyer — Package Management (Demo Lawyer ID: 2)</p>
+          </div>
+          <div class="topbar-right"><span class="phase-pill">No Gateway</span></div>
+        </header>
+
+        <section class="content">
+          <div class="section-head">
+            <div class="section-head__text">
+              <h1>Consultation Package Management</h1>
+              <p>Define time-based packages and fees for consultations. Payment gateway integration is deferred.</p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title" id="formTitle">Add New Package</p>
+            </div>
+            <form id="packageForm" novalidate>
+              <input type="hidden" id="packageId">
+              <input type="hidden" id="lawyerId" value="2">
+              <div class="form-grid">
+                <label class="span-full" style="display:grid;gap:6px;">
+                  <span style="font-size:13px;font-weight:600;color:var(--navy);">Package Name <span style="color:var(--danger)">*</span></span>
+                  <input id="packageName" type="text" maxlength="150" required placeholder="e.g. 30-Minute Consultation">
+                </label>
+                <label style="display:grid;gap:6px;">
+                  <span style="font-size:13px;font-weight:600;color:var(--navy);">Fee (LKR) <span style="color:var(--danger)">*</span></span>
+                  <input id="packageFee" type="number" min="0" step="0.01" required>
+                </label>
+                <label style="display:grid;gap:6px;">
+                  <span style="font-size:13px;font-weight:600;color:var(--navy);">Duration (minutes) <span style="color:var(--danger)">*</span></span>
+                  <input id="durationMinutes" type="number" min="1" required value="30">
+                </label>
+                <label style="display:grid;gap:6px;">
+                  <span style="font-size:13px;font-weight:600;color:var(--navy);">Legal Category</span>
+                  <select id="categoryId"><option value="">— Optional —</option></select>
+                </label>
+                <label style="display:grid;gap:6px;">
+                  <span style="font-size:13px;font-weight:600;color:var(--navy);">Status</span>
+                  <select id="packageStatus">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </label>
+                <label class="span-full" style="display:grid;gap:6px;">
+                  <span style="font-size:13px;font-weight:600;color:var(--navy);">Description</span>
+                  <textarea id="packageDescription" placeholder="Optional package details"></textarea>
+                </label>
+              </div>
+              <div class="form-actions">
+                <button class="btn primary" type="submit" id="saveButton">Save Package</button>
+                <button class="btn secondary" type="button" id="resetButton">Clear Form</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel mt-6">
+            <div class="panel-header">
+              <p class="panel-title">All Packages</p>
+              <span class="badge active" id="packageCount" style="font-size:12px;"></span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Package</th>
+                    <th>Category</th>
+                    <th>Fee</th>
+                    <th>Duration</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="packageRows">
+                  <tr><td colspan="7"><div class="empty-state"><p>Loading packages…</p></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/lawyer_consultation_packages.js"></script>
+  </body>
+</html>

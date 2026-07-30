@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalConnect | Admin Login</title>
+    <meta name="description" content="Admin login portal for LegalConnect — manage legal categories, lawyer availability, and platform settings.">
+    <link rel="stylesheet" href="../css/auth.css">
+  </head>
+  <body>
+
+    <!-- Background -->
+    <div class="auth-bg"></div>
+
+    <!-- Ambient glow — gold accent for admin -->
+    <div class="ambient-glow glow-1" style="background:#c9a96e;"></div>
+    <div class="ambient-glow glow-2" style="background:#1e3a68;"></div>
+
+    <!-- Page -->
+    <div class="auth-page">
+
+      <!-- Top bar -->
+      <div class="auth-topbar">
+        <a class="auth-brand" href="login.html" aria-label="Back to portal">
+          <div class="auth-brand-mark">LC</div>
+          <span class="auth-brand-name">LegalConnect</span>
+        </a>
+        <a class="back-link" href="login.html">← Back to Portal</a>
+      </div>
+
+      <!-- Two-column body -->
+      <div class="login-body">
+
+        <!-- Left — hero copy -->
+        <div class="login-hero">
+          <span class="login-hero-tag">🛡 Admin Access</span>
+          <h1>Manage the Platform with Confidence.</h1>
+          <p>
+            Access full administrative controls — configure legal categories,
+            oversee lawyer availability, and keep the platform running smoothly.
+          </p>
+          <div class="hero-stat-row">
+            <div class="hero-stat">
+              <strong>485</strong>
+              <span>Contracted</span>
+            </div>
+            <div class="hero-stat">
+              <strong>85</strong>
+              <span>Experts</span>
+            </div>
+            <div class="hero-stat">
+              <strong>98%</strong>
+              <span>Growth</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right — login card -->
+        <div class="login-panel">
+          <div class="login-card">
+
+            <div class="login-card-header">
+              <div class="login-role-badge gold">Admin Portal</div>
+              <h2>Welcome Back, Admin</h2>
+              <p class="subtitle">Sign in to access the administration dashboard.</p>
+            </div>
+
+            <!-- Phase 1 notice -->
+            <div class="auth-notice warning">
+              ⚠ Authentication is not yet implemented in Phase 1. This UI is a preview only.
+            </div>
+
+            <form id="adminLoginForm" novalidate>
+              <div class="auth-fields">
+
+                <div class="auth-field">
+                  <label for="adminEmail">Email Address</label>
+                  <input
+                    id="adminEmail"
+                    type="email"
+                    placeholder="admin@legalconnect.lk"
+                    autocomplete="username"
+                    required>
+                </div>
+
+                <div class="auth-field">
+                  <div class="field-row">
+                    <label for="adminPassword">Password</label>
+                    <a class="forgot-link gold" href="#">Forgot password?</a>
+                  </div>
+                  <input
+                    id="adminPassword"
+                    type="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required>
+                </div>
+
+              </div>
+
+              <button class="auth-submit gold" type="submit" id="adminSubmit">
+                Sign in to Admin Portal →
+              </button>
+            </form>
+
+            <div class="auth-divider"><span>or continue to</span></div>
+
+            <div class="auth-footer-note">
+              <a class="gold" href="phase1_dashboard.html">Skip login → Go to Dashboard (Phase 1 Demo)</a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      const form   = document.getElementById('adminLoginForm');
+      const submit = document.getElementById('adminSubmit');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submit.disabled = true;
+        submit.textContent = 'Signing in…';
+
+        // Phase 1: redirect to dashboard after brief delay (no real auth yet)
+        setTimeout(() => {
+          window.location.href = 'phase1_dashboard.html';
+        }, 900);
+      });
+    </script>
+  </body>
+</html>

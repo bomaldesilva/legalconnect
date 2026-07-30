@@ -1,0 +1,761 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   LegalConnect — auth.css
+   Full-page authentication styles (login portal, admin login, client login).
+   Separate from main.css — does not inherit the sidebar dashboard layout.
+───────────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ── Reset ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', system-ui, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── Auth tokens ───────────────────────────────────────────────────────────── */
+:root {
+  --teal:        #0ea5a0;
+  --teal-dark:   #0b8682;
+  --teal-glow:   rgba(14, 165, 160, 0.35);
+  --gold:        #c9a96e;
+  --gold-light:  #e8c98a;
+  --navy:        #0d1f3c;
+  --white:       #ffffff;
+  --white-80:    rgba(255,255,255,0.80);
+  --white-55:    rgba(255,255,255,0.55);
+  --white-30:    rgba(255,255,255,0.30);
+  --white-12:    rgba(255,255,255,0.12);
+  --white-06:    rgba(255,255,255,0.06);
+  --black-60:    rgba(0,0,0,0.60);
+  --black-80:    rgba(0,0,0,0.80);
+  --glass-bg:    rgba(13, 17, 28, 0.72);
+  --glass-line:  rgba(255,255,255,0.10);
+  --radius:      12px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --ease:        cubic-bezier(.4,0,.2,1);
+  --t-fast:      150ms;
+  --t-mid:       260ms;
+  --t-slow:      420ms;
+}
+
+/* ── Full-page background ──────────────────────────────────────────────────── */
+.auth-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    url('../assets/legal_hero_bg.jpg') center center / cover no-repeat;
+  z-index: 0;
+}
+
+.auth-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(10, 14, 26, 0.68) 50%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+}
+
+/* ── Page wrapper ──────────────────────────────────────────────────────────── */
+.auth-page {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Top bar ───────────────────────────────────────────────────────────────── */
+.auth-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 48px;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.auth-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 4px 16px var(--teal-glow);
+}
+
+.auth-brand-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -.3px;
+}
+
+.auth-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── Portal / landing page — role cards ────────────────────────────────────── */
+.portal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  gap: 48px;
+}
+
+.portal-headline {
+  text-align: center;
+}
+
+.portal-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(14,165,160,.35);
+  background: rgba(14,165,160,.10);
+  color: var(--teal);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.portal-headline h1 {
+  font-size: clamp(36px, 5vw, 62px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.07;
+  letter-spacing: -2px;
+  margin-bottom: 16px;
+}
+
+.portal-headline h1 em {
+  font-style: normal;
+  color: var(--teal);
+}
+
+.portal-headline p {
+  font-size: 16px;
+  color: var(--white-55);
+  max-width: 440px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Role selection cards */
+.role-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.role-card {
+  position: relative;
+  overflow: hidden;
+  width: 280px;
+  padding: 36px 30px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-line);
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  cursor: pointer;
+  transition:
+    transform var(--t-mid) var(--ease),
+    box-shadow var(--t-mid) var(--ease),
+    border-color var(--t-mid) var(--ease);
+  text-decoration: none;
+  display: block;
+}
+
+.role-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, rgba(14,165,160,.08), transparent 60%);
+  opacity: 0;
+  transition: opacity var(--t-mid) var(--ease);
+}
+
+.role-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 64px rgba(0,0,0,.5), 0 0 0 1px rgba(14,165,160,.3);
+  border-color: rgba(14,165,160,.3);
+}
+
+.role-card:hover::before { opacity: 1; }
+
+.role-card.admin-card:hover {
+  box-shadow: 0 24px 64px rgba(0,0,0,.5), 0 0 0 1px rgba(201,169,110,.3);
+  border-color: rgba(201,169,110,.3);
+}
+
+.role-card.admin-card::before {
+  background: linear-gradient(135deg, rgba(201,169,110,.08), transparent 60%);
+}
+
+.role-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius);
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  margin-bottom: 22px;
+}
+
+.role-icon.teal {
+  background: linear-gradient(135deg, rgba(14,165,160,.25), rgba(14,165,160,.10));
+  border: 1px solid rgba(14,165,160,.25);
+}
+
+.role-icon.gold {
+  background: linear-gradient(135deg, rgba(201,169,110,.25), rgba(201,169,110,.10));
+  border: 1px solid rgba(201,169,110,.25);
+}
+
+.role-card h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 8px;
+  letter-spacing: -.3px;
+}
+
+.role-card p {
+  font-size: 14px;
+  color: var(--white-55);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.role-card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.role-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: var(--white-30);
+}
+
+.role-arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  transition: transform var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+
+.teal .role-arrow, .role-card:not(.admin-card) .role-arrow {
+  background: rgba(14,165,160,.2);
+  color: var(--teal);
+}
+
+.role-card:not(.admin-card):hover .role-arrow {
+  background: var(--teal);
+  color: #fff;
+  transform: rotate(45deg);
+}
+
+.role-card.admin-card .role-arrow {
+  background: rgba(201,169,110,.2);
+  color: var(--gold);
+}
+
+.role-card.admin-card:hover .role-arrow {
+  background: var(--gold);
+  color: #fff;
+  transform: rotate(45deg);
+}
+
+/* Stats strip */
+.portal-stats {
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -1px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--white-55);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* ── Login form page layout ────────────────────────────────────────────────── */
+.login-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  overflow: hidden;
+}
+
+/* Left — hero content */
+.login-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 64px 72px;
+}
+
+.login-hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--white-30);
+  background: var(--white-06);
+  color: var(--white-80);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  width: fit-content;
+  backdrop-filter: blur(8px);
+}
+
+.login-hero h1 {
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.08;
+  letter-spacing: -1.5px;
+  margin-bottom: 18px;
+  max-width: 520px;
+}
+
+.login-hero p {
+  font-size: 15px;
+  color: var(--white-55);
+  line-height: 1.7;
+  max-width: 380px;
+  margin-bottom: 40px;
+}
+
+.hero-stat-row {
+  display: flex;
+  gap: 36px;
+  flex-wrap: wrap;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-stat strong {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -1px;
+}
+
+.hero-stat span {
+  font-size: 12px;
+  color: var(--white-55);
+  font-weight: 500;
+}
+
+/* Right — glass login card */
+.login-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 40px 40px 0;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius-xl);
+  padding: 44px 40px;
+  box-shadow: 0 32px 80px rgba(0,0,0,.5);
+  animation: cardIn var(--t-slow) var(--ease) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.login-card-header {
+  margin-bottom: 32px;
+}
+
+.login-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.login-role-badge.teal {
+  background: rgba(14,165,160,.15);
+  border: 1px solid rgba(14,165,160,.3);
+  color: var(--teal);
+}
+
+.login-role-badge.gold {
+  background: rgba(201,169,110,.15);
+  border: 1px solid rgba(201,169,110,.3);
+  color: var(--gold-light);
+}
+
+.login-role-badge::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.login-card h2 {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -.5px;
+  margin-bottom: 6px;
+}
+
+.login-card .subtitle {
+  font-size: 14px;
+  color: var(--white-55);
+  line-height: 1.5;
+}
+
+/* Fields */
+.auth-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.auth-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white-80);
+  letter-spacing: .1px;
+}
+
+.auth-field input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--glass-line);
+  background: rgba(255,255,255,.07);
+  color: var(--white);
+  font: 14px/1 'Inter', sans-serif;
+  transition:
+    border-color var(--t-fast) var(--ease),
+    background var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease);
+  outline: none;
+}
+
+.auth-field input::placeholder { color: var(--white-30); }
+
+.auth-field input:focus {
+  border-color: var(--teal);
+  background: rgba(14,165,160,.08);
+  box-shadow: 0 0 0 3px rgba(14,165,160,.18);
+}
+
+.auth-field input:focus.gold-focus {
+  border-color: var(--gold);
+  background: rgba(201,169,110,.06);
+  box-shadow: 0 0 0 3px rgba(201,169,110,.15);
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.field-row label { margin: 0; }
+
+.forgot-link {
+  font-size: 12px;
+  color: var(--teal);
+  font-weight: 600;
+  white-space: nowrap;
+  transition: opacity var(--t-fast);
+}
+
+.forgot-link:hover { opacity: .75; }
+
+.forgot-link.gold { color: var(--gold-light); }
+
+/* Submit button */
+.auth-submit {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: var(--radius);
+  font: 15px/1 'Inter', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    transform var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease),
+    filter var(--t-fast) var(--ease);
+  margin-bottom: 20px;
+}
+
+.auth-submit.teal {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+  color: #fff;
+  box-shadow: 0 8px 28px rgba(14,165,160,.40);
+}
+
+.auth-submit.teal:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 12px 36px rgba(14,165,160,.50);
+}
+
+.auth-submit.gold {
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+  color: #1a1008;
+  box-shadow: 0 8px 28px rgba(201,169,110,.35);
+}
+
+.auth-submit.gold:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 12px 36px rgba(201,169,110,.45);
+}
+
+.auth-submit:active { transform: scale(.98); }
+
+.auth-submit:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* Divider */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--glass-line);
+}
+
+.auth-divider span {
+  font-size: 12px;
+  color: var(--white-30);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Footer note */
+.auth-footer-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--white-55);
+}
+
+.auth-footer-note a {
+  color: var(--teal);
+  font-weight: 600;
+  transition: opacity var(--t-fast);
+}
+
+.auth-footer-note a:hover { opacity: .75; }
+
+.auth-footer-note a.gold { color: var(--gold-light); }
+
+/* Back link */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white-55);
+  transition: color var(--t-fast) var(--ease);
+}
+
+.back-link:hover { color: var(--white); }
+
+/* Notice bar */
+.auth-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  border: 1px solid;
+}
+
+.auth-notice.info {
+  background: rgba(14,165,160,.08);
+  border-color: rgba(14,165,160,.20);
+  color: #5eead4;
+}
+
+.auth-notice.warning {
+  background: rgba(201,169,110,.08);
+  border-color: rgba(201,169,110,.20);
+  color: var(--gold-light);
+}
+
+/* ── Floating ambient glow ─────────────────────────────────────────────────── */
+.ambient-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: .18;
+  animation: glowPulse 8s ease-in-out infinite alternate;
+}
+
+.ambient-glow.glow-1 {
+  width: 500px;
+  height: 500px;
+  background: var(--teal);
+  top: -150px;
+  right: -100px;
+  animation-delay: 0s;
+}
+
+.ambient-glow.glow-2 {
+  width: 400px;
+  height: 400px;
+  background: #1e40af;
+  bottom: -100px;
+  left: -100px;
+  animation-delay: -4s;
+}
+
+@keyframes glowPulse {
+  from { transform: scale(1) translate(0, 0); }
+  to   { transform: scale(1.15) translate(20px, -20px); }
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .login-body {
+    grid-template-columns: 1fr;
+  }
+
+  .login-hero { display: none; }
+
+  .login-panel {
+    align-items: flex-start;
+    padding: 20px;
+    padding-top: 0;
+    overflow-y: auto;
+    height: 100%;
+  }
+
+  .login-card {
+    padding: 36px 28px;
+    margin-top: 8px;
+  }
+
+  .auth-topbar { padding: 20px 24px; }
+  .portal-headline h1 { letter-spacing: -.5px; }
+  .role-cards { gap: 14px; }
+  .role-card { width: 240px; }
+}
+
+@media (max-width: 560px) {
+  body { overflow: auto; }
+  html, body { height: auto; min-height: 100%; }
+
+  .auth-topbar { padding: 18px 20px; }
+  .portal-body { padding: 20px; gap: 32px; }
+  .role-card { width: 100%; max-width: 340px; }
+  .portal-stats { gap: 28px; }
+  .login-card { padding: 28px 20px; }
+}
