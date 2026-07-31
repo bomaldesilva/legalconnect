@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegalConnect | My Profile</title>
+  <meta name="description" content="Manage your professional profile, credentials, and specializations on LegalConnect.">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    /* Local only: two-column layout specific to profile */
+    .profile-cols { display: grid; grid-template-columns: 3fr 2fr; gap: 24px; align-items: start; }
+    @media (max-width: 900px) { .profile-cols { grid-template-columns: 1fr; } }
+    .specialty-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; min-height: 36px; }
+    .specialty-tag { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 999px; font-size: 13px; font-weight: 600; background: var(--teal-light); color: var(--teal-dark); border: 1px solid rgba(14,165,160,.2); }
+    .specialty-tag__remove { cursor: pointer; font-size: 14px; color: var(--teal-dark); opacity: .7; border: none; background: none; padding: 0; line-height: 1; }
+    .specialty-tag__remove:hover { opacity: 1; }
+    .category-chip-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Lawyer Sidebar ─────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="lawyer_dashboard.html" aria-label="LegalConnect">
+      <span class="brand-mark">LC</span>
+      <span class="brand-name">LegalConnect</span>
+    </a>
+    <div class="nav-group">
+      <p class="nav-group-label">Workspace</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="lawyer_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+        <a class="nav-link active" href="lawyer_profile.html"><span class="nav-icon">👤</span> My Profile</a>
+        <a class="nav-link" href="lawyer_appointments.html"><span class="nav-icon">📅</span> Appointments</a>
+        <a class="nav-link" href="lawyer_cases.html"><span class="nav-icon">⚖</span> Cases</a>
+        <a class="nav-link" href="lawyer_clients.html"><span class="nav-icon">👥</span> Clients</a>
+      </nav>
+    </div>
+    <div class="nav-group">
+      <p class="nav-group-label">Management</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="lawyer_availability_slots.html"><span class="nav-icon">◷</span> Availability</a>
+        <a class="nav-link" href="lawyer_consultation_packages.html"><span class="nav-icon">◈</span> Packages</a>
+        <a class="nav-link" href="lawyer_documents.html"><span class="nav-icon">📄</span> Documents</a>
+        <a class="nav-link" href="lawyer_templates.html"><span class="nav-icon">📋</span> Templates</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <p class="sidebar-footer-text">LegalConnect · Lawyer Portal<br>University Project</p>
+    </div>
+  </aside>
+
+  <!-- ── Main ───────────────────────────────────────────────────────────── -->
+  <main class="page">
+
+    <header class="topbar">
+      <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div>
+          <p class="topbar-title">My Profile</p>
+          <p class="topbar-subtitle">Demo Lawyer — LegalConnect Lawyer Portal</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" title="Notifications">🔔</button>
+        <div class="avatar avatar--md avatar--teal" title="Demo Lawyer">DL</div>
+        <span class="phase-pill">Lawyer</span>
+      </div>
+    </header>
+
+    <section class="content">
+
+      <div class="breadcrumb">
+        <a href="lawyer_dashboard.html">Dashboard</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">My Profile</span>
+      </div>
+
+      <div class="section-head">
+        <div class="section-head__text">
+          <h1>My Profile</h1>
+          <p>Manage your professional information, credentials, and specializations.</p>
+        </div>
+      </div>
+
+      <div class="inline-alert inline-alert--info" style="margin-bottom:24px;">
+        <span class="inline-alert__icon">ℹ</span>
+        <div><strong>Module 4 backend pending</strong> — Profile editing (PUT /api/lawyer-profile) will be fully functional in Module 4. Changes made here are for demonstration only.</div>
+      </div>
+
+      <!-- ── Profile Hero ──────────────────────────────────────────────── -->
+      <div class="profile-hero" style="margin-bottom:24px;">
+        <div class="profile-hero__avatar">DL</div>
+        <div class="profile-hero__info">
+          <p class="profile-hero__name">Demo Lawyer</p>
+          <p class="profile-hero__sub">lawyer@legalconnect.lk &nbsp;·&nbsp; BAR-DEMO-001 &nbsp;·&nbsp; Active</p>
+          <div class="profile-hero__tags" id="heroTags">
+            <span class="tag">Family Law</span>
+            <span class="tag">Criminal Law</span>
+            <span class="tag">Property Law</span>
+          </div>
+        </div>
+        <div class="profile-hero__actions">
+          <span class="verif-badge verif-badge--approved">✓ Verified</span>
+          <button class="btn primary" type="button" id="saveBtn">Save Changes</button>
+          <button class="btn secondary" type="button" onclick="location.reload()">Reset</button>
+        </div>
+      </div>
+
+      <!-- ── Two-column layout ─────────────────────────────────────────── -->
+      <div class="profile-cols">
+
+        <!-- LEFT: Personal Info + Specializations -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Personal Information</p>
+            </div>
+            <form id="profileForm" novalidate>
+              <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+                <div class="field">
+                  <label for="firstName">First Name</label>
+                  <input type="text" id="firstName" value="Demo" placeholder="First name">
+                </div>
+                <div class="field">
+                  <label for="lastName">Last Name</label>
+                  <input type="text" id="lastName" value="Lawyer" placeholder="Last name">
+                </div>
+              </div>
+              <div class="field">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" value="lawyer@legalconnect.lk" disabled>
+              </div>
+              <div class="field">
+                <label for="bio">Professional Bio</label>
+                <textarea id="bio" rows="4" placeholder="Write a short professional bio highlighting your experience and practice areas…">Experienced legal practitioner specialising in Family Law, Criminal Law, and Property Law. Registered with the Bar Association of Sri Lanka (BASL) with 5 years of active practice.</textarea>
+              </div>
+              <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+                <div class="field">
+                  <label for="court">Court Jurisdiction</label>
+                  <input type="text" id="court" value="" placeholder="e.g. Colombo District Court">
+                </div>
+                <div class="field">
+                  <label for="experience">Experience (Years)</label>
+                  <input type="number" id="experience" value="5" min="0" max="50">
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Legal Specializations</p>
+            </div>
+
+            <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Current specializations (click ✕ to remove):</p>
+            <div class="specialty-chips" id="specialtyChips">
+              <!-- Populated by JS -->
+            </div>
+
+            <div class="section-divider">Add from categories</div>
+
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
+              <select id="categorySelect" style="flex:1;">
+                <option value="">Loading categories…</option>
+              </select>
+              <button class="btn primary" type="button" id="addSpecialtyBtn" style="height:42px;padding:0 16px;">Add</button>
+            </div>
+
+            <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">Or click any category to add directly:</p>
+            <div class="category-chip-list" id="categoryChips">
+              <!-- Populated by API -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Verification + Credentials + Settings -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Verification Status</p>
+            </div>
+            <div class="stepper">
+              <div class="stepper-step done">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">✓</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Account Created</p>
+                  <p class="stepper-step__desc">Demo Lawyer registered successfully</p>
+                </div>
+              </div>
+              <div class="stepper-step done">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">✓</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Bar Registration Submitted</p>
+                  <p class="stepper-step__desc">BASL No. BAR-DEMO-001</p>
+                </div>
+              </div>
+              <div class="stepper-step active">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">3</div>
+                  <div class="stepper-step__connector"></div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Admin Review</p>
+                  <p class="stepper-step__desc">Credentials approved by admin</p>
+                </div>
+              </div>
+              <div class="stepper-step done">
+                <div class="stepper-step__track">
+                  <div class="stepper-step__num">✓</div>
+                </div>
+                <div class="stepper-step__content">
+                  <p class="stepper-step__title">Verified &amp; Activated</p>
+                  <p class="stepper-step__desc">Available for client bookings</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Professional Credentials</p>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Bar Registration</span>
+              <span class="detail-row__value">BAR-DEMO-001 <span class="verif-badge verif-badge--approved" style="font-size:10px;padding:2px 8px;">✓</span></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Supreme Court No.</span>
+              <span class="detail-row__value" style="color:var(--muted);font-size:13px;font-style:italic;">Not submitted yet</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Rating</span>
+              <span class="detail-row__value">
+                <div class="stars-rating">
+                  <span class="stars-rating__star filled">★</span>
+                  <span class="stars-rating__star filled">★</span>
+                  <span class="stars-rating__star filled">★</span>
+                  <span class="stars-rating__star filled">★</span>
+                  <span class="stars-rating__star half">★</span>
+                  <span class="stars-rating__value">4.5</span>
+                  <span class="stars-rating__count">(11 reviews)</span>
+                </div>
+              </span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Experience</span>
+              <span class="detail-row__value">5 Years</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Account Status</span>
+              <span class="detail-row__value"><span class="badge active">Active</span></span>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Account Settings</p>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Email</span>
+              <span class="detail-row__value" style="font-size:13px;">lawyer@legalconnect.lk</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Role</span>
+              <span class="detail-row__value"><span class="role-badge role-badge--lawyer">Lawyer</span></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Member Since</span>
+              <span class="detail-row__value" style="font-size:13px;">2026-07-30</span>
+            </div>
+            <div class="inline-alert inline-alert--warning" style="margin-top:12px;margin-bottom:0;">
+              <span class="inline-alert__icon">⚠</span>
+              <div>Password change available after authentication is implemented.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+  </main>
+</div>
+
+<!-- Mobile bottom nav -->
+<nav class="mobile-nav">
+  <div class="mobile-nav__items">
+    <a class="mobile-nav__item" href="lawyer_dashboard.html"><span class="mobile-nav__icon">⊞</span>Home</a>
+    <a class="mobile-nav__item" href="lawyer_appointments.html"><span class="mobile-nav__icon">📅</span>Appts</a>
+    <a class="mobile-nav__item" href="lawyer_cases.html"><span class="mobile-nav__icon">⚖</span>Cases</a>
+    <a class="mobile-nav__item active" href="lawyer_profile.html"><span class="mobile-nav__icon">👤</span>Profile</a>
+    <a class="mobile-nav__item" href="lawyer_clients.html"><span class="mobile-nav__icon">👥</span>Clients</a>
+  </div>
+</nav>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/pages/lawyer_profile.js"></script>
+</body>
+</html>

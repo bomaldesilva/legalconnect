@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents | LegalConnect</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .dropzone {
+            border: 2px dashed var(--teal);
+            border-radius: var(--radius-lg);
+            padding: 40px 20px;
+            text-align: center;
+            background: var(--bg);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 20px;
+        }
+        .dropzone.dragover {
+            background: var(--teal-light, #e0f2f1);
+            border-color: var(--teal-dark);
+        }
+        .dropzone-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            background: var(--surface);
+        }
+        .file-item__icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        .file-item__details {
+            flex: 1;
+        }
+        .file-item__name {
+            font-weight: 600;
+            margin: 0;
+            font-size: 14px;
+        }
+        .file-item__meta {
+            font-size: 12px;
+            color: var(--text-light);
+            margin: 4px 0 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+            <a class="brand" href="lawyer_dashboard.html" aria-label="LegalConnect">
+                <span class="brand-mark">LC</span>
+                <span class="brand-name">LegalConnect</span>
+            </a>
+            <div class="nav-group">
+                <p class="nav-group-label">Workspace</p>
+                <nav class="nav-list">
+                    <a class="nav-link" href="lawyer_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+                    <a class="nav-link" href="lawyer_profile.html"><span class="nav-icon">👤</span> My Profile</a>
+                    <a class="nav-link" href="lawyer_appointments.html"><span class="nav-icon">📅</span> Appointments</a>
+                    <a class="nav-link" href="lawyer_cases.html"><span class="nav-icon">⚖</span> Cases</a>
+                    <a class="nav-link" href="lawyer_clients.html"><span class="nav-icon">👥</span> Clients</a>
+                </nav>
+            </div>
+            <div class="nav-group">
+                <p class="nav-group-label">Management</p>
+                <nav class="nav-list">
+                    <a class="nav-link" href="lawyer_availability_slots.html"><span class="nav-icon">◷</span> Availability</a>
+                    <a class="nav-link" href="lawyer_consultation_packages.html"><span class="nav-icon">◈</span> Packages</a>
+                    <a class="nav-link active" href="lawyer_documents.html"><span class="nav-icon">📄</span> Documents</a>
+                    <a class="nav-link" href="lawyer_templates.html"><span class="nav-icon">📋</span> Templates</a>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <p class="sidebar-footer-text">LegalConnect · Lawyer Portal<br>University Project</p>
+            </div>
+        </aside>
+
+        <main class="page">
+            <header class="topbar">
+                <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+                    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+                    <div>
+                        <p class="topbar-title">Documents</p>
+                        <p class="topbar-subtitle">Demo Lawyer — LegalConnect Lawyer Portal</p>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="notif-btn" title="Notifications">🔔</div>
+                    <div class="avatar avatar--md avatar--teal" title="Demo Lawyer">DL</div>
+                    <span class="phase-pill">Lawyer</span>
+                </div>
+            </header>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <a href="lawyer_dashboard.html">Dashboard</a> › <span>Documents</span>
+                </div>
+
+                <div class="section-head">
+                    <div>
+                        <h1>Documents</h1>
+                        <p>Manage case documents and client files</p>
+                    </div>
+                </div>
+
+                <div class="inline-alert inline-alert--warning">
+                    <span class="alert-icon">⚠️</span>
+                    <div class="alert-content">
+                        File storage backend (Module 8) is pending. The dropzone accepts files but does not upload them yet.
+                    </div>
+                </div>
+
+                <div class="grid three" style="margin-bottom: 24px;">
+                    <div class="stat-card" style="border-left: 4px solid var(--navy);">
+                        <p class="stat-label">Total Docs</p>
+                        <p class="stat-value" id="kpiTotal">0</p>
+                    </div>
+                    <div class="stat-card" style="border-left: 4px solid var(--warning);">
+                        <p class="stat-label">Pending Review</p>
+                        <p class="stat-value" id="kpiPending">0</p>
+                    </div>
+                    <div class="stat-card" style="border-left: 4px solid var(--success);">
+                        <p class="stat-label">Approved</p>
+                        <p class="stat-value" id="kpiApproved">0</p>
+                    </div>
+                </div>
+
+                <div class="grid two" style="align-items:start; grid-template-columns: 2fr 1fr; gap: 24px;">
+                    <!-- LEFT PANEL -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2>Document List</h2>
+                        </div>
+                        <div class="toolbar">
+                            <div class="search-box">
+                                <span class="search-icon">🔍</span>
+                                <input type="text" id="searchInput" placeholder="Search files...">
+                            </div>
+                            <div class="filter-chips" id="filterChips">
+                                <button class="filter-chip active" data-status="All">All</button>
+                                <button class="filter-chip" data-status="Uploaded">Uploaded</button>
+                                <button class="filter-chip" data-status="Reviewed">Reviewed</button>
+                                <button class="filter-chip" data-status="Approved">Approved</button>
+                                <button class="filter-chip" data-status="Rejected">Rejected</button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>File Name</th>
+                                        <th>Case</th>
+                                        <th>Upload By</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="docsTableBody">
+                                    <!-- Rendered via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="emptyState" class="empty-state" style="display: none; text-align: center; padding: 40px;">
+                            <div style="font-size: 32px; margin-bottom: 16px;">📄</div>
+                            <h3>No documents found</h3>
+                            <p style="color: var(--text-light);">Try adjusting your search or filters.</p>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT PANEL -->
+                    <div>
+                        <div class="panel" style="margin-bottom: 24px;">
+                            <div class="panel-header">
+                                <h2>Upload Document</h2>
+                            </div>
+                            <div class="dropzone" id="dropzone">
+                                <div class="dropzone-icon">📤</div>
+                                <h3 style="margin: 0 0 8px;">Drop files here</h3>
+                                <p style="margin: 0 0 12px; color: var(--text-light);">or browse to upload</p>
+                                <p style="margin: 0; font-size: 12px; color: var(--text-light);">PDF, DOCX, JPG · Max 10MB</p>
+                                <input type="file" id="fileInput" style="display:none;" multiple>
+                            </div>
+
+                            <div style="margin-bottom: 16px;">
+                                <label style="display:block; margin-bottom: 8px; font-weight:600; font-size:14px;">Select Case (Optional)</label>
+                                <select class="form-control" style="width:100%;">
+                                    <option>-- No Case Selected --</option>
+                                    <option>CASE-2026-001</option>
+                                    <option>CASE-2026-002</option>
+                                </select>
+                            </div>
+
+                            <button class="btn btn--primary" style="width: 100%; margin-bottom: 16px;" onclick="uploadPendingFiles()">Upload Files</button>
+                            
+                            <div id="pendingFiles" class="file-list">
+                                <!-- Pending files shown here -->
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h2>Storage Info</h2>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Total files</span>
+                                <span class="detail-value">4</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Storage used</span>
+                                <span class="detail-value">~2.3 MB</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Limit</span>
+                                <span class="detail-value">No limit set</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <nav class="mobile-nav">
+        <a href="lawyer_dashboard.html" class="mobile-nav-item">⊞<span>Dashboard</span></a>
+        <a href="lawyer_appointments.html" class="mobile-nav-item">📅<span>Appointments</span></a>
+        <a href="lawyer_cases.html" class="mobile-nav-item">⚖<span>Cases</span></a>
+        <a href="lawyer_documents.html" class="mobile-nav-item active">📄<span>Documents</span></a>
+        <a href="lawyer_profile.html" class="mobile-nav-item">👤<span>Profile</span></a>
+    </nav>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/lawyer_documents.js"></script>
+</body>
+</html>

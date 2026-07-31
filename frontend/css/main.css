@@ -1660,3 +1660,75 @@ tbody tr:nth-child(10) { animation-delay: 360ms; }
   .detail-row { flex-direction: column; gap: 4px; }
   .detail-row__label { min-width: unset; }
 }
+
+/* ── Slide panel (case detail, right drawer) ─────────────────────────────────── */
+.slide-panel {
+  position: fixed; right: 0; top: 0; bottom: 0;
+  width: 440px; max-width: 100vw;
+  background: var(--surface);
+  box-shadow: -6px 0 32px rgba(13,31,60,.12);
+  padding: 28px 24px;
+  z-index: 900;
+  transform: translateX(100%);
+  transition: transform var(--t-mid) var(--ease);
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.slide-panel--open { transform: translateX(0); }
+.slide-panel__header {
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--line); padding-bottom: 16px;
+}
+.slide-panel__title { font-size: 18px; font-weight: 800; color: var(--navy); }
+.slide-panel__overlay {
+  position: fixed; inset: 0; z-index: 899;
+  background: rgba(13,31,60,.3); backdrop-filter: blur(2px);
+  display: none;
+}
+.slide-panel__overlay--show { display: block; }
+@media (max-width: 480px) { .slide-panel { width: 100vw; } }
+
+/* ── Template cards grid ─────────────────────────────────────────────────────── */
+.template-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+@media (max-width: 1000px) { .template-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px)  { .template-grid { grid-template-columns: 1fr; } }
+
+.template-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: 20px;
+  box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 10px;
+  transition: transform var(--t-mid) var(--ease), box-shadow var(--t-mid) var(--ease);
+}
+.template-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.template-card__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.template-card__name { font-size: 15px; font-weight: 800; color: var(--navy); margin: 0; line-height: 1.3; }
+.template-card__desc { font-size: 13px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.template-card__actions { display: flex; gap: 8px; margin-top: auto; padding-top: 4px; }
+
+/* ── Four-column KPI grid shorthand ──────────────────────────────────────────── */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+@media (max-width: 1100px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px)  { .grid-4 { grid-template-columns: 1fr 1fr; } }
+
+/* ── Appointment mode badge ──────────────────────────────────────────────────── */
+.mode-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 22px; padding: 0 9px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; letter-spacing: .2px; white-space: nowrap;
+}
+.mode-badge--online   { background: var(--info-bg);    color: var(--info);    border: 1px solid #bfdbfe; }
+.mode-badge--physical { background: rgba(13,31,60,.07); color: var(--navy);   border: 1px solid var(--line); }
+
+/* ── Outcome badge ───────────────────────────────────────────────────────────── */
+.outcome-badge {
+  display: inline-flex; align-items: center;
+  height: 22px; padding: 0 9px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; letter-spacing: .2px;
+}
+.outcome-badge--won       { background: var(--success-bg); color: var(--success); }
+.outcome-badge--lost      { background: var(--danger-bg);  color: var(--danger); }
+.outcome-badge--settled   { background: var(--info-bg);    color: var(--info); }
+.outcome-badge--withdrawn { background: rgba(100,116,139,.1); color: #64748b; }
+.outcome-badge--pending   { background: var(--warning-bg); color: var(--warning); }

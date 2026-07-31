@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Management - LegalConnect</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .slide-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 420px;
+            background: var(--surface);
+            box-shadow: -4px 0 16px rgba(0,0,0,0.1);
+            padding: 24px;
+            z-index: 999;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .slide-panel--open {
+            transform: translateX(0);
+        }
+        .slide-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 12px;
+        }
+        .slide-panel-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal--open {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        @media (max-width: 768px) {
+            .slide-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+        <a class="brand" href="lawyer_dashboard.html" aria-label="LegalConnect">
+            <span class="brand-mark">LC</span>
+            <span class="brand-name">LegalConnect</span>
+        </a>
+        <div class="nav-group">
+            <p class="nav-group-label">Workspace</p>
+            <nav class="nav-list">
+                <a class="nav-link" href="lawyer_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+                <a class="nav-link" href="lawyer_profile.html"><span class="nav-icon">👤</span> My Profile</a>
+                <a class="nav-link" href="lawyer_appointments.html"><span class="nav-icon">📅</span> Appointments</a>
+                <a class="nav-link active" href="lawyer_cases.html"><span class="nav-icon">⚖</span> Cases</a>
+                <a class="nav-link" href="lawyer_clients.html"><span class="nav-icon">👥</span> Clients</a>
+            </nav>
+        </div>
+        <div class="nav-group">
+            <p class="nav-group-label">Management</p>
+            <nav class="nav-list">
+                <a class="nav-link" href="lawyer_availability_slots.html"><span class="nav-icon">◷</span> Availability</a>
+                <a class="nav-link" href="lawyer_consultation_packages.html"><span class="nav-icon">◈</span> Packages</a>
+                <a class="nav-link" href="lawyer_documents.html"><span class="nav-icon">📄</span> Documents</a>
+                <a class="nav-link" href="lawyer_templates.html"><span class="nav-icon">📋</span> Templates</a>
+            </nav>
+        </div>
+        <div class="sidebar-footer">
+            <p class="sidebar-footer-text">LegalConnect · Lawyer Portal<br>University Project</p>
+        </div>
+    </aside>
+
+    <main class="page">
+        <header class="topbar">
+            <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+                <div>
+                    <p class="topbar-title">Case Management</p>
+                    <p class="topbar-subtitle">Demo Lawyer — LegalConnect Lawyer Portal</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="notif-btn" title="Notifications">🔔</div>
+                <div class="avatar avatar--md avatar--teal" title="Demo Lawyer">DL</div>
+                <span class="phase-pill">Lawyer</span>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="breadcrumb">
+                <a href="lawyer_dashboard.html">Dashboard</a> › <span>Cases</span>
+            </div>
+
+            <div class="section-head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <div>
+                    <h1>Case Management</h1>
+                    <p>Track and manage all client cases</p>
+                </div>
+                <button class="btn btn--primary" id="btnNewCase">New Case</button>
+            </div>
+
+            <div class="inline-alert inline-alert--info" style="margin-bottom: 24px;">
+                ℹ Case management backend (Module 7) is pending. Demo data shown below.
+            </div>
+
+            <!-- KPI stat-cards -->
+            <div class="grid" style="grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+                <div class="stat-card stat-card--teal">
+                    <div class="stat-card-title">Open</div>
+                    <div class="stat-card-value" id="kpiOpen">0</div>
+                </div>
+                <div class="stat-card stat-card--warning">
+                    <div class="stat-card-title">In Progress</div>
+                    <div class="stat-card-value" id="kpiInProgress">0</div>
+                </div>
+                <div class="stat-card stat-card--navy">
+                    <div class="stat-card-title">Closed</div>
+                    <div class="stat-card-value" id="kpiClosed">0</div>
+                </div>
+                <div class="stat-card stat-card--danger">
+                    <div class="stat-card-title">Archived</div>
+                    <div class="stat-card-value" id="kpiArchived">0</div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="toolbar" style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; margin-bottom: 16px;">
+                    <div style="display: flex; gap: 8px;">
+                        <span class="filter-chip active" data-filter="All">All</span>
+                        <span class="filter-chip" data-filter="Open">Open</span>
+                        <span class="filter-chip" data-filter="InProgress">In Progress</span>
+                        <span class="filter-chip" data-filter="Closed">Closed</span>
+                        <span class="filter-chip" data-filter="Archived">Archived</span>
+                    </div>
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                        <input type="text" id="searchBox" class="search-box form-control" placeholder="Search cases..." style="width: 250px;">
+                        <span id="resultsCount">0 results</span>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #eee;">
+                                <th style="padding: 12px;">#</th>
+                                <th style="padding: 12px;">Case Title</th>
+                                <th style="padding: 12px;">Category</th>
+                                <th style="padding: 12px;">Client</th>
+                                <th style="padding: 12px;">Status</th>
+                                <th style="padding: 12px;">Outcome</th>
+                                <th style="padding: 12px;">Open Date</th>
+                                <th style="padding: 12px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="casesTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="emptyState" style="display: none; text-align: center; padding: 32px; color: #666;">
+                    No cases found.
+                </div>
+                <div class="pagination" style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+                    <button class="btn btn--secondary" disabled>Prev</button>
+                    <button class="btn btn--secondary" disabled>Next</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Mobile Nav -->
+<nav class="mobile-nav">
+    <a href="lawyer_dashboard.html" class="mobile-nav-item">Dashboard</a>
+    <a href="lawyer_appointments.html" class="mobile-nav-item">Appointments</a>
+    <a href="lawyer_cases.html" class="mobile-nav-item active">Cases</a>
+    <a href="lawyer_clients.html" class="mobile-nav-item">Clients</a>
+    <a href="lawyer_profile.html" class="mobile-nav-item">Profile</a>
+</nav>
+
+<!-- Add Case Modal -->
+<div class="modal" id="addCaseModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>New Case</h3>
+            <button class="btn btn--secondary" id="closeAddCaseModal">✕</button>
+        </div>
+        <form id="addCaseForm">
+            <div class="form-group">
+                <label>Case Title *</label>
+                <input type="text" class="form-control" id="caseTitle" required>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select class="form-control" id="caseCategory">
+                    <!-- Populated via API -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Client</label>
+                <select class="form-control" id="caseClient">
+                    <option value="3">Demo Client</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Open Date</label>
+                <input type="date" class="form-control" id="caseOpenDate" required>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select class="form-control" id="caseStatus">
+                    <option value="Open">Open</option>
+                    <option value="InProgress">In Progress</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea class="form-control" id="caseDesc" rows="3"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" id="btnCancelAdd">Cancel</button>
+                <button type="submit" class="btn btn--primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- View Case Panel -->
+<div class="slide-panel" id="caseDetailPanel">
+    <div class="slide-panel-header">
+        <h3 id="detailTitle">Case Detail</h3>
+        <button class="slide-panel-close" id="closeCaseDetail">✕</button>
+    </div>
+    <div id="detailContent">
+        <!-- Content injected by JS -->
+    </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/pages/lawyer_cases.js"></script>
+</body>
+</html>

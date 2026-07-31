@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Templates | LegalConnect</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .template-card {
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-sm);
+            background: var(--surface);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .template-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .template-card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .template-card__title {
+            font-weight: 800;
+            color: var(--navy);
+            margin: 0 0 8px;
+            font-size: 16px;
+        }
+        .template-card__desc {
+            color: var(--text-light);
+            font-size: 14px;
+            margin: 0 0 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex: 1;
+        }
+        .template-card__footer {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+            <a class="brand" href="lawyer_dashboard.html" aria-label="LegalConnect">
+                <span class="brand-mark">LC</span>
+                <span class="brand-name">LegalConnect</span>
+            </a>
+            <div class="nav-group">
+                <p class="nav-group-label">Workspace</p>
+                <nav class="nav-list">
+                    <a class="nav-link" href="lawyer_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+                    <a class="nav-link" href="lawyer_profile.html"><span class="nav-icon">👤</span> My Profile</a>
+                    <a class="nav-link" href="lawyer_appointments.html"><span class="nav-icon">📅</span> Appointments</a>
+                    <a class="nav-link" href="lawyer_cases.html"><span class="nav-icon">⚖</span> Cases</a>
+                    <a class="nav-link" href="lawyer_clients.html"><span class="nav-icon">👥</span> Clients</a>
+                </nav>
+            </div>
+            <div class="nav-group">
+                <p class="nav-group-label">Management</p>
+                <nav class="nav-list">
+                    <a class="nav-link" href="lawyer_availability_slots.html"><span class="nav-icon">◷</span> Availability</a>
+                    <a class="nav-link" href="lawyer_consultation_packages.html"><span class="nav-icon">◈</span> Packages</a>
+                    <a class="nav-link" href="lawyer_documents.html"><span class="nav-icon">📄</span> Documents</a>
+                    <a class="nav-link active" href="lawyer_templates.html"><span class="nav-icon">📋</span> Templates</a>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <p class="sidebar-footer-text">LegalConnect · Lawyer Portal<br>University Project</p>
+            </div>
+        </aside>
+
+        <main class="page">
+            <header class="topbar">
+                <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+                    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+                    <div>
+                        <p class="topbar-title">Document Templates</p>
+                        <p class="topbar-subtitle">Demo Lawyer — LegalConnect Lawyer Portal</p>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="notif-btn" title="Notifications">🔔</div>
+                    <div class="avatar avatar--md avatar--teal" title="Demo Lawyer">DL</div>
+                    <span class="phase-pill">Lawyer</span>
+                </div>
+            </header>
+
+            <div class="content">
+                <div class="breadcrumb">
+                    <a href="lawyer_dashboard.html">Dashboard</a> › <span>Templates</span>
+                </div>
+
+                <div class="section-head">
+                    <div>
+                        <h1>Document Templates</h1>
+                        <p>Browse and use legal document templates</p>
+                    </div>
+                    <div>
+                        <button class="btn btn--primary" onclick="openUploadModal()">Upload Template</button>
+                    </div>
+                </div>
+
+                <div class="inline-alert inline-alert--info">
+                    <span class="alert-icon">ℹ️</span>
+                    <div class="alert-content">
+                        Template library uses document_templates table. Upload feature pending Module 8.
+                    </div>
+                </div>
+
+                <div class="grid three" style="margin-bottom: 24px;">
+                    <div class="stat-card" style="border-left: 4px solid var(--navy);">
+                        <p class="stat-label">Total Templates</p>
+                        <p class="stat-value" id="kpiTotal">0</p>
+                    </div>
+                    <div class="stat-card" style="border-left: 4px solid var(--teal);">
+                        <p class="stat-label">Active</p>
+                        <p class="stat-value" id="kpiActive">0</p>
+                    </div>
+                    <div class="stat-card" style="border-left: 4px solid var(--warning);">
+                        <p class="stat-label">Inactive</p>
+                        <p class="stat-value" id="kpiInactive">0</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Template Library <span id="resultsCount" style="font-size:14px; color:var(--text-light); font-weight:normal; margin-left:8px;">(0)</span></h2>
+                    </div>
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="searchInput" placeholder="Search templates...">
+                        </div>
+                        <div class="filter-chips" id="filterChips">
+                            <button class="filter-chip active" data-cat="All">All</button>
+                            <button class="filter-chip" data-cat="Family Law">Family Law</button>
+                            <button class="filter-chip" data-cat="Property Law">Property Law</button>
+                            <button class="filter-chip" data-cat="Criminal Law">Criminal Law</button>
+                            <button class="filter-chip" data-cat="Labour Law">Labour Law</button>
+                            <button class="filter-chip" data-cat="Corporate Law">Corporate Law</button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid three" id="templatesGrid">
+                        <!-- Rendered via JS -->
+                    </div>
+                    
+                    <div id="emptyState" class="empty-state" style="display: none; text-align: center; padding: 40px;">
+                        <div style="font-size: 32px; margin-bottom: 16px;">📋</div>
+                        <h3>No templates found</h3>
+                        <p style="color: var(--text-light);">Try adjusting your search or category filter.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Upload Template Modal -->
+    <div id="uploadModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Upload Template</h2>
+                <button class="modal-close" onclick="closeUploadModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm">
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label class="form-label">Template Name</label>
+                        <input type="text" class="form-control" required placeholder="e.g. Non-Disclosure Agreement">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label class="form-label">Category</label>
+                        <select class="form-control" id="modalCategorySelect" required>
+                            <option value="">Select Category</option>
+                            <option value="Family Law">Family Law</option>
+                            <option value="Property Law">Property Law</option>
+                            <option value="Criminal Law">Criminal Law</option>
+                            <option value="Labour Law">Labour Law</option>
+                            <option value="Corporate Law">Corporate Law</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" rows="3" placeholder="Brief description of the template..."></textarea>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label class="form-label">File</label>
+                        <input type="file" class="form-control" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" onclick="closeUploadModal()">Cancel</button>
+                <button class="btn btn--primary" onclick="submitUpload()">Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="mobile-nav">
+        <a href="lawyer_dashboard.html" class="mobile-nav-item">⊞<span>Dashboard</span></a>
+        <a href="lawyer_appointments.html" class="mobile-nav-item">📅<span>Appointments</span></a>
+        <a href="lawyer_cases.html" class="mobile-nav-item">⚖<span>Cases</span></a>
+        <a href="lawyer_documents.html" class="mobile-nav-item">📄<span>Documents</span></a>
+        <a href="lawyer_templates.html" class="mobile-nav-item active">📋<span>Templates</span></a>
+    </nav>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/lawyer_templates.js"></script>
+</body>
+</html>
