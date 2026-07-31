@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegalConnect | Lawyer Profile</title>
+  <meta name="description" content="View this lawyer's professional profile, legal expertise, consultation packages, and availability on LegalConnect.">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    /* ── Public profile local styles ──────────────────────────────────────── */
+    body { background: var(--bg); }
+
+    /* Simple top navbar for public view */
+    .public-nav {
+      background: var(--navy);
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(13,31,60,.3);
+    }
+    .public-nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: #fff;
+    }
+    .public-nav-brand .brand-mark {
+      width: 36px; height: 36px; font-size: 15px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+      display: grid; place-items: center;
+      font-weight: 800; color: #fff;
+      box-shadow: 0 2px 8px rgba(14,165,160,.4);
+    }
+    .public-nav-brand span:last-child { font-size: 17px; font-weight: 800; color: #fff; }
+    .public-nav-back {
+      font-size: 13px; color: rgba(255,255,255,.7);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.15);
+      transition: all var(--t-fast) var(--ease);
+    }
+    .public-nav-back:hover { background: rgba(255,255,255,.1); color: #fff; }
+
+    /* Profile wrapper */
+    .public-wrapper {
+      max-width: 900px;
+      margin: 36px auto;
+      padding: 0 20px 60px;
+    }
+
+    /* Hero banner */
+    .public-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 60%, var(--navy-3) 100%);
+      border-radius: var(--radius-xl);
+      padding: 36px 40px;
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    .public-hero::before {
+      content: ''; position: absolute;
+      right: -60px; top: -60px;
+      width: 240px; height: 240px; border-radius: 50%;
+      background: rgba(14,165,160,.12);
+    }
+    .public-hero-avatar {
+      width: 100px; height: 100px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+      display: grid; place-items: center;
+      font-size: 36px; font-weight: 800; color: #fff;
+      letter-spacing: -2px;
+      flex-shrink: 0;
+      box-shadow: 0 6px 20px rgba(14,165,160,.4);
+      border: 3px solid rgba(255,255,255,.2);
+      position: relative; z-index: 1;
+    }
+    .public-hero-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
+    .public-hero-name {
+      font-size: 28px; font-weight: 800; color: #fff;
+      letter-spacing: -.5px; margin-bottom: 6px;
+    }
+    .public-hero-sub { font-size: 14px; color: rgba(255,255,255,.65); margin-bottom: 12px; }
+    .public-hero-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+    .public-hero-tag {
+      font-size: 12px; font-weight: 600;
+      padding: 4px 12px; border-radius: 999px;
+      background: rgba(14,165,160,.25);
+      color: #ccf7f5; border: 1px solid rgba(14,165,160,.3);
+    }
+    .public-hero-action { position: relative; z-index: 1; flex-shrink: 0; }
+
+    /* Book button */
+    .book-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 24px; border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+      color: #fff; font-size: 15px; font-weight: 700;
+      border: none; cursor: not-allowed;
+      box-shadow: 0 4px 14px rgba(14,165,160,.4);
+      opacity: .7;
+      position: relative;
+    }
+    .book-btn-badge {
+      position: absolute; top: -8px; right: -8px;
+      background: var(--warning-bg); color: var(--warning);
+      font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 999px;
+      border: 1px solid rgba(146,64,14,.2);
+      white-space: nowrap;
+    }
+
+    /* Verification badge */
+    .pub-verif-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 700;
+      padding: 5px 12px; border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    .pub-verif-badge--approved {
+      background: rgba(10,102,64,.2); color: #059669;
+      border: 1px solid rgba(5,150,105,.2);
+    }
+    .pub-verif-badge--pending {
+      background: var(--warning-bg); color: var(--warning);
+      border: 1px solid rgba(146,64,14,.15);
+    }
+    .pub-verif-badge--rejected {
+      background: var(--danger-bg); color: var(--danger);
+      border: 1px solid rgba(192,57,43,.15);
+    }
+    .pub-verif-badge--unknown {
+      background: var(--surface-2); color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    /* Two-column layout */
+    .pub-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 900px) { .pub-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .public-hero { flex-direction: column; text-align: center; padding: 28px 20px; }
+      .public-hero-tags { justify-content: center; }
+    }
+
+    /* Package card */
+    .pkg-card {
+      border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 16px 18px;
+      background: var(--surface-2);
+      transition: box-shadow var(--t-fast) var(--ease);
+    }
+    .pkg-card:hover { box-shadow: var(--shadow-sm); }
+    .pkg-card__name { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .pkg-card__meta { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+    .pkg-card__fee { font-size: 18px; font-weight: 800; color: var(--teal-dark); }
+
+    /* Stat boxes */
+    .pub-stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .pub-stat-box {
+      background: var(--surface-2); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 14px 16px; text-align: center;
+    }
+    .pub-stat-box__value { font-size: 22px; font-weight: 800; color: var(--navy); }
+    .pub-stat-box__label { font-size: 11px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+
+    /* Stars */
+    .stars-rating { display: inline-flex; align-items: center; gap: 3px; }
+    .stars-rating__star { color: #d1d5db; font-size: 16px; }
+    .stars-rating__star.filled { color: #f59e0b; }
+    .stars-rating__star.half { color: #f59e0b; opacity: .5; }
+    .stars-rating__value { font-size: 14px; font-weight: 700; color: var(--navy); margin-left: 4px; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Public Navigation ──────────────────────────────────────────────────── -->
+  <nav class="public-nav">
+    <a class="public-nav-brand" href="../index.html">
+      <span class="brand-mark">LC</span>
+      <span>LegalConnect</span>
+    </a>
+    <a class="public-nav-back" href="lawyer_search.html">← Back to Search</a>
+  </nav>
+
+  <!-- ── Main content ──────────────────────────────────────────────────────── -->
+  <div class="public-wrapper">
+
+    <!-- Loading -->
+    <div id="loadingState" style="text-align:center;padding:80px 20px;">
+      <div class="skeleton" style="height:180px;border-radius:var(--radius-xl);margin-bottom:24px;"></div>
+      <div class="skeleton" style="height:400px;border-radius:var(--radius-lg);"></div>
+    </div>
+
+    <!-- Error -->
+    <div id="errorState" style="display:none;">
+      <div class="empty-state" style="padding:80px 20px;">
+        <div class="empty-state__icon">⚠</div>
+        <p class="empty-state__title">Profile Not Found</p>
+        <p id="errorMsg">This lawyer profile could not be loaded.</p>
+        <div class="empty-state__action">
+          <a class="btn secondary" href="lawyer_search.html">← Back to Search</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div id="profileContent" style="display:none;">
+
+      <!-- Hero -->
+      <div class="public-hero">
+        <div class="public-hero-avatar" id="pubAvatar">DL</div>
+        <div class="public-hero-info">
+          <div id="pubVerifBadge" class="pub-verif-badge pub-verif-badge--unknown">— Not Verified</div>
+          <p class="public-hero-name" id="pubName">Demo Lawyer</p>
+          <p class="public-hero-sub" id="pubSub">Lawyer</p>
+          <div class="public-hero-tags" id="pubTags"></div>
+        </div>
+        <div class="public-hero-action">
+          <button class="book-btn" disabled title="Appointment booking available in Module 5">
+            📅 Book Appointment
+            <span class="book-btn-badge">Coming Soon</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Two-column grid -->
+      <div class="pub-grid">
+
+        <!-- LEFT: Bio, Packages, Education -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <!-- Biography -->
+          <div class="panel" id="bioPanel" style="display:none;">
+            <div class="panel-header">
+              <p class="panel-title">About This Lawyer</p>
+            </div>
+            <p id="pubBio" style="font-size:14px;line-height:1.8;color:var(--text);"></p>
+          </div>
+
+          <!-- Consultation Packages -->
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Consultation Packages</p>
+            </div>
+            <div id="pubPkgList" style="display:flex;flex-direction:column;gap:10px;">
+              <div class="skeleton" style="height:80px;border-radius:var(--radius);"></div>
+            </div>
+          </div>
+
+          <!-- Education -->
+          <div class="panel" id="eduPanel" style="display:none;">
+            <div class="panel-header">
+              <p class="panel-title">Education & Qualifications</p>
+            </div>
+            <p id="pubEdu" style="font-size:14px;line-height:1.8;color:var(--text);white-space:pre-line;"></p>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Quick facts + availability -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <!-- Quick facts -->
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Quick Facts</p>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Experience</span>
+              <span class="detail-row__value" id="pubExperience">—</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Court</span>
+              <span class="detail-row__value" id="pubCourt">—</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Bar Registration</span>
+              <span class="detail-row__value" id="pubBar">—</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Rating</span>
+              <span class="detail-row__value" id="pubRating">—</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Member Since</span>
+              <span class="detail-row__value" id="pubMemberSince">—</span>
+            </div>
+          </div>
+
+          <!-- Availability -->
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Availability</p>
+            </div>
+            <div class="pub-stat-row" style="margin-bottom:12px;">
+              <div class="pub-stat-box">
+                <div class="pub-stat-box__value" id="pubAvailTotal">—</div>
+                <div class="pub-stat-box__label">Total Slots</div>
+              </div>
+              <div class="pub-stat-box">
+                <div class="pub-stat-box__value" id="pubAvailAvail">—</div>
+                <div class="pub-stat-box__label">Available</div>
+              </div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Next Available</span>
+              <span class="detail-row__value" id="pubAvailNext">—</span>
+            </div>
+          </div>
+
+          <!-- Legal Expertise -->
+          <div class="panel" id="expertisePanel" style="display:none;">
+            <div class="panel-header">
+              <p class="panel-title">Legal Expertise</p>
+            </div>
+            <div id="pubExpertiseTags" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+          </div>
+
+          <!-- Book now CTA -->
+          <div class="panel" style="background:linear-gradient(135deg,var(--navy),var(--navy-2));border:none;">
+            <p style="font-size:16px;font-weight:800;color:#fff;margin-bottom:6px;">Ready to Consult?</p>
+            <p style="font-size:13px;color:rgba(255,255,255,.65);margin-bottom:16px;">
+              Appointment booking will be available in the next module.
+            </p>
+            <button class="btn" style="width:100%;background:rgba(14,165,160,.25);color:#ccf7f5;border:1px solid rgba(14,165,160,.3);cursor:not-allowed;"
+              disabled>
+              📅 Book Appointment — Coming Soon
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <!-- end #profileContent -->
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/pages/lawyer_public_profile.js"></script>
+</body>
+</html>
