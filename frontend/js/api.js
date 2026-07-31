@@ -76,9 +76,19 @@ const dashboardApi = {
   metrics: () => request('/dashboard'),
 };
 
-window.legalCategories = legalCategories;
-window.availabilitySlots = availabilitySlots;
+const lawyerProfileApi = {
+  get:            (id)           => request(`/lawyer-profile/${id}`),
+  update:         (id, data)     => request(`/lawyer-profile/${id}`, jsonOptions('PUT', data)),
+  listCategories: (id)           => request(`/lawyer-profile/${id}/categories`),
+  addCategory:    (id, data)     => request(`/lawyer-profile/${id}/categories`, jsonOptions('POST', data)),
+  removeCategory: (id, catId)    => request(`/lawyer-profile/${id}/categories/${catId}`, { method: 'DELETE' }),
+  getPublic:      (id)           => request(`/lawyer-profile/${id}/public`),
+};
+
+window.legalCategories    = legalCategories;
+window.availabilitySlots  = availabilitySlots;
 window.consultationPackages = consultationPackages;
-window.appointmentsApi = appointmentsApi;
-window.paymentsApi = paymentsApi;
-window.dashboardApi = dashboardApi;
+window.appointmentsApi    = appointmentsApi;
+window.paymentsApi        = paymentsApi;
+window.dashboardApi       = dashboardApi;
+window.lawyerProfileApi   = lawyerProfileApi;
