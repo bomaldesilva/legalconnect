@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegalConnect | Book Consultation</title>
+  <meta name="description" content="Book a legal consultation with verified lawyers on LegalConnect. 4-step interactive appointment wizard.">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    .package-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .package-card {
+      background: var(--surface);
+      border: 2px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      transition: all var(--t-mid) var(--ease);
+      cursor: pointer;
+      position: relative;
+    }
+    .package-card:hover {
+      border-color: var(--teal);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+    .package-card.selected {
+      border-color: var(--teal);
+      background: var(--teal-light);
+      box-shadow: 0 4px 14px rgba(14,165,160,.2);
+    }
+    .package-card.selected::after {
+      content: '✓ Selected';
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--teal-dark);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+    .package-card__fee {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .slot-card {
+      background: var(--surface);
+      border: 2px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      transition: all var(--t-fast) var(--ease);
+    }
+    .slot-card:hover {
+      border-color: var(--teal);
+      box-shadow: var(--shadow-xs);
+    }
+    .slot-card.selected {
+      border-color: var(--teal);
+      background: var(--teal-light);
+    }
+    .mode-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 12px;
+    }
+    @media (max-width: 600px) {
+      .mode-options { grid-template-columns: 1fr; }
+    }
+    .mode-card {
+      border: 2px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      cursor: pointer;
+      transition: all var(--t-fast) var(--ease);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--surface);
+    }
+    .mode-card:hover { border-color: var(--teal); }
+    .mode-card.selected {
+      border-color: var(--teal);
+      background: var(--teal-light);
+    }
+    .payment-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      margin-bottom: 10px;
+      cursor: pointer;
+      background: var(--surface);
+    }
+    .payment-option:hover { border-color: var(--teal); }
+    .payment-option input[type="radio"] { accent-color: var(--teal); }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Client Sidebar ─────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="client_dashboard.html" aria-label="LegalConnect">
+      <span class="brand-mark">LC</span>
+      <span class="brand-name">LegalConnect</span>
+    </a>
+    <div class="nav-group">
+      <p class="nav-group-label">Workspace</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="client_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+        <a class="nav-link" href="client_appointments.html"><span class="nav-icon">📅</span> Appointments</a>
+        <a class="nav-link" href="client_documents.html"><span class="nav-icon">📄</span> My Documents</a>
+        <a class="nav-link" href="client_requests.html"><span class="nav-icon">📋</span> Service Requests</a>
+      </nav>
+    </div>
+    <div class="nav-group">
+      <p class="nav-group-label">Quick Actions</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="client_lawyers.html"><span class="nav-icon">🔍</span> Find Lawyer</a>
+        <a class="nav-link active" href="client_book_appointment.html"><span class="nav-icon">➕</span> Book Consultation</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <p class="sidebar-footer-text">LegalConnect · Client Portal<br>University Project</p>
+    </div>
+  </aside>
+
+  <!-- ── Main Page Area ─────────────────────────────────────────────────── -->
+  <main class="page">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div>
+          <p class="topbar-title">Book Legal Consultation</p>
+          <p class="topbar-subtitle">Demo Client — 4-Step Consultation Booking Wizard</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" title="Notifications">🔔</button>
+        <div class="avatar avatar--md avatar--teal" title="Demo Client">DC</div>
+        <span class="phase-pill">Client</span>
+      </div>
+    </header>
+
+    <section class="content">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="client_dashboard.html">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="client_appointments.html">Appointments</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Book Consultation</span>
+      </nav>
+
+      <!-- Page Header -->
+      <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 22px; font-weight: 800; color: var(--navy);">Book a Legal Consultation</h1>
+        <p style="font-size: 14px; color: var(--muted);">Select your preferred legal category, package, date, and mode to confirm your appointment.</p>
+      </div>
+
+      <!-- ── Multi-Step Horizontal Wizard Stepper ───────────────────────── -->
+      <div class="wizard" id="bookingWizard">
+        <div class="wizard__step active" id="wizStep1" data-step="1">
+          <div class="wizard__step-circle">1</div>
+          <span class="wizard__step-label">1. Package</span>
+        </div>
+        <div class="wizard__connector" id="wizConn1"></div>
+        <div class="wizard__step" id="wizStep2" data-step="2">
+          <div class="wizard__step-circle">2</div>
+          <span class="wizard__step-label">2. Date & Time</span>
+        </div>
+        <div class="wizard__connector" id="wizConn2"></div>
+        <div class="wizard__step" id="wizStep3" data-step="3">
+          <div class="wizard__step-circle">3</div>
+          <span class="wizard__step-label">3. Details & Mode</span>
+        </div>
+        <div class="wizard__connector" id="wizConn3"></div>
+        <div class="wizard__step" id="wizStep4" data-step="4">
+          <div class="wizard__step-circle">4</div>
+          <span class="wizard__step-label">4. Summary & Pay</span>
+        </div>
+      </div>
+
+      <!-- ── STEP 1: Select Package & Category ──────────────────────────── -->
+      <div class="panel step-container" id="step1Container">
+        <div class="panel-header" style="flex-wrap:wrap;gap:12px;">
+          <div>
+            <p class="panel-title">Step 1: Select Consultation Package</p>
+            <p class="panel-subtitle" style="font-size:12px;color:var(--muted);">Filter by legal practice category or choose an active package below</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <label for="categoryFilter" style="font-size:13px;font-weight:600;color:var(--navy);">Category:</label>
+            <select id="categoryFilter" style="padding:6px 12px;border-radius:var(--radius-sm);border:1px solid var(--line);font-size:13px;background:#fff;">
+              <option value="all">All Practice Areas</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="packagesListState">
+          <div class="package-grid" id="packagesGrid">
+            <!-- Skeleton Rows -->
+            <div class="package-card" style="opacity:0.6;">
+              <div class="skeleton-bar w-60"></div>
+              <div class="skeleton-bar w-40"></div>
+              <div class="skeleton-bar w-80"></div>
+            </div>
+            <div class="package-card" style="opacity:0.6;">
+              <div class="skeleton-bar w-60"></div>
+              <div class="skeleton-bar w-40"></div>
+              <div class="skeleton-bar w-80"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Select Date & Available Time Slot ──────────────────── -->
+      <div class="panel step-container" id="step2Container" style="display:none;">
+        <div class="panel-header" style="flex-wrap:wrap;gap:12px;">
+          <div>
+            <p class="panel-title">Step 2: Select Date & Available Time Slot</p>
+            <p class="panel-subtitle" style="font-size:12px;color:var(--muted);">Pick an available calendar date to view lawyer availability</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <label for="slotDateInput" style="font-size:13px;font-weight:600;color:var(--navy);">Select Date:</label>
+            <input type="date" id="slotDateInput" style="padding:6px 12px;border-radius:var(--radius-sm);border:1px solid var(--line);font-size:13px;background:#fff;">
+            <button class="btn secondary" id="btnShowAllSlots" style="height:32px;font-size:12px;padding:0 10px;">Show All Slots</button>
+          </div>
+        </div>
+
+        <div id="slotsListState">
+          <div class="slot-grid" id="slotsGrid">
+            <!-- Skeleton Slots -->
+            <div class="slot-card" style="opacity:0.6;">
+              <div class="skeleton-bar w-60"></div>
+              <div class="skeleton-bar w-40"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Client Details & Consultation Mode ─────────────────── -->
+      <div class="panel step-container" id="step3Container" style="display:none;">
+        <div class="panel-header">
+          <div>
+            <p class="panel-title">Step 3: Client Details & Consultation Mode</p>
+            <p class="panel-subtitle" style="font-size:12px;color:var(--muted);">Provide your contact information and select consultation meeting preference</p>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:20px;max-width:720px;margin-top:12px;">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;">Client Name</label>
+              <input type="text" id="clientName" value="Demo Client" style="width:100%;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--line);font-size:14px;" required>
+            </div>
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;">Email Address</label>
+              <input type="email" id="clientEmail" value="client@legalconnect.lk" style="width:100%;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--line);font-size:14px;" required>
+            </div>
+          </div>
+
+          <div>
+            <label style="display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;">Phone Number</label>
+            <input type="tel" id="clientPhone" value="+94 77 123 4567" style="width:100%;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--line);font-size:14px;" required>
+          </div>
+
+          <div>
+            <label style="display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;">Consultation Mode</label>
+            <div class="mode-options">
+              <div class="mode-card selected" data-mode="Online Video Consultation" id="modeOnline">
+                <span style="font-size:24px;">🎥</span>
+                <div>
+                  <strong style="font-size:14px;color:var(--navy);display:block;">Online Video Consultation</strong>
+                  <span style="font-size:12px;color:var(--muted);">Secure WebRTC video room link provided upon confirmation.</span>
+                </div>
+              </div>
+              <div class="mode-card" data-mode="Physical Court / Office Meeting" id="modePhysical">
+                <span style="font-size:24px;">⚖</span>
+                <div>
+                  <strong style="font-size:14px;color:var(--navy);display:block;">Physical Court Meeting</strong>
+                  <span style="font-size:12px;color:var(--muted);">In-person meeting at Colombo District Court Chambers.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label style="display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;">Brief Note / Legal Concern Description</label>
+            <textarea id="clientNotes" rows="3" style="width:100%;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--line);font-size:14px;" placeholder="Describe your legal matter, documents to review, or questions for Demo Lawyer..."></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Summary & Payment Placeholder ──────────────────────── -->
+      <div class="panel step-container" id="step4Container" style="display:none;">
+        <div class="panel-header">
+          <div>
+            <p class="panel-title">Step 4: Booking Summary & Payment</p>
+            <p class="panel-subtitle" style="font-size:12px;color:var(--muted);">Review your consultation details and complete appointment booking</p>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:3fr 2fr;gap:24px;margin-top:16px;">
+          
+          <!-- Left: Summary Card -->
+          <div class="booking-summary">
+            <div class="booking-summary__header">
+              <h3>Consultation Summary</h3>
+              <p>Demo Lawyer — LegalConnect Professional Legal Services</p>
+            </div>
+            <div class="booking-summary__body">
+              <div class="booking-row">
+                <span class="booking-row__label">Lawyer</span>
+                <span class="booking-row__value" id="sumLawyer">Demo Lawyer (BAR-DEMO-001)</span>
+              </div>
+              <div class="booking-row">
+                <span class="booking-row__label">Package Name</span>
+                <span class="booking-row__value" id="sumPackage">—</span>
+              </div>
+              <div class="booking-row">
+                <span class="booking-row__label">Legal Category</span>
+                <span class="booking-row__value" id="sumCategory">—</span>
+              </div>
+              <div class="booking-row">
+                <span class="booking-row__label">Date & Time</span>
+                <span class="booking-row__value" id="sumDateTime">—</span>
+              </div>
+              <div class="booking-row">
+                <span class="booking-row__label">Consultation Mode</span>
+                <span class="booking-row__value" id="sumMode">Online Video Consultation</span>
+              </div>
+              <div class="booking-row">
+                <span class="booking-row__label">Client Name</span>
+                <span class="booking-row__value" id="sumClient">Demo Client</span>
+              </div>
+              <div class="booking-row">
+                <span class="booking-row__label">Consultation Fee</span>
+                <span class="booking-row__value" id="sumFee">LKR 0</span>
+              </div>
+              <div class="booking-row">
+                <span class="booking-row__label">Platform Admin Fee</span>
+                <span class="booking-row__value">LKR 500</span>
+              </div>
+            </div>
+            <div class="booking-summary__total">
+              <span class="booking-summary__total-label">Total Payable</span>
+              <span class="booking-summary__total-amount" id="sumTotal">LKR 500</span>
+            </div>
+          </div>
+
+          <!-- Right: Payment Method & Confirmation -->
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:16px;">
+              <h4 style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;">Payment Method</h4>
+              
+              <label class="payment-option">
+                <input type="radio" name="payMethod" value="card" checked>
+                <div>
+                  <strong style="font-size:13px;display:block;">💳 Credit / Debit Card</strong>
+                  <span style="font-size:11px;color:var(--muted);">Visa, MasterCard, Amex</span>
+                </div>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payMethod" value="bank">
+                <div>
+                  <strong style="font-size:13px;display:block;">🏦 Bank Direct Deposit</strong>
+                  <span style="font-size:11px;color:var(--muted);">Commercial Bank LK · Slip Upload</span>
+                </div>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payMethod" value="office">
+                <div>
+                  <strong style="font-size:13px;display:block;">💵 Pay at Office</strong>
+                  <span style="font-size:11px;color:var(--muted);">Pay cash upon physical arrival</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="inline-alert inline-alert--info" style="margin:0;">
+              <span class="inline-alert__icon">🔒</span>
+              <div style="font-size:12px;">
+                <strong>Module 5 Demo Sandbox:</strong> No actual payment processing will take place.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── Wizard Navigation Controls ─────────────────────────────────── -->
+      <div class="wizard-nav">
+        <button type="button" class="btn secondary" id="btnPrevStep" style="visibility:hidden;">← Back Step</button>
+        <button type="button" class="btn primary" id="btnNextStep" disabled>Next Step →</button>
+      </div>
+
+    </section>
+  </main>
+</div>
+
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+  <div class="mobile-nav__items">
+    <a class="mobile-nav__item" href="client_dashboard.html"><span class="mobile-nav__icon">⊞</span>Home</a>
+    <a class="mobile-nav__item" href="client_appointments.html"><span class="mobile-nav__icon">📅</span>Appts</a>
+    <a class="mobile-nav__item active" href="client_book_appointment.html"><span class="mobile-nav__icon">➕</span>Book</a>
+    <a class="mobile-nav__item" href="client_documents.html"><span class="mobile-nav__icon">📄</span>Docs</a>
+  </div>
+</nav>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/pages/client_book_appointment.js"></script>
+</body>
+</html>

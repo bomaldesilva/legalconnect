@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegalConnect | Client Workspace Dashboard</title>
+  <meta name="description" content="LegalConnect Client Portal — Workspace dashboard for consultation management, service requests, and document portal.">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    /* Local grid layout rules */
+    .grid-four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .grid-two-wide { display: grid; grid-template-columns: 3fr 2fr; gap: 20px; align-items: start; }
+    @media (max-width: 1100px) {
+      .grid-four { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .grid-four { grid-template-columns: repeat(2, 1fr); }
+      .grid-two-wide { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .grid-four { grid-template-columns: 1fr 1fr; }
+    }
+    .consultation-card {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .consultation-card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .consultation-card__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .consultation-card__actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-top: 8px;
+      border-top: 1px dashed var(--line);
+    }
+    .service-req-item, .doc-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      gap: 12px;
+    }
+    .service-req-item:last-child, .doc-item:last-child { border-bottom: none; }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Client Sidebar ─────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="client_dashboard.html" aria-label="LegalConnect">
+      <span class="brand-mark">LC</span>
+      <span class="brand-name">LegalConnect</span>
+    </a>
+    <div class="nav-group">
+      <p class="nav-group-label">Workspace</p>
+      <nav class="nav-list">
+        <a class="nav-link active" href="client_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+        <a class="nav-link" href="client_appointments.html"><span class="nav-icon">📅</span> Appointments</a>
+        <a class="nav-link" href="client_documents.html"><span class="nav-icon">📄</span> My Documents</a>
+        <a class="nav-link" href="client_requests.html"><span class="nav-icon">📋</span> Service Requests</a>
+      </nav>
+    </div>
+    <div class="nav-group">
+      <p class="nav-group-label">Quick Actions</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="client_lawyers.html"><span class="nav-icon">🔍</span> Find Lawyer</a>
+        <a class="nav-link" href="client_book_appointment.html"><span class="nav-icon">➕</span> Book Consultation</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <p class="sidebar-footer-text">LegalConnect · Client Portal<br>University Project</p>
+    </div>
+  </aside>
+
+  <!-- ── Main Page Area ─────────────────────────────────────────────────── -->
+  <main class="page">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div>
+          <p class="topbar-title">Client Workspace Dashboard</p>
+          <p class="topbar-subtitle" id="currentDate">Loading date…</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" title="Notifications">🔔</button>
+        <div class="avatar avatar--md avatar--teal" title="Demo Client">DC</div>
+        <span class="phase-pill">Client</span>
+      </div>
+    </header>
+
+    <section class="content">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="client_dashboard.html">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Client Workspace</span>
+      </nav>
+
+      <!-- ── Profile Hero ────────────────────────────────────────────────── -->
+      <!-- DEMO DATA -->
+      <div class="profile-hero" style="margin-bottom: 24px;">
+        <div class="profile-hero__avatar">DC</div>
+        <div class="profile-hero__info">
+          <p class="profile-hero__name">Demo Client</p>
+          <p class="profile-hero__sub">client@legalconnect.lk &nbsp;·&nbsp; User ID: 3 &nbsp;·&nbsp; Client ID: 1</p>
+          <div class="profile-hero__tags" style="margin-top:6px;">
+            <span class="tag">Individual Client</span>
+            <span class="tag">Colombo, Sri Lanka</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0;">
+          <span class="verif-badge verif-badge--pending" style="background:#fff3cd;color:#856404;border:1px solid #ffeeba;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;">⏳ Verification Pending</span>
+          <div style="display:flex;gap:8px;">
+            <a class="btn secondary" href="#" id="btnEditProfile" style="height:34px;font-size:13px;padding:0 14px;">Edit Profile</a>
+            <a class="btn primary" href="client_book_appointment.html" style="height:34px;font-size:13px;padding:0 14px;">+ Book Consultation</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 4 KPI Stat Cards ────────────────────────────────────────────── -->
+      <div class="grid-four">
+        <div class="stat-card stat-card--teal">
+          <div class="stat-card__icon-wrap">📅</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Upcoming Consultations</p>
+            <p class="stat-card__value" id="kpiUpcoming">1</p>
+            <p class="stat-card__delta" style="font-size:11px;color:var(--muted);">Next: 2026-08-05</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--info">
+          <div class="stat-card__icon-wrap">📋</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Active Requests</p>
+            <p class="stat-card__value" id="kpiRequests">2</p>
+            <p class="stat-card__delta" style="font-size:11px;color:var(--muted);">1 Under Review</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--navy">
+          <div class="stat-card__icon-wrap">📄</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Uploaded Documents</p>
+            <p class="stat-card__value" id="kpiDocs">4</p>
+            <p class="stat-card__delta" style="font-size:11px;color:var(--muted);">Deeds & Identity NIC</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--success">
+          <div class="stat-card__icon-wrap">💳</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Total Payments</p>
+            <p class="stat-card__value" id="kpiPayments">LKR 15,000</p>
+            <p class="stat-card__delta" style="font-size:11px;color:var(--muted);">2 Completed Tx</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Two-Column Main Section ────────────────────────────────────── -->
+      <div class="grid-two-wide">
+
+        <!-- LEFT COLUMN: Upcoming Consultations List & Quick Actions -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <!-- Upcoming Consultations Panel -->
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="panel-title">Upcoming Consultations</p>
+                <p class="panel-subtitle" style="font-size:12px;color:var(--muted);">Your scheduled meetings with verified lawyers</p>
+              </div>
+              <a class="btn secondary" href="client_appointments.html" style="height:30px;font-size:12px;padding:0 10px;">View All</a>
+            </div>
+
+            <div id="upcomingConsultationsList">
+              <!-- DEMO DATA: Demo Lawyer Consultation on 2026-08-05 at 11:00 AM Online -->
+              <div class="consultation-card">
+                <div class="consultation-card__header">
+                  <div>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span class="avatar avatar--sm avatar--teal">DL</span>
+                      <div>
+                        <strong style="font-size:15px;color:var(--navy);">Demo Lawyer</strong>
+                        <span style="font-size:12px;color:var(--muted);margin-left:6px;">BAR-DEMO-001</span>
+                      </div>
+                    </div>
+                    <p style="font-size:13px;color:var(--navy);font-weight:600;margin-top:8px;">
+                      Initial Consultation — Property & Family Law
+                    </p>
+                  </div>
+                  <span class="badge active">Confirmed</span>
+                </div>
+
+                <div class="consultation-card__meta">
+                  <span>📅 <strong>Date:</strong> 2026-08-05</span>
+                  <span>⏰ <strong>Time:</strong> 11:00 AM – 11:30 AM</span>
+                  <span>🎥 <strong>Mode:</strong> Online Video Call</span>
+                </div>
+
+                <div class="consultation-card__actions">
+                  <button class="btn primary" id="btnJoinMeeting" style="height:32px;font-size:12px;padding:0 12px;">🎥 Join Video Meeting</button>
+                  <button class="btn secondary" id="btnReschedule" style="height:32px;font-size:12px;padding:0 12px;">📅 Reschedule</button>
+                  <a class="btn secondary" href="client_appointments.html" style="height:32px;font-size:12px;padding:0 12px;">View Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions Panel -->
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Quick Actions</p>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
+              <a class="btn primary" href="client_book_appointment.html" style="justify-content:center;gap:8px;">
+                <span>➕</span> Book Appointment
+              </a>
+              <button class="btn secondary" id="btnRequestTitleCheck" style="justify-content:center;gap:8px;">
+                <span>📜</span> Request Title Check
+              </button>
+              <button class="btn secondary" id="btnUploadDocument" style="justify-content:center;gap:8px;">
+                <span>📤</span> Upload Document
+              </button>
+              <a class="btn secondary" href="client_lawyers.html" style="justify-content:center;gap:8px;">
+                <span>🔍</span> Find Lawyers
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: Active Service Requests & Recent Documents -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <!-- Active Service Requests Panel -->
+          <!-- DEMO DATA -->
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Active Service Requests</p>
+              <a class="btn secondary" href="client_requests.html" style="height:30px;font-size:12px;padding:0 10px;">View All</a>
+            </div>
+            <div class="service-requests-list">
+              <div class="service-req-item">
+                <div>
+                  <strong style="font-size:14px;color:var(--navy);display:block;">Title Deed Verification</strong>
+                  <span style="font-size:12px;color:var(--muted);">Land Registry · Ref #REQ-2026-089</span>
+                  <div style="font-size:11px;color:var(--muted);margin-top:2px;">Assigned: Demo Lawyer</div>
+                </div>
+                <span class="badge info">In Progress</span>
+              </div>
+              <div class="service-req-item">
+                <div>
+                  <strong style="font-size:14px;color:var(--navy);display:block;">Commercial Lease Agreement</strong>
+                  <span style="font-size:12px;color:var(--muted);">Corporate Law · Ref #REQ-2026-074</span>
+                  <div style="font-size:11px;color:var(--muted);margin-top:2px;">Assigned: Demo Lawyer</div>
+                </div>
+                <span class="badge warning">Under Review</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Documents Panel -->
+          <!-- DEMO DATA -->
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Recent Documents</p>
+              <a class="btn secondary" href="client_documents.html" style="height:30px;font-size:12px;padding:0 10px;">View All</a>
+            </div>
+            <div class="recent-documents-list">
+              <div class="doc-item">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="font-size:20px;">📄</span>
+                  <div>
+                    <strong style="font-size:13px;color:var(--navy);display:block;">Land_Deed_Extract_2026.pdf</strong>
+                    <span style="font-size:11px;color:var(--muted);">1.8 MB · Uploaded 2026-07-28</span>
+                  </div>
+                </div>
+                <span class="badge active" style="font-size:10px;">Verified</span>
+              </div>
+              <div class="doc-item">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="font-size:20px;">🆔</span>
+                  <div>
+                    <strong style="font-size:13px;color:var(--navy);display:block;">Identity_Card_Copy.pdf</strong>
+                    <span style="font-size:11px;color:var(--muted);">450 KB · Uploaded 2026-07-25</span>
+                  </div>
+                </div>
+                <span class="badge active" style="font-size:10px;">Verified</span>
+              </div>
+              <div class="doc-item">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="font-size:20px;">📋</span>
+                  <div>
+                    <strong style="font-size:13px;color:var(--navy);display:block;">Property_Tax_Receipt.pdf</strong>
+                    <span style="font-size:11px;color:var(--muted);">820 KB · Uploaded 2026-07-20</span>
+                  </div>
+                </div>
+                <span class="badge warning" style="font-size:10px;">Pending</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+</div>
+
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+  <div class="mobile-nav__items">
+    <a class="mobile-nav__item active" href="client_dashboard.html"><span class="mobile-nav__icon">⊞</span>Home</a>
+    <a class="mobile-nav__item" href="client_appointments.html"><span class="mobile-nav__icon">📅</span>Appts</a>
+    <a class="mobile-nav__item" href="client_book_appointment.html"><span class="mobile-nav__icon">➕</span>Book</a>
+    <a class="mobile-nav__item" href="client_documents.html"><span class="mobile-nav__icon">📄</span>Docs</a>
+  </div>
+</nav>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/pages/client_dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegalConnect | Service Requests</title>
+  <meta name="description" content="Property Title Search and Special Legal Service Requests on LegalConnect.">
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Client Sidebar ─────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="client_dashboard.html" aria-label="LegalConnect">
+      <span class="brand-mark">LC</span>
+      <span class="brand-name">LegalConnect</span>
+    </a>
+    <div class="nav-group">
+      <p class="nav-group-label">Workspace</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="client_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+        <a class="nav-link" href="client_appointments.html"><span class="nav-icon">📅</span> Appointments</a>
+        <a class="nav-link" href="client_documents.html"><span class="nav-icon">📄</span> My Documents</a>
+        <a class="nav-link active" href="client_service_requests.html"><span class="nav-icon">🏛</span> Service Requests</a>
+      </nav>
+    </div>
+    <div class="nav-group">
+      <p class="nav-group-label">Quick Actions</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="lawyer_search.html"><span class="nav-icon">⌕</span> Find Lawyers</a>
+        <a class="nav-link" href="client_book_appointment.html"><span class="nav-icon">✚</span> Book Consultation</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <p class="sidebar-footer-text">LegalConnect · Client Portal<br>University Project</p>
+    </div>
+  </aside>
+
+  <!-- ── Main ───────────────────────────────────────────────────────────── -->
+  <main class="page">
+
+    <header class="topbar">
+      <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div>
+          <p class="topbar-title">Service Requests</p>
+          <p class="topbar-subtitle">Property Title Search &amp; Special Legal Services</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" title="Notifications">🔔</button>
+        <div class="avatar avatar--md avatar--teal" title="Demo Client">DC</div>
+        <span class="phase-pill">Client</span>
+      </div>
+    </header>
+
+    <section class="content">
+
+      <div class="breadcrumb">
+        <a href="client_dashboard.html">Dashboard</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Service Requests</span>
+      </div>
+
+      <div class="section-head">
+        <div class="section-head__text">
+          <h1>Property Title Checks &amp; Legal Services</h1>
+          <p>Submit property title verification requests for Land Registry checks and deed verification.</p>
+        </div>
+        <button class="btn primary" id="newRequestBtn" type="button">✚ New Service Request</button>
+      </div>
+
+      <div class="inline-alert inline-alert--info" style="margin-bottom:24px;">
+        <span class="inline-alert__icon">ℹ</span>
+        <div><strong>Property Title Search &amp; Verification</strong> — Requests are processed directly with Land Registry records and assigned to verified Notaries Public. Demo data shown below.</div>
+      </div>
+
+      <!-- ── 3 KPI Cards ────────────────────────────────────────────────── -->
+      <div class="grid three" style="margin-bottom:28px;">
+        <div class="stat-card stat-card--teal">
+          <div class="stat-card__icon-wrap">🏛</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Total Requests</p>
+            <p class="stat-card__value" id="kpiTotalReq">2</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--warning">
+          <div class="stat-card__icon-wrap">⏳</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">In Review / Pending</p>
+            <p class="stat-card__value" id="kpiPendingReq">1</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--success">
+          <div class="stat-card__icon-wrap">✓</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Approved / Completed</p>
+            <p class="stat-card__value" id="kpiCompletedReq">1</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Requests Table Panel ───────────────────────────────────────── -->
+      <div class="panel">
+        <div class="panel-header">
+          <p class="panel-title">My Service Requests</p>
+          <span class="badge active" id="requestCount">2 requests</span>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by type or location..." autocomplete="off">
+          </div>
+          <div class="filter-group">
+            <button class="filter-chip selected" data-filter="all" type="button">All</button>
+            <button class="filter-chip" data-filter="Pending" type="button">Pending</button>
+            <button class="filter-chip" data-filter="InReview" type="button">In Review</button>
+            <button class="filter-chip" data-filter="Approved" type="button">Approved</button>
+          </div>
+          <span class="results-count" id="resultsCount">2 results</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Req ID</th>
+                <th>Service Type</th>
+                <th>Property Location</th>
+                <th>Assigned Attorney</th>
+                <th>Submitted Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="requestRows">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+  </main>
+</div>
+
+<!-- New Service Request Modal -->
+<div id="requestModalOverlay" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(13,31,60,.45);backdrop-filter:blur(4px);display:none;place-items:center;">
+  <div class="lc-modal" style="width:min(540px,calc(100vw - 32px));">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <h2 style="font-size:18px;font-weight:800;color:var(--navy);">New Property Title / Service Request</h2>
+      <button class="btn secondary icon-btn" onclick="closeRequestModal()">✕</button>
+    </div>
+
+    <form id="requestForm">
+      <div class="field">
+        <label for="requestType">Service Request Type *</label>
+        <select id="requestType" required>
+          <option value="Land Registry Title Search">Land Registry Title Search &amp; Extraction</option>
+          <option value="Deed Title Ownership Verification">Deed Title Ownership Verification</option>
+          <option value="Boundary Dispute &amp; Plan Verification">Boundary Dispute &amp; Plan Verification</option>
+          <option value="Power of Attorney Attestation">Power of Attorney Attestation</option>
+          <option value="Lease Agreement Drafting">Lease Agreement Drafting</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="propertyLocation">Property Location / Local Authority Area *</label>
+        <input type="text" id="propertyLocation" placeholder="e.g. Kandy Municipal Council Area / Deed Volume 142 Folio 88" required>
+      </div>
+
+      <div class="field">
+        <label for="requestDescription">Request Details / Instructions</label>
+        <textarea id="requestDescription" rows="3" placeholder="Provide any specific deed numbers, local land registry office, or notes..."></textarea>
+      </div>
+
+      <div class="inline-alert inline-alert--info" style="margin-top:12px;">
+        <span class="inline-alert__icon">ℹ</span>
+        <div>Request will be logged and assigned to Demo Lawyer (BAR-DEMO-001) for verification.</div>
+      </div>
+
+      <div class="form-actions" style="margin-top:20px;">
+        <button class="btn primary" type="submit">Submit Request</button>
+        <button class="btn secondary" type="button" onclick="closeRequestModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Mobile bottom nav -->
+<nav class="mobile-nav">
+  <div class="mobile-nav__items">
+    <a class="mobile-nav__item" href="client_dashboard.html"><span class="mobile-nav__icon">⊞</span>Home</a>
+    <a class="mobile-nav__item" href="client_appointments.html"><span class="mobile-nav__icon">📅</span>Appts</a>
+    <a class="mobile-nav__item" href="client_documents.html"><span class="mobile-nav__icon">📄</span>Docs</a>
+    <a class="mobile-nav__item active" href="client_service_requests.html"><span class="mobile-nav__icon">🏛</span>Requests</a>
+  </div>
+</nav>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/pages/client_service_requests.js"></script>
+</body>
+</html>

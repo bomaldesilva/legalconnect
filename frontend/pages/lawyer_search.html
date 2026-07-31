@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalConnect | Lawyer Search &amp; Discovery</title>
+    <meta name="description" content="Search verified Attorneys-at-Law in Sri Lanka. Compare consultation packages, practice areas, rating reviews, and book instant legal consultations.">
+    <link rel="stylesheet" href="../css/main.css">
+  </head>
+  <body style="background:var(--bg);">
+
+    <!-- ── Public Header ────────────────────────────────────────────────── -->
+    <header class="landing-header" style="background:var(--navy);">
+      <div class="landing-header-container">
+        <a class="brand" href="../index.html" aria-label="LegalConnect Home">
+          <span class="brand-mark">LC</span>
+          <span class="brand-name">LegalConnect</span>
+        </a>
+
+        <nav>
+          <ul class="landing-nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="lawyer_search.html" class="active">Find Lawyers</a></li>
+            <li><a href="../index.html#services">Services</a></li>
+            <li><a href="../index.html#categories">Categories</a></li>
+          </ul>
+        </nav>
+
+        <div class="landing-portal-btns">
+          <a href="client_login.html" class="btn secondary btn-glass" style="font-size:13px; padding:0 14px; height:36px;">Client Login</a>
+          <a href="login.html" class="btn primary" style="font-size:13px; padding:0 16px; height:36px;">Lawyer Workspace</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Main Search Page Container ───────────────────────────────────── -->
+    <main class="content" style="max-width:1200px; padding-top:24px; padding-bottom:60px;">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" style="margin-bottom:16px;" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Lawyer Search</span>
+      </nav>
+
+      <!-- Section Head -->
+      <div class="section-head">
+        <div class="section-head__text">
+          <h1>Find Verified Attorneys-at-Law in Sri Lanka</h1>
+          <p>Browse top-rated legal practitioners, filter by specialization and court jurisdiction, and book consultations instantly.</p>
+        </div>
+        <span class="phase-pill">Directory Active</span>
+      </div>
+
+      <!-- ── Search & Filter Panel ───────────────────────────────────────── -->
+      <div class="panel" style="margin-bottom:28px; padding:20px;">
+        <div class="table-topbar" style="margin-bottom:16px;">
+          <!-- Main text search input -->
+          <div class="search-box" style="flex:2;">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search lawyer name, court jurisdiction, or legal topic..." aria-label="Search lawyers">
+          </div>
+
+          <!-- Category filter select (populated dynamically) -->
+          <select id="categoryFilter" class="select-filter" style="flex:1; height:42px; border-radius:var(--radius); border:1px solid var(--line); padding:0 12px; font-size:14px; background:var(--surface);">
+            <option value="">All Legal Categories</option>
+            <option value="1">Family Law</option>
+            <option value="2">Property &amp; Real Estate Law</option>
+            <option value="3">Corporate &amp; Commercial Law</option>
+            <option value="4">Criminal Law</option>
+            <option value="5">Labour &amp; Employment Law</option>
+            <option value="6">Constitutional &amp; Administrative Law</option>
+          </select>
+
+          <!-- Location filter select -->
+          <select id="locationFilter" class="select-filter" style="flex:1; height:42px; border-radius:var(--radius); border:1px solid var(--line); padding:0 12px; font-size:14px; background:var(--surface);">
+            <option value="">All Locations / Courts</option>
+            <option value="Colombo">Colombo (Supreme / High Court)</option>
+            <option value="Kandy">Kandy District Court</option>
+            <option value="Galle">Galle Commercial Court</option>
+            <option value="Gampaha">Gampaha District Court</option>
+            <option value="Kurunegala">Kurunegala Court</option>
+            <option value="Jaffna">Jaffna High Court</option>
+          </select>
+        </div>
+
+        <!-- Toolbar Chips & Sorting -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-top:1px solid var(--line); padding-top:14px;">
+          <div style="display:flex; items:center; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;">Rating:</span>
+            <button type="button" class="filter-chip active" data-rating="all">All Ratings</button>
+            <button type="button" class="filter-chip" data-rating="4.5">★ 4.5 &amp; above</button>
+            <button type="button" class="filter-chip" data-rating="4.0">★ 4.0 &amp; above</button>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px;">
+            <label for="sortSelect" style="font-size:13px; font-weight:600; color:var(--muted);">Sort by:</label>
+            <select id="sortSelect" style="height:36px; border-radius:var(--radius-sm); border:1px solid var(--line); padding:0 10px; font-size:13px;">
+              <option value="recommended">Recommended</option>
+              <option value="rating">Highest Rated</option>
+              <option value="experience">Most Experienced</option>
+              <option value="name">Name (A-Z)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Search Results Count & Skeleton / Cards Container ────────────── -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+        <p style="font-size:15px; font-weight:700; color:var(--navy);" id="resultsCount">
+          Showing <strong>0</strong> verified attorneys
+        </p>
+        <div style="font-size:12px; color:var(--muted);">
+          <span>● BASL Identity Verified</span>
+        </div>
+      </div>
+
+      <!-- Lawyer Cards Grid -->
+      <div class="grid two" id="lawyerGrid" style="gap:24px;">
+        <!-- Loading Skeleton State -->
+        <div class="lawyer-card" style="opacity:0.6;">
+          <div class="skeleton" style="height:20px; width:60%; margin-bottom:8px;"></div>
+          <div class="skeleton" style="height:14px; width:40%; margin-bottom:12px;"></div>
+          <div class="skeleton" style="height:60px; width:100%;"></div>
+        </div>
+        <div class="lawyer-card" style="opacity:0.6;">
+          <div class="skeleton" style="height:20px; width:60%; margin-bottom:8px;"></div>
+          <div class="skeleton" style="height:14px; width:40%; margin-bottom:12px;"></div>
+          <div class="skeleton" style="height:60px; width:100%;"></div>
+        </div>
+      </div>
+
+      <!-- Empty State Container (Hidden by default) -->
+      <div id="emptyState" class="panel" style="display:none; text-align:center; padding:48px 24px; margin-top:16px;">
+        <div style="font-size:48px; margin-bottom:12px;">🔍</div>
+        <h3 style="font-size:18px; font-weight:700; color:var(--navy); margin-bottom:6px;">No Lawyers Found</h3>
+        <p style="font-size:14px; color:var(--muted); max-width:420px; margin:0 auto 16px;">
+          We couldn't find any lawyers matching your search criteria. Try adjusting your category or rating filters.
+        </p>
+        <button type="button" class="btn secondary" id="resetSearchBtn">Reset Filters</button>
+      </div>
+
+    </main>
+
+    <!-- ── Lawyer Detail / Booking Modal ───────────────────────────────── -->
+    <div id="lawyerModal" class="slide-panel__overlay" style="display:none;" aria-hidden="true">
+      <div class="slide-panel slide-panel--open" style="width:540px;" role="dialog" aria-labelledby="modalLawyerName">
+        <div class="slide-panel__header">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="avatar avatar--md avatar--teal" id="modalAvatar">DL</div>
+            <div>
+              <h3 class="slide-panel__title" id="modalLawyerName">Demo Lawyer</h3>
+              <p style="font-size:12px; color:var(--muted);" id="modalBarNo">BAR-DEMO-001</p>
+            </div>
+          </div>
+          <button type="button" id="closeModalBtn" class="btn secondary" style="min-height:32px; padding:0 10px;">✕</button>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:20px; padding-top:12px;">
+          <!-- Status & Court info -->
+          <div class="detail-row">
+            <span class="detail-row__label">Court Jurisdiction</span>
+            <span class="detail-row__value" id="modalCourt">Supreme Court &amp; District Court Colombo</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-row__label">Experience</span>
+            <span class="detail-row__value" id="modalExp">5 Years Legal Practice</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-row__label">Rating &amp; Reviews</span>
+            <span class="detail-row__value" id="modalRating">⭐ 4.50 (28 verified client reviews)</span>
+          </div>
+
+          <!-- Bio -->
+          <div>
+            <h4 style="font-size:14px; font-weight:700; color:var(--navy); margin-bottom:6px;">Biography &amp; Practice Focus</h4>
+            <p style="font-size:13.5px; color:var(--muted); line-height:1.6;" id="modalBio">
+              Experienced Sri Lankan Attorney-at-Law specializing in Family Law, Criminal Defense, Property Title Searches, and Deed Attestations.
+            </p>
+          </div>
+
+          <!-- Active Packages -->
+          <div>
+            <h4 style="font-size:14px; font-weight:700; color:var(--navy); margin-bottom:10px;">Available Consultation Packages</h4>
+            <div id="modalPackagesList" style="display:flex; flex-direction:column; gap:10px;">
+              <div class="skeleton" style="height:50px;"></div>
+            </div>
+          </div>
+
+          <!-- Modal Actions -->
+          <div style="display:flex; gap:12px; margin-top:12px; padding-top:16px; border-top:1px solid var(--line);">
+            <a id="modalClientBookBtn" href="client_login.html" class="btn primary" style="flex:1; justify-content:center;">
+              Book Consultation Now
+            </a>
+            <button type="button" id="modalCloseSecondary" class="btn secondary">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Public Footer ────────────────────────────────────────────────── -->
+    <footer class="landing-footer">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <a class="brand" href="../index.html">
+            <span class="brand-mark">LC</span>
+            <span class="brand-name">LegalConnect</span>
+          </a>
+          <p>Sri Lanka's leading digital legal platform connecting clients with verified Attorneys-at-Law and providing practice management solutions.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="lawyer_search.html">Find Lawyers</a></li>
+            <li><a href="../index.html#services">Services</a></li>
+            <li><a href="../index.html#categories">Legal Categories</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>User Portals</h4>
+          <ul>
+            <li><a href="client_login.html">Client Portal</a></li>
+            <li><a href="login.html">Lawyer Workspace</a></li>
+            <li><a href="admin_login.html">Admin Portal</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact &amp; Help</h4>
+          <ul>
+            <li><span style="color:rgba(255,255,255,0.7)">📍 Colombo, Sri Lanka</span></li>
+            <li><span style="color:rgba(255,255,255,0.7)">📧 support@legalconnect.lk</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-disclaimer">
+        <p><strong>BASL &amp; Sri Lanka Legal Disclaimer:</strong> LegalConnect is an administrative technology platform connecting clients with verified Attorneys-at-Law in Sri Lanka. All legal advice and court representations are provided directly by independent legal practitioners bound by the Bar Association of Sri Lanka (BASL).</p>
+        <p>© 2026 LegalConnect Sri Lanka. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- ── Mobile Navigation ────────────────────────────────────────────── -->
+    <div class="mobile-nav">
+      <div class="mobile-nav__items">
+        <a href="../index.html" class="mobile-nav__item">
+          <span class="mobile-nav__icon">🏠</span>
+          <span>Home</span>
+        </a>
+        <a href="lawyer_search.html" class="mobile-nav__item active">
+          <span class="mobile-nav__icon">🔍</span>
+          <span>Search</span>
+        </a>
+        <a href="client_login.html" class="mobile-nav__item">
+          <span class="mobile-nav__icon">👤</span>
+          <span>Client</span>
+        </a>
+        <a href="login.html" class="mobile-nav__item">
+          <span class="mobile-nav__icon">⚖</span>
+          <span>Lawyer</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── Scripts ───────────────────────────────────────────────────────── -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/lawyer_search.js"></script>
+  </body>
+</html>

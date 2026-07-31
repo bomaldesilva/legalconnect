@@ -3,11 +3,336 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LegalConnect</title>
-    <meta http-equiv="refresh" content="0; url=pages/login.html">
+    <title>LegalConnect — Top Legal Expertise & Practice Management in Sri Lanka</title>
+    <meta name="description" content="Sri Lanka's premier legal consultation and practice management platform. Access verified attorneys, document attestation, property title checks, and case tracking.">
+    <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
-    <p><a href="pages/login.html">Open LegalConnect</a></p>
+    <!-- ── Navigation Bar ────────────────────────────────────────────────── -->
+    <header class="landing-header">
+      <div class="landing-header-container">
+        <a class="brand" href="index.html" aria-label="LegalConnect Home">
+          <span class="brand-mark">LC</span>
+          <span class="brand-name">LegalConnect</span>
+        </a>
+
+        <nav>
+          <ul class="landing-nav-links">
+            <li><a href="#top" class="active">Home</a></li>
+            <li><a href="pages/lawyer_search.html">Find Lawyers</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#categories">Categories</a></li>
+            <li><a href="#about">About</a></li>
+          </ul>
+        </nav>
+
+        <div class="landing-portal-btns">
+          <a href="pages/client_login.html" class="btn secondary btn-glass" style="font-size:13px; padding:0 14px; height:36px;">Client Login</a>
+          <a href="pages/login.html" class="btn primary" style="font-size:13px; padding:0 16px; height:36px;">Lawyer Login</a>
+          <a href="pages/admin_login.html" class="btn secondary" style="font-size:13px; padding:0 12px; height:36px; border-color:rgba(255,255,255,0.2); color:rgba(255,255,255,0.75);">Admin</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Hero Section ──────────────────────────────────────────────────── -->
+    <section class="landing-hero" id="top">
+      <div class="hero-glow-1"></div>
+      <div class="hero-glow-2"></div>
+
+      <div class="landing-hero-content">
+        <div class="hero-badge-pill">
+          <span>🇱🇰</span> Verified Sri Lankan Attorneys & Legal Tech Suite
+        </div>
+
+        <h1 class="hero-headline">
+          Access Top Legal Expertise &amp; Practice Management in Sri Lanka
+        </h1>
+
+        <p class="hero-subheadline">
+          Seamless consultation, document attestation, property title checks, and case tracking for clients and legal practitioners.
+        </p>
+
+        <!-- Hero Search Bar -->
+        <div class="hero-search-wrapper">
+          <form id="heroSearchForm" class="hero-search" action="pages/lawyer_search.html" method="GET">
+            <input type="text" id="heroSearchInput" name="search" placeholder="Search lawyer name, legal area, or court..." aria-label="Search lawyer or legal area">
+            <select id="heroCategorySelect" name="category" aria-label="Select Legal Category">
+              <option value="">All Categories</option>
+              <!-- Dynamically populated or fallback -->
+              <option value="1">Family Law</option>
+              <option value="2">Property &amp; Real Estate Law</option>
+              <option value="3">Corporate &amp; Commercial Law</option>
+              <option value="4">Criminal Law</option>
+              <option value="5">Labour &amp; Employment Law</option>
+              <option value="6">Constitutional &amp; Administrative Law</option>
+            </select>
+            <button type="submit" class="btn primary">Search</button>
+          </form>
+        </div>
+
+        <!-- Quick stats summary in Hero -->
+        <!-- DEMO DATA -->
+        <div style="display:flex; gap:32px; margin-top:24px; color:rgba(255,255,255,0.75); font-size:13px; flex-wrap:wrap; justify-content:center;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="color:var(--teal); font-weight:700;">✓</span> 100% BASL Verified Attorneys
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="color:var(--teal); font-weight:700;">✓</span> Instant Video &amp; In-Person Slots
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="color:var(--teal); font-weight:700;">✓</span> Encrypted Case &amp; Document Vault
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Services & Features Grid ──────────────────────────────────────── -->
+    <section class="landing-section" id="services">
+      <div class="landing-section-title">
+        <h2>Comprehensive Legal &amp; Practice Solutions</h2>
+        <p>Empowering individuals and corporate clients with direct legal consultations while equipping lawyers with modern practice tools.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon">⚖</div>
+          <h3>Legal Consultation</h3>
+          <p>Book online video consultations or physical office appointments with top-rated Sri Lankan attorneys-at-law with transparent fixed pricing.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">📄</div>
+          <h3>Document Attestation &amp; Templates</h3>
+          <p>Access standardized legal templates, deed attestation services, sworn affidavits, and agreement reviews verified by experienced counsel.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">🏛</div>
+          <h3>Property Title Search &amp; Deed Verification</h3>
+          <p>Comprehensive land registry checks, title opinion reports, boundary dispute reviews, and deed drafting for secure property transactions.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">💼</div>
+          <h3>Practice Management Suite</h3>
+          <p>End-to-end workspace for lawyers: availability calendar management, client intake, consultation packages, document repository, and case tracking.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── Legal Categories Grid ─────────────────────────────────────────── -->
+    <section class="landing-section" style="background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line);" id="categories">
+      <div class="landing-section-title">
+        <h2>Browse Legal Specialization Categories</h2>
+        <p>Connect with specialist legal practitioners across major practice areas in Sri Lankan law.</p>
+      </div>
+
+      <div class="category-grid" id="landingCategoriesGrid">
+        <!-- DEMO DATA (Overwritten dynamically if API connects) -->
+        <a href="pages/lawyer_search.html?category=1" class="category-card">
+          <div class="category-left">
+            <div class="category-card-icon">👨‍👩‍👧</div>
+            <div class="category-card-info">
+              <h4>Family Law</h4>
+              <p>Divorce, maintenance, custody &amp; adoption</p>
+            </div>
+          </div>
+          <span class="badge active" style="font-weight:600;">Active</span>
+        </a>
+
+        <a href="pages/lawyer_search.html?category=2" class="category-card">
+          <div class="category-left">
+            <div class="category-card-icon">🏡</div>
+            <div class="category-card-info">
+              <h4>Property &amp; Real Estate</h4>
+              <p>Deeds, title search, land disputes &amp; leases</p>
+            </div>
+          </div>
+          <span class="badge active" style="font-weight:600;">Active</span>
+        </a>
+
+        <a href="pages/lawyer_search.html?category=3" class="category-card">
+          <div class="category-left">
+            <div class="category-card-icon">🏢</div>
+            <div class="category-card-info">
+              <h4>Business &amp; Corporate</h4>
+              <p>Company setup, contracts &amp; compliance</p>
+            </div>
+          </div>
+          <span class="badge active" style="font-weight:600;">Active</span>
+        </a>
+
+        <a href="pages/lawyer_search.html?category=4" class="category-card">
+          <div class="category-left">
+            <div class="category-card-icon">🛡</div>
+            <div class="category-card-info">
+              <h4>Criminal Law</h4>
+              <p>Bail applications, defense &amp; litigation</p>
+            </div>
+          </div>
+          <span class="badge active" style="font-weight:600;">Active</span>
+        </a>
+
+        <a href="pages/lawyer_search.html?category=5" class="category-card">
+          <div class="category-left">
+            <div class="category-card-icon">👷</div>
+            <div class="category-card-info">
+              <h4>Labour &amp; Employment</h4>
+              <p>Industrial disputes, contracts &amp; EPF/ETF</p>
+            </div>
+          </div>
+          <span class="badge active" style="font-weight:600;">Active</span>
+        </a>
+
+        <a href="pages/lawyer_search.html?category=6" class="category-card">
+          <div class="category-left">
+            <div class="category-card-icon">📜</div>
+            <div class="category-card-info">
+              <h4>Constitutional Law</h4>
+              <p>Fundamental rights &amp; writ petitions</p>
+            </div>
+          </div>
+          <span class="badge active" style="font-weight:600;">Active</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ── How It Works Section ──────────────────────────────────────────── -->
+    <section class="landing-section" id="how-it-works">
+      <div class="landing-section-title">
+        <h2>How LegalConnect Works</h2>
+        <p>Simple 4-step process to consult with verified lawyers and manage your legal matters.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">Step 01</span>
+          <h3>Find Verified Lawyer</h3>
+          <p>Search by legal area, court jurisdiction, experience, or rating. Filter verified BASL attorneys across Sri Lanka.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num">Step 02</span>
+          <h3>Select Package &amp; Slot</h3>
+          <p>Choose your preferred consultation package (30-min discovery, 60-min strategy) and pick an open time slot.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num">Step 03</span>
+          <h3>Secure Booking</h3>
+          <p>Confirm your appointment with transparent fixed fee schedules. Receive instant confirmation and meeting link.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num">Step 04</span>
+          <h3>Case Tracking &amp; Documents</h3>
+          <p>Track case progress, share legal documents securely, receive court date reminders, and review case notes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Verified Sri Lankan Lawyer Highlight ──────────────────────────── -->
+    <!-- DEMO DATA -->
+    <section class="landing-section" id="about">
+      <div class="lawyer-highlight-box">
+        <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+          <div class="avatar avatar--xl avatar--navy" style="width:72px; height:72px; font-size:24px; box-shadow:var(--shadow-sm);">DL</div>
+          <div>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+              <h3 style="font-size:22px; font-weight:800; color:var(--navy);">Demo Lawyer</h3>
+              <span class="badge active">BAR-DEMO-001</span>
+              <span class="phase-pill">Verified Practitioner</span>
+            </div>
+            <p style="color:var(--muted); font-size:14px; margin-bottom:8px;">
+              Attorney-at-Law &amp; Notary Public · Supreme Court of Sri Lanka · 5+ Years Experience
+            </p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <span class="tag">Family Law</span>
+              <span class="tag">Criminal Defense</span>
+              <span class="tag">Property &amp; Deed Attestation</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:12px; min-width:200px;">
+          <div style="text-align:right;">
+            <div style="font-size:20px; font-weight:800; color:var(--navy);">⭐ 4.50 <span style="font-size:12px; color:var(--muted); font-weight:500;">(28 reviews)</span></div>
+            <div style="font-size:12px; color:var(--success); font-weight:600; margin-top:2px;">● Available for Booking Today</div>
+          </div>
+          <a href="pages/lawyer_search.html?lawyer=2" class="btn primary" style="padding:0 24px; height:44px; font-weight:700;">
+            Book Consultation
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Footer ────────────────────────────────────────────────────────── -->
+    <footer class="landing-footer">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <a class="brand" href="index.html">
+            <span class="brand-mark">LC</span>
+            <span class="brand-name">LegalConnect</span>
+          </a>
+          <p>Sri Lanka's leading digital legal platform connecting clients with verified Attorneys-at-Law and providing comprehensive practice management tools.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pages/lawyer_search.html">Find Lawyers</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#categories">Legal Categories</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>User Portals</h4>
+          <ul>
+            <li><a href="pages/client_login.html">Client Portal</a></li>
+            <li><a href="pages/login.html">Lawyer Workspace</a></li>
+            <li><a href="pages/admin_login.html">Admin Portal</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Platform Contact</h4>
+          <ul>
+            <li><span style="color:rgba(255,255,255,0.7)">📍 Colombo, Sri Lanka</span></li>
+            <li><span style="color:rgba(255,255,255,0.7)">📧 support@legalconnect.lk</span></li>
+            <li><span style="color:rgba(255,255,255,0.7)">📞 +94 11 234 5678</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-disclaimer">
+        <p><strong>BASL &amp; Sri Lanka Legal Disclaimer:</strong> LegalConnect is an administrative technology platform connecting clients with verified Attorneys-at-Law in Sri Lanka. All legal advice, deed attestations, and courtroom representations are provided independently by registered legal practitioners bound by the Rules of Professional Conduct under the Bar Association of Sri Lanka (BASL).</p>
+        <p>© 2026 LegalConnect Sri Lanka. University Project. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- ── Scripts ───────────────────────────────────────────────────────── -->
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+      // Populate category dropdown from API if available
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          if (window.legalCategories && typeof window.legalCategories.list === 'function') {
+            const categories = await window.legalCategories.list();
+            if (categories && categories.length > 0) {
+              const select = document.getElementById('heroCategorySelect');
+              if (select) {
+                select.innerHTML = '<option value="">All Categories</option>' +
+                  categories.map(c => `<option value="${c.category_id || c.id}">${LC.escapeHtml(c.category_name || c.name)}</option>`).join('');
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('API category load skipped, using fallback static options:', err.message);
+        }
+      });
+    </script>
   </body>
 </html>
-
