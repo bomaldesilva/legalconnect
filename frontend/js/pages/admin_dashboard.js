@@ -151,7 +151,14 @@ function buildTimeline(slots, pkgs, cats) {
   });
 
   events.push({
-    title: 'Module 5: Appointments — Next',
+    title: 'Module 5: Appointments — Complete',
+    meta: 'Booking wizard, lawyer view, cancel/confirm/complete actions live',
+    icon: '✓',
+    color: 'var(--success)'
+  });
+
+  events.push({
+    title: 'Module 6: Payments — In Planning',
     meta: 'Next development step',
     icon: '→',
     color: 'var(--warning)'
@@ -177,11 +184,8 @@ function buildTimeline(slots, pkgs, cats) {
 
 // ── Verifications placeholder ─────────────────────────────────────────────────
 function loadVerifications() {
-  // Backend for lawyer_verifications table is implemented as part of Module 4
-  // (GET /api/lawyer-profile/{id} returns verification_status from lawyer_verifications)
-  // Admin verification management endpoints are part of a future Admin module
   animateCounter(kpiVerifications, 0);
-  if (kpiVerifNote) kpiVerifNote.textContent = 'Awaiting Module 5 (Appointments)';
+  if (kpiVerifNote) kpiVerifNote.textContent = 'Awaiting Admin Verifications module';
 }
 
 // ── Sidebar toggle ────────────────────────────────────────────────────────────
@@ -191,15 +195,25 @@ if (sidebarToggle && sidebar) {
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
 (async () => {
-  const [cats, slots, pkgs] = await Promise.all([
+  const [cats, slots, pkgs, appts] = await Promise.all([
     legalCategories.list().catch(() => []),
     availabilitySlots.list().catch(() => []),
-    consultationPackages.list().catch(() => [])
+    consultationPackages.list().catch(() => []),
+    appointmentsApi.list().catch(() => [])
   ]);
 
   animateCounter(kpiCategories, cats.filter(c => c.status === 'Active').length);
   animateCounter(kpiSlots, slots.filter(s => s.status === 'Available').length);
   animateCounter(kpiPackages, pkgs.filter(p => p.status === 'Active').length);
+
+  // Appointments KPI
+  const kpiApptCount = document.getElementById('kpiApptCount');
+  if (kpiApptCount) animateCounter(kpiApptCount, appts.length);
+
+  // Remove "Module 5 coming next" delta text since it's now done
+  const apptDelta = document.querySelector('.stat-card--danger .stat-card__delta');
+  if (apptDelta) apptDelta.textContent = `${appts.filter(a => a.status === 'Pending' || a.status === 'Confirmed').length} active`;
+
   loadVerifications();
   buildTimeline(slots, pkgs, cats);
 
