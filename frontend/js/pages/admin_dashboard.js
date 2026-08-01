@@ -144,7 +144,14 @@ function buildTimeline(slots, pkgs, cats) {
   });
 
   events.push({
-    title: 'Module 4: Lawyer Profile — In Planning',
+    title: 'Module 4: Lawyer Profile — Complete',
+    meta: 'Backend API + Frontend UI fully implemented',
+    icon: '✓',
+    color: 'var(--success)'
+  });
+
+  events.push({
+    title: 'Module 5: Appointments — Next',
     meta: 'Next development step',
     icon: '→',
     color: 'var(--warning)'
@@ -170,10 +177,11 @@ function buildTimeline(slots, pkgs, cats) {
 
 // ── Verifications placeholder ─────────────────────────────────────────────────
 function loadVerifications() {
-  // Backend for this exists in Module 4 (lawyer_verifications table)
-  // Placeholder count until Module 4 backend is implemented
+  // Backend for lawyer_verifications table is implemented as part of Module 4
+  // (GET /api/lawyer-profile/{id} returns verification_status from lawyer_verifications)
+  // Admin verification management endpoints are part of a future Admin module
   animateCounter(kpiVerifications, 0);
-  if (kpiVerifNote) kpiVerifNote.textContent = 'Module 4 backend pending';
+  if (kpiVerifNote) kpiVerifNote.textContent = 'Awaiting Module 5 (Appointments)';
 }
 
 // ── Sidebar toggle ────────────────────────────────────────────────────────────

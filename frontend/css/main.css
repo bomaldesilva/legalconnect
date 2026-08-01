@@ -904,6 +904,27 @@ tbody tr:hover { background: var(--surface-2); }
 .skeleton-bar.badge-size { width: 72px; height: 22px; border-radius: 999px; }
 .skeleton-bar.btn-size   { width: 56px; height: 30px; border-radius: 6px; }
 
+/* Generic shimmer block (used for loading skeletons of hero cards, panels, etc.) */
+.skeleton {
+  background: linear-gradient(90deg, var(--line) 25%, var(--surface-2) 50%, var(--line) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-lg);
+}
+
+/* ── Mobile sidebar open state ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .sidebar--open {
+    display: flex;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 200;
+    height: 100vh;
+    overflow-y: auto;
+    flex-direction: column;
+  }
+}
+
 /* ── Improved empty state ──────────────────────────────────────────────────── */
 .empty-state__title {
   font-size: 16px;
