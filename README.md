@@ -112,7 +112,7 @@ All API responses are JSON and use suitable HTTP status codes such as `200`, `20
 http://localhost/legalConnect/frontend/
 ```
 
-6. API requests are sent to:
+6. API requests are sent to:git checkout -b development
 
 ```text
 http://localhost/legalConnect/backend/public/api
