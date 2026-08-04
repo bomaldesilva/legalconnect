@@ -374,21 +374,48 @@ btnPrev?.addEventListener('click', () => {
   }
 });
 
-btnNext?.addEventListener('click', () => {
+btnNext?.addEventListener('click', async () => {
   if (state.currentStep < 4) {
     state.currentStep++;
     updateWizardUI();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else if (state.currentStep === 4) {
-    // Final booking confirmation
+    // Final step — submit to real API
     btnNext.disabled = true;
-    btnNext.textContent = 'Processing Appointment…';
-    
-    LC.showToast('Appointment booked successfully! (Module 5 Demo)', 'success');
-    
-    setTimeout(() => {
-      window.location.href = 'client_appointments.html';
-    }, 1500);
+    btnNext.textContent = 'Confirming Appointment…';
+
+    // Determine mode value for API ('Online' or 'Physical')
+    const apiMode = state.consultationMode.toLowerCase().includes('physical') ? 'Physical' : 'Online';
+
+    const slot = state.selectedSlot;
+    const pkg  = state.selectedPackage;
+
+    const payload = {
+      client_id:        3,          // Demo client ID
+      lawyer_id:        2,          // Demo lawyer ID
+      slot_id:          slot ? slot.slot_id        : null,
+      package_id:       pkg  ? pkg.package_id      : null,
+      appointment_date: slot ? slot.available_date : '',
+      start_time:       slot ? LC.formatTime(slot.start_time) : '',
+      end_time:         slot ? LC.formatTime(slot.end_time)   : '',
+      mode:             apiMode,
+      status:           'Pending',
+    };
+
+    try {
+      await window.appointmentsApi.create(payload);
+      LC.showToast('Appointment booked successfully! Redirecting…', 'success');
+      setTimeout(() => {
+        window.location.href = 'client_appointments.html';
+      }, 1500);
+    } catch (err) {
+      btnNext.disabled = false;
+      btnNext.textContent = 'Confirm Booking';
+      const msg = err.errors && Object.values(err.errors).length
+        ? Object.values(err.errors).join(' ')
+        : (err.message || 'Booking failed. Please try again.');
+      LC.showToast(msg, 'error');
+    }
   }
 });
 

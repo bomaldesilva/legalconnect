@@ -17,6 +17,7 @@ require_once __DIR__ . '/../src/models/AvailabilitySlot.php';
 require_once __DIR__ . '/../src/models/ConsultationPackage.php';
 require_once __DIR__ . '/../src/models/Appointment.php';
 require_once __DIR__ . '/../src/models/Payment.php';
+require_once __DIR__ . '/../src/models/LawyerProfile.php';
 
 // ─── Services ─────────────────────────────────────────────────────────────────
 require_once __DIR__ . '/../src/services/LegalCategoryService.php';
@@ -24,6 +25,7 @@ require_once __DIR__ . '/../src/services/AvailabilitySlotService.php';
 require_once __DIR__ . '/../src/services/ConsultationPackageService.php';
 require_once __DIR__ . '/../src/services/AppointmentService.php';
 require_once __DIR__ . '/../src/services/PaymentService.php';
+require_once __DIR__ . '/../src/services/LawyerProfileService.php';
 
 // ─── Controllers ──────────────────────────────────────────────────────────────
 require_once __DIR__ . '/../src/controllers/DashboardController.php';
@@ -32,6 +34,7 @@ require_once __DIR__ . '/../src/controllers/AvailabilitySlotController.php';
 require_once __DIR__ . '/../src/controllers/ConsultationPackageController.php';
 require_once __DIR__ . '/../src/controllers/AppointmentController.php';
 require_once __DIR__ . '/../src/controllers/PaymentController.php';
+require_once __DIR__ . '/../src/controllers/LawyerProfileController.php';
 
 // ─── CORS pre-flight ──────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -51,18 +54,20 @@ try {
     );
 
     // ── Models ────────────────────────────────────────────────────────────────
-    $categoryModel = new LegalCategory($db);
-    $slotModel     = new AvailabilitySlot($db);
-    $packageModel  = new ConsultationPackage($db);
-    $appointmentModel = new Appointment($db);
-    $paymentModel  = new Payment($db);
+    $categoryModel      = new LegalCategory($db);
+    $slotModel          = new AvailabilitySlot($db);
+    $packageModel       = new ConsultationPackage($db);
+    $appointmentModel   = new Appointment($db);
+    $paymentModel       = new Payment($db);
+    $lawyerProfileModel = new LawyerProfile($db);
 
     // ── Services ──────────────────────────────────────────────────────────────
-    $categoryService    = new LegalCategoryService($categoryModel);
-    $slotService        = new AvailabilitySlotService($slotModel);
-    $packageService     = new ConsultationPackageService($packageModel);
-    $appointmentService = new AppointmentService($appointmentModel);
-    $paymentService     = new PaymentService($paymentModel);
+    $categoryService       = new LegalCategoryService($categoryModel);
+    $slotService           = new AvailabilitySlotService($slotModel);
+    $packageService        = new ConsultationPackageService($packageModel);
+    $appointmentService    = new AppointmentService($appointmentModel);
+    $paymentService        = new PaymentService($paymentModel);
+    $lawyerProfileService  = new LawyerProfileService($lawyerProfileModel);
 
     // ── Controllers ───────────────────────────────────────────────────────────
     $dashboardController  = new DashboardController(
@@ -72,11 +77,12 @@ try {
         $appointmentModel,
         $paymentModel
     );
-    $categoryController    = new LegalCategoryController($categoryService);
-    $slotController        = new AvailabilitySlotController($slotService);
-    $packageController     = new ConsultationPackageController($packageService);
-    $appointmentController = new AppointmentController($appointmentService);
-    $paymentController     = new PaymentController($paymentService);
+    $categoryController       = new LegalCategoryController($categoryService);
+    $slotController           = new AvailabilitySlotController($slotService);
+    $packageController        = new ConsultationPackageController($packageService);
+    $appointmentController    = new AppointmentController($appointmentService);
+    $paymentController        = new PaymentController($paymentService);
+    $lawyerProfileController  = new LawyerProfileController($lawyerProfileService);
 
     // ── Routing ───────────────────────────────────────────────────────────────
 
@@ -107,6 +113,44 @@ try {
 
     if (preg_match('#^/api/payments/?(\d+)?$#', $path, $matches)) {
         routeCrud($method, $matches[1] ?? null, $paymentController);
+        exit;
+    }
+
+    // ── Lawyer Profile routes ────────────────────────────────────────────────
+
+    // GET /api/lawyer-profile/{id}/public
+    if (preg_match('#^/api/lawyer-profile/(\d+)/public$#', $path, $matches) && $method === 'GET') {
+        $lawyerProfileController->publicProfile((int) $matches[1]);
+        exit;
+    }
+
+    // GET /api/lawyer-profile/{id}/categories
+    if (preg_match('#^/api/lawyer-profile/(\d+)/categories$#', $path, $matches) && $method === 'GET') {
+        $lawyerProfileController->listCategories((int) $matches[1]);
+        exit;
+    }
+
+    // POST /api/lawyer-profile/{id}/categories
+    if (preg_match('#^/api/lawyer-profile/(\d+)/categories$#', $path, $matches) && $method === 'POST') {
+        $lawyerProfileController->addCategory((int) $matches[1]);
+        exit;
+    }
+
+    // DELETE /api/lawyer-profile/{id}/categories/{categoryId}
+    if (preg_match('#^/api/lawyer-profile/(\d+)/categories/(\d+)$#', $path, $matches) && $method === 'DELETE') {
+        $lawyerProfileController->removeCategory((int) $matches[1], (int) $matches[2]);
+        exit;
+    }
+
+    // GET /api/lawyer-profile/{id}
+    if (preg_match('#^/api/lawyer-profile/(\d+)$#', $path, $matches) && $method === 'GET') {
+        $lawyerProfileController->show((int) $matches[1]);
+        exit;
+    }
+
+    // PUT /api/lawyer-profile/{id}
+    if (preg_match('#^/api/lawyer-profile/(\d+)$#', $path, $matches) && $method === 'PUT') {
+        $lawyerProfileController->update((int) $matches[1]);
         exit;
     }
 

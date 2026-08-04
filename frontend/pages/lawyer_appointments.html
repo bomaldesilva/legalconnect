@@ -1,261 +1,222 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Appointments - LegalConnect</title>
+  <title>LegalConnect | Appointments</title>
+  <meta name="description" content="Manage your consultation appointments — confirm, complete, or cancel bookings on LegalConnect.">
   <link rel="stylesheet" href="../css/main.css">
-
 </head>
 <body>
-  <div class="app-shell">
-    
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-      <a class="brand" href="lawyer_dashboard.html" aria-label="LegalConnect">
-        <span class="brand-mark">LC</span>
-        <span class="brand-name">LegalConnect</span>
-      </a>
-      <div class="nav-group">
-        <p class="nav-group-label">Workspace</p>
-        <nav class="nav-list">
-          <a class="nav-link" href="lawyer_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
-          <a class="nav-link" href="lawyer_profile.html"><span class="nav-icon">👤</span> My Profile</a>
-          <a class="nav-link active" href="lawyer_appointments.html"><span class="nav-icon">📅</span> Appointments</a>
-          <a class="nav-link" href="lawyer_cases.html"><span class="nav-icon">⚖</span> Cases</a>
-          <a class="nav-link" href="lawyer_clients.html"><span class="nav-icon">👥</span> Clients</a>
-        </nav>
+<div class="app-shell">
+
+  <!-- ── Lawyer Sidebar ────────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="lawyer_dashboard.html" aria-label="LegalConnect">
+      <span class="brand-mark">LC</span>
+      <span class="brand-name">LegalConnect</span>
+    </a>
+    <div class="nav-group">
+      <p class="nav-group-label">Workspace</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="lawyer_dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+        <a class="nav-link" href="lawyer_profile.html"><span class="nav-icon">👤</span> My Profile</a>
+        <a class="nav-link active" href="lawyer_appointments.html"><span class="nav-icon">📅</span> Appointments</a>
+        <a class="nav-link" href="lawyer_cases.html"><span class="nav-icon">⚖</span> Cases</a>
+        <a class="nav-link" href="lawyer_clients.html"><span class="nav-icon">👥</span> Clients</a>
+      </nav>
+    </div>
+    <div class="nav-group">
+      <p class="nav-group-label">Management</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="lawyer_availability_slots.html"><span class="nav-icon">◷</span> Availability</a>
+        <a class="nav-link" href="lawyer_consultation_packages.html"><span class="nav-icon">◈</span> Packages</a>
+        <a class="nav-link" href="lawyer_documents.html"><span class="nav-icon">📄</span> Documents</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <p class="sidebar-footer-text">LegalConnect · Lawyer Portal<br>University Project</p>
+    </div>
+  </aside>
+
+  <!-- ── Main Page ─────────────────────────────────────────────────────────── -->
+  <main class="page">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div>
+          <p class="topbar-title">Appointments</p>
+          <p class="topbar-subtitle">Demo Lawyer — LegalConnect Lawyer Portal</p>
+        </div>
       </div>
-      <div class="nav-group">
-        <p class="nav-group-label">Management</p>
-        <nav class="nav-list">
-          <a class="nav-link" href="lawyer_availability_slots.html"><span class="nav-icon">◷</span> Availability</a>
-          <a class="nav-link" href="lawyer_consultation_packages.html"><span class="nav-icon">◈</span> Packages</a>
-          <a class="nav-link" href="lawyer_documents.html"><span class="nav-icon">📄</span> Documents</a>
-          <a class="nav-link" href="lawyer_templates.html"><span class="nav-icon">📋</span> Templates</a>
-        </nav>
+      <div class="topbar-right">
+        <button class="notif-btn" title="Notifications">🔔</button>
+        <div class="avatar avatar--md avatar--teal" title="Demo Lawyer">DL</div>
+        <span class="phase-pill">Lawyer</span>
       </div>
-      <div class="sidebar-footer">
-        <p class="sidebar-footer-text">LegalConnect · Lawyer Portal<br>University Project</p>
-      </div>
-    </aside>
+    </header>
 
-    <div class="page">
-      <!-- TOPBAR -->
-      <header class="topbar">
-        <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
-          <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
-          <div>
-            <p class="topbar-title">Appointments</p>
-            <p class="topbar-subtitle">Demo Lawyer — LegalConnect Lawyer Portal</p>
-          </div>
-        </div>
-        <div class="topbar-right">
-          <div class="notif-btn" title="Notifications">🔔</div>
-          <div class="avatar avatar--md avatar--teal" title="Demo Lawyer">DL</div>
-          <span class="phase-pill">Lawyer</span>
-        </div>
-      </header>
+    <section class="content">
 
-      <!-- CONTENT -->
-      <main class="content">
-        <div class="breadcrumb">
-          <a href="lawyer_dashboard.html">Dashboard</a> › <span>Appointments</span>
-        </div>
-
-        <div class="section-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-          <div>
-            <h1 style="margin:0;font-size:1.5rem;color:var(--navy);">Appointments</h1>
-            <p style="margin:4px 0 0;color:#64748b;">Manage your consultation schedule</p>
-          </div>
-          <div>
-            <a href="lawyer_availability_slots.html" class="btn btn--secondary">View Availability</a>
-          </div>
-        </div>
-
-        <div class="inline-alert inline-alert--info" style="margin-bottom:24px;">
-          <span class="alert-icon">ℹ️</span>
-          <div class="alert-content">
-            <p style="margin:0;"><strong>Notice:</strong> Appointment booking backend (Module 5) is in planning. This page shows the UI with demo data. Real appointment data will populate once Module 5 is implemented.</p>
-          </div>
-        </div>
-
-        <!-- KPIs -->
-        <div class="grid" style="grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 24px;">
-          <div class="stat-card stat-card--navy">
-            <div class="stat-card-icon">📅</div>
-            <p class="stat-card-label">Total</p>
-            <p class="stat-card-val" id="kpiTotal">0</p>
-          </div>
-          <div class="stat-card stat-card--warning">
-            <div class="stat-card-icon">⏳</div>
-            <p class="stat-card-label">Pending</p>
-            <p class="stat-card-val" id="kpiPending">0</p>
-          </div>
-          <div class="stat-card stat-card--success">
-            <div class="stat-card-icon">✓</div>
-            <p class="stat-card-label">Confirmed</p>
-            <p class="stat-card-val" id="kpiConfirmed">0</p>
-          </div>
-          <div class="stat-card stat-card--teal">
-            <div class="stat-card-icon">☑</div>
-            <p class="stat-card-label">Completed</p>
-            <p class="stat-card-val" id="kpiCompleted">0</p>
-          </div>
-        </div>
-
-        <!-- TWO COLUMN LAYOUT -->
-        <div class="grid" style="grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 32px;">
-          
-          <!-- LEFT: APPOINTMENT LIST -->
-          <div class="panel">
-            <h2 style="font-size:1.125rem;margin:0 0 16px;">Appointment List</h2>
-            
-            <div class="toolbar" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-              <div class="filter-chips" id="filterChips" style="display:flex;gap:8px;">
-                <span class="filter-chip filter-chip--active" data-filter="All">All</span>
-                <span class="filter-chip" data-filter="Pending">Pending</span>
-                <span class="filter-chip" data-filter="Confirmed">Confirmed</span>
-                <span class="filter-chip" data-filter="Completed">Completed</span>
-                <span class="filter-chip" data-filter="Cancelled">Cancelled</span>
-                <span class="filter-chip" data-filter="NoShow">NoShow</span>
-              </div>
-              <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search client or package...">
-              </div>
-            </div>
-            
-            <p id="resultsCount" style="font-size:0.875rem; color:#64748b; margin-bottom:12px;">Showing 0 results</p>
-            
-            <div class="table-responsive">
-              <table class="table" style="width:100%; text-align:left; border-collapse:collapse;">
-                <thead>
-                  <tr style="border-bottom:1px solid #e2e8f0;">
-                    <th style="padding:12px 8px;">#</th>
-                    <th style="padding:12px 8px;">Client</th>
-                    <th style="padding:12px 8px;">Date & Time</th>
-                    <th style="padding:12px 8px;">Mode</th>
-                    <th style="padding:12px 8px;">Package</th>
-                    <th style="padding:12px 8px;">Status</th>
-                    <th style="padding:12px 8px;">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="appointmentsTableBody">
-                  <!-- JS Populated -->
-                </tbody>
-              </table>
-            </div>
-            
-            <div id="emptyState" style="display:none; text-align:center; padding:48px 0; color:#64748b;">
-              <div style="font-size:2rem; margin-bottom:16px;">📅</div>
-              <p style="margin:0;">No appointments found.</p>
-            </div>
-            
-            <div class="pagination" style="display:flex; justify-content:center; gap:8px; margin-top:24px;">
-              <button class="btn btn--secondary btn--sm">1</button>
-              <button class="btn btn--secondary btn--sm" style="background:#e2e8f0;">2</button>
-              <button class="btn btn--secondary btn--sm">3</button>
-            </div>
-          </div>
-
-          <!-- RIGHT: TODAY'S SCHEDULE -->
-          <div style="display:flex;flex-direction:column;gap:24px;">
-            <div class="panel">
-              <h2 style="font-size:1.125rem;margin:0 0 16px;">Today's Schedule</h2>
-              <div class="agenda-day">
-                <div class="agenda-slot">
-                  <div class="agenda-slot-time">11:00 – 12:30</div>
-                  <h4 class="agenda-slot-title">Demo Client</h4>
-                  <p class="agenda-slot-desc">Online consultation</p>
-                </div>
-                <div class="agenda-slot agenda-slot--available">
-                  <div class="agenda-slot-time">14:00 – 15:00</div>
-                  <h4 class="agenda-slot-title">Free Slot</h4>
-                  <p class="agenda-slot-desc">Available</p>
-                </div>
-                <div class="agenda-slot agenda-slot--booked">
-                  <div class="agenda-slot-time">16:00 – 17:00</div>
-                  <h4 class="agenda-slot-title">Demo Client</h4>
-                  <p class="agenda-slot-desc">Physical</p>
-                </div>
-              </div>
-            </div>
-            
-            <div class="panel">
-              <h2 style="font-size:1.125rem;margin:0 0 16px;">Appointment Modes</h2>
-              <div class="detail-row" style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #e2e8f0;">
-                <span style="color:#64748b;">Online Consultations</span>
-                <span style="font-weight:600;">1</span>
-              </div>
-              <div class="detail-row" style="display:flex;justify-content:space-between;padding:12px 0;">
-                <span style="color:#64748b;">Physical Meetings</span>
-                <span style="font-weight:600;">1</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </main>
-
-      <!-- MOBILE NAV -->
-      <nav class="mobile-nav" style="display:none;">
-        <!-- Assume handled by main css for mobile layout, typical generic links -->
-        <a href="lawyer_dashboard.html">Dash</a>
-        <a href="lawyer_appointments.html" class="active">Appts</a>
-        <a href="lawyer_cases.html">Cases</a>
-        <a href="lawyer_clients.html">Clients</a>
-        <a href="lawyer_profile.html">Profile</a>
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="lawyer_dashboard.html">Dashboard</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Appointments</span>
       </nav>
 
+      <!-- Page heading -->
+      <div class="section-head">
+        <div class="section-head__text">
+          <h1>Appointments</h1>
+          <p>Manage your consultation schedule — confirm, complete or cancel bookings.</p>
+        </div>
+        <a class="btn secondary" href="lawyer_availability_slots.html">Manage Availability</a>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="grid four" style="margin-bottom:28px;" id="kpiRow">
+        <div class="stat-card stat-card--navy">
+          <div class="stat-card__icon-wrap">📅</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Total</p>
+            <p class="stat-card__value" id="kpiTotal"><span class="skeleton" style="width:40px;height:28px;display:inline-block;border-radius:4px;"></span></p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--warning">
+          <div class="stat-card__icon-wrap">⏳</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Pending</p>
+            <p class="stat-card__value" id="kpiPending"><span class="skeleton" style="width:40px;height:28px;display:inline-block;border-radius:4px;"></span></p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--success">
+          <div class="stat-card__icon-wrap">✓</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Confirmed</p>
+            <p class="stat-card__value" id="kpiConfirmed"><span class="skeleton" style="width:40px;height:28px;display:inline-block;border-radius:4px;"></span></p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--teal">
+          <div class="stat-card__icon-wrap">☑</div>
+          <div class="stat-card__body">
+            <p class="stat-card__label">Completed</p>
+            <p class="stat-card__value" id="kpiCompleted"><span class="skeleton" style="width:40px;height:28px;display:inline-block;border-radius:4px;"></span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two-column layout -->
+      <div class="grid two" style="align-items:start;">
+
+        <!-- LEFT: Appointment list -->
+        <div class="panel">
+          <div class="panel-header">
+            <p class="panel-title">Appointment List</p>
+            <span class="badge active" id="resultsCount" style="font-size:11px;">Loading…</span>
+          </div>
+
+          <!-- Toolbar: filters + search -->
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;">
+            <div class="filter-chips" id="filterChips" style="display:flex;flex-wrap:wrap;gap:8px;">
+              <button class="filter-chip filter-chip--active" data-filter="All">All</button>
+              <button class="filter-chip" data-filter="Pending">Pending</button>
+              <button class="filter-chip" data-filter="Confirmed">Confirmed</button>
+              <button class="filter-chip" data-filter="Completed">Completed</button>
+              <button class="filter-chip" data-filter="Cancelled">Cancelled</button>
+              <button class="filter-chip" data-filter="NoShow">No Show</button>
+            </div>
+            <input class="search-input" type="text" id="searchInput" placeholder="Search client or package…" style="max-width:220px;">
+          </div>
+
+          <!-- Table -->
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:13px;text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--line);color:var(--muted);">
+                  <th style="padding:10px 8px;">#</th>
+                  <th style="padding:10px 8px;">Client</th>
+                  <th style="padding:10px 8px;">Date &amp; Time</th>
+                  <th style="padding:10px 8px;">Mode</th>
+                  <th style="padding:10px 8px;">Package</th>
+                  <th style="padding:10px 8px;">Status</th>
+                  <th style="padding:10px 8px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="appointmentsTableBody">
+                <tr>
+                  <td colspan="7" style="padding:40px;text-align:center;color:var(--muted);">
+                    <div class="skeleton" style="height:16px;border-radius:4px;margin-bottom:10px;"></div>
+                    <div class="skeleton" style="height:16px;border-radius:4px;width:80%;margin:0 auto;"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty state -->
+          <div id="emptyState" style="display:none;text-align:center;padding:48px 16px;">
+            <div style="font-size:2.5rem;margin-bottom:12px;">📅</div>
+            <p style="font-weight:600;color:var(--navy);margin-bottom:4px;">No Appointments Found</p>
+            <p style="color:var(--muted);font-size:13px;">No appointments match your current filter.</p>
+          </div>
+        </div>
+
+        <!-- RIGHT: Today's schedule + mode breakdown -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Today's Schedule</p>
+              <span class="badge active" style="font-size:11px;" id="todayDate">—</span>
+            </div>
+            <div id="todaySchedule">
+              <div class="skeleton" style="height:60px;border-radius:var(--radius);margin-bottom:10px;"></div>
+              <div class="skeleton" style="height:60px;border-radius:var(--radius);"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <p class="panel-title">Consultation Modes</p>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">🎥 Online</span>
+              <span class="detail-row__value" id="modeOnlineCount">—</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">⚖ Physical</span>
+              <span class="detail-row__value" id="modePhysicalCount">—</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+  </main>
+</div>
+
+<!-- ── View / Action Modal ────────────────────────────────────────────────── -->
+<div class="lc-modal" id="viewApptModal" role="dialog" aria-modal="true" aria-labelledby="viewApptTitle">
+  <div class="lc-modal-content" style="max-width:520px;">
+    <div class="lc-modal-header">
+      <h3 class="lc-modal-title" id="viewApptTitle">Appointment Details</h3>
+      <button class="lc-modal-close" id="closeViewModalBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="lc-modal-body" id="viewApptBody">
+      <!-- Populated by JS -->
+    </div>
+    <div class="lc-modal-footer" id="viewApptFooter">
+      <!-- Populated by JS -->
     </div>
   </div>
+</div>
 
-  <!-- VIEW APPOINTMENT MODAL -->
-  <div class="lc-modal" id="viewApptModal">
-    <div class="lc-modal-content">
-      <div class="lc-modal-header">
-        <h3 class="lc-modal-title">Appointment Details</h3>
-        <button class="lc-modal-close" id="closeModalBtn">&times;</button>
-      </div>
-      <div class="lc-modal-body">
-        <div class="detail-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e2e8f0;">
-          <span style="color:#64748b;">Client</span>
-          <strong id="modalClient"></strong>
-        </div>
-        <div class="detail-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e2e8f0;">
-          <span style="color:#64748b;">Date</span>
-          <strong id="modalDate"></strong>
-        </div>
-        <div class="detail-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e2e8f0;">
-          <span style="color:#64748b;">Time</span>
-          <strong id="modalTime"></strong>
-        </div>
-        <div class="detail-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e2e8f0;">
-          <span style="color:#64748b;">Mode</span>
-          <span id="modalMode"></span>
-        </div>
-        <div class="detail-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e2e8f0;">
-          <span style="color:#64748b;">Package</span>
-          <strong id="modalPackage"></strong>
-        </div>
-        <div class="detail-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e2e8f0;">
-          <span style="color:#64748b;">Status</span>
-          <span id="modalStatus"></span>
-        </div>
-        <div class="detail-row" style="display:flex;flex-direction:column;padding:8px 0;">
-          <span style="color:#64748b;margin-bottom:4px;">Notes</span>
-          <p style="margin:0;font-size:0.875rem;">Client requested to discuss property transfer deeds. Please prepare relevant forms. <!-- DEMO DATA --></p>
-        </div>
-      </div>
-      <div class="lc-modal-footer" id="modalFooter">
-        <!-- JS populated action buttons -->
-      </div>
-    </div>
-  </div>
-
-  <script src="../js/utils.js"></script>
-  <script src="../js/api.js"></script>
-  <script src="../js/pages/lawyer_appointments.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/pages/lawyer_appointments.js"></script>
 </body>
 </html>

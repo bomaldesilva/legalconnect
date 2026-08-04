@@ -4,17 +4,222 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LegalConnect | My Profile</title>
-  <meta name="description" content="Manage your professional profile, credentials, and specializations on LegalConnect.">
+  <meta name="description" content="Manage your professional profile, credentials, legal expertise, and career information on LegalConnect.">
   <link rel="stylesheet" href="../css/main.css">
   <style>
-    /* Local only: two-column layout specific to profile */
-    .profile-cols { display: grid; grid-template-columns: 3fr 2fr; gap: 24px; align-items: start; }
-    @media (max-width: 900px) { .profile-cols { grid-template-columns: 1fr; } }
-    .specialty-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; min-height: 36px; }
-    .specialty-tag { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 999px; font-size: 13px; font-weight: 600; background: var(--teal-light); color: var(--teal-dark); border: 1px solid rgba(14,165,160,.2); }
-    .specialty-tag__remove { cursor: pointer; font-size: 14px; color: var(--teal-dark); opacity: .7; border: none; background: none; padding: 0; line-height: 1; }
+    /* ── Profile-page local styles ────────────────────────────────────────── */
+
+    /* Two-column responsive layout */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 1024px) { .profile-grid { grid-template-columns: 1fr; } }
+
+    /* Profile hero card */
+    .profile-hero-card {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 60%, var(--navy-3) 100%);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-hero-card::before {
+      content: '';
+      position: absolute;
+      right: -40px; top: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(14,165,160,.12);
+    }
+    .profile-hero-card::after {
+      content: '';
+      position: absolute;
+      right: 60px; bottom: -60px;
+      width: 150px; height: 150px;
+      border-radius: 50%;
+      background: rgba(14,165,160,.07);
+    }
+    .hero-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+      display: grid; place-items: center;
+      font-size: 28px; font-weight: 800; color: #fff;
+      letter-spacing: -1px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(14,165,160,.4);
+      border: 3px solid rgba(255,255,255,.2);
+    }
+    .hero-info { flex: 1; min-width: 0; }
+    .hero-name {
+      font-size: 24px; font-weight: 800;
+      color: #fff; letter-spacing: -.4px;
+      margin-bottom: 4px;
+    }
+    .hero-sub {
+      font-size: 13px; color: rgba(255,255,255,.65);
+      margin-bottom: 10px;
+    }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .hero-tag {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: 999px;
+      background: rgba(14,165,160,.25);
+      color: #ccf7f5; border: 1px solid rgba(14,165,160,.3);
+    }
+    .hero-actions {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 10px;
+      position: relative; z-index: 1;
+    }
+
+    /* Verification badge variants */
+    .verif-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 700;
+      padding: 5px 12px; border-radius: 999px;
+    }
+    .verif-badge--approved {
+      background: rgba(10,102,64,.25);
+      color: #6ee7b7; border: 1px solid rgba(110,231,183,.25);
+    }
+    .verif-badge--pending {
+      background: rgba(146,64,14,.25);
+      color: #fcd34d; border: 1px solid rgba(252,211,77,.25);
+    }
+    .verif-badge--rejected {
+      background: rgba(192,57,43,.25);
+      color: #fca5a5; border: 1px solid rgba(252,165,165,.25);
+    }
+    .verif-badge--unknown {
+      background: rgba(255,255,255,.1);
+      color: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.15);
+    }
+
+    /* Profile completeness bar */
+    .completeness-bar-wrap {
+      margin-bottom: 24px;
+    }
+    .completeness-bar-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 8px;
+    }
+    .completeness-bar-label { font-size: 13px; font-weight: 600; color: var(--text); }
+    .completeness-pct { font-size: 14px; font-weight: 800; color: var(--teal-dark); }
+    .completeness-bar-bg {
+      height: 8px; border-radius: 999px;
+      background: var(--line); overflow: hidden;
+    }
+    .completeness-bar-fill {
+      height: 100%; border-radius: 999px;
+      background: linear-gradient(90deg, var(--teal) 0%, var(--teal-dark) 100%);
+      transition: width .6s cubic-bezier(.4,0,.2,1);
+    }
+    .completeness-missing {
+      margin-top: 6px; font-size: 12px; color: var(--muted);
+    }
+
+    /* Specialty chips */
+    .specialty-chips { display: flex; flex-wrap: wrap; gap: 8px; min-height: 36px; margin-bottom: 16px; }
+    .specialty-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 30px; padding: 0 12px; border-radius: 999px;
+      font-size: 12px; font-weight: 600;
+      background: var(--teal-light); color: var(--teal-dark);
+      border: 1px solid rgba(14,165,160,.2);
+    }
+    .specialty-tag__remove {
+      cursor: pointer; font-size: 14px; color: var(--teal-dark);
+      opacity: .7; border: none; background: none; padding: 0; line-height: 1;
+    }
     .specialty-tag__remove:hover { opacity: 1; }
     .category-chip-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .category-quick-chip {
+      cursor: pointer; border: 1px solid var(--line);
+      background: var(--surface-2); color: var(--text);
+      font-size: 12px; font-weight: 500;
+      padding: 4px 12px; border-radius: 999px;
+      transition: all var(--t-fast) var(--ease);
+    }
+    .category-quick-chip:hover {
+      background: var(--teal-light); border-color: rgba(14,165,160,.3);
+      color: var(--teal-dark);
+    }
+    .category-quick-chip.already-added {
+      opacity: .4; cursor: not-allowed;
+    }
+
+    /* Verification stepper */
+    .stepper { display: flex; flex-direction: column; gap: 0; padding: 4px 0; }
+    .stepper-step { display: flex; gap: 14px; padding-bottom: 20px; }
+    .stepper-step:last-child { padding-bottom: 0; }
+    .stepper-step__track { display: flex; flex-direction: column; align-items: center; width: 28px; flex-shrink: 0; }
+    .stepper-step__num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--line); color: var(--muted);
+      display: grid; place-items: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .stepper-step__connector {
+      flex: 1; width: 2px; background: var(--line);
+      margin-top: 4px; min-height: 16px;
+    }
+    .stepper-step__content { padding-top: 4px; }
+    .stepper-step__title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .stepper-step__desc { font-size: 12px; color: var(--muted); }
+    .stepper-step.done .stepper-step__num { background: var(--success-bg); color: var(--success); }
+    .stepper-step.done .stepper-step__connector { background: var(--success-bg); }
+    .stepper-step.active .stepper-step__num { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); color: #fff; }
+    .stepper-step.rejected .stepper-step__num { background: var(--danger-bg); color: var(--danger); }
+
+    /* Summary mini list */
+    .summary-item {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 10px 0; border-bottom: 1px solid var(--line);
+      gap: 12px;
+    }
+    .summary-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .summary-item__name { font-size: 13px; font-weight: 500; color: var(--text); }
+    .summary-item__meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .summary-item__right { text-align: right; flex-shrink: 0; }
+    .summary-item__value { font-size: 13px; font-weight: 700; color: var(--navy); }
+
+    /* Stat row */
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stat-box {
+      background: var(--surface-2); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 14px 16px; text-align: center;
+    }
+    .stat-box__value { font-size: 22px; font-weight: 800; color: var(--navy); }
+    .stat-box__label { font-size: 11px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+
+    /* Form section dividers */
+    .form-section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; color: var(--muted);
+      padding: 20px 0 10px; border-top: 1px solid var(--line); margin-top: 8px;
+    }
+    .form-section-title:first-child { padding-top: 0; border-top: none; margin-top: 0; }
+
+    /* Loading skeleton */
+    .skeleton-hero { height: 136px; border-radius: var(--radius-lg); }
+    .skeleton-section { height: 300px; border-radius: var(--radius-lg); margin-bottom: 20px; }
+
+    /* Stars */
+    .stars-rating { display: inline-flex; align-items: center; gap: 3px; }
+    .stars-rating__star { color: #d1d5db; font-size: 14px; }
+    .stars-rating__star.filled { color: #f59e0b; }
+    .stars-rating__star.half { color: #f59e0b; opacity: .5; }
+    .stars-rating__value { font-size: 13px; font-weight: 700; color: var(--navy); margin-left: 4px; }
+    .stars-rating__count { font-size: 12px; color: var(--muted); }
   </style>
 </head>
 <body>
@@ -58,12 +263,12 @@
         <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
         <div>
           <p class="topbar-title">My Profile</p>
-          <p class="topbar-subtitle">Demo Lawyer — LegalConnect Lawyer Portal</p>
+          <p class="topbar-subtitle" id="topbarSubtitle">Loading…</p>
         </div>
       </div>
       <div class="topbar-right">
         <button class="notif-btn" title="Notifications">🔔</button>
-        <div class="avatar avatar--md avatar--teal" title="Demo Lawyer">DL</div>
+        <div class="avatar avatar--md avatar--teal" id="topbarAvatar" title="">DL</div>
         <span class="phase-pill">Lawyer</span>
       </div>
     </header>
@@ -79,213 +284,266 @@
       <div class="section-head">
         <div class="section-head__text">
           <h1>My Profile</h1>
-          <p>Manage your professional information, credentials, and specializations.</p>
+          <p>Manage your professional information, credentials, and legal expertise.</p>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <a class="btn secondary" href="lawyer_public_profile.html?id=2" target="_blank">👁 Public View</a>
         </div>
       </div>
 
-      <div class="inline-alert inline-alert--info" style="margin-bottom:24px;">
-        <span class="inline-alert__icon">ℹ</span>
-        <div><strong>Module 4 backend pending</strong> — Profile editing (PUT /api/lawyer-profile) will be fully functional in Module 4. Changes made here are for demonstration only.</div>
+      <!-- ── Loading state ──────────────────────────────────────────────── -->
+      <div id="loadingState">
+        <div class="skeleton skeleton-hero" style="margin-bottom:24px;"></div>
+        <div class="skeleton skeleton-section"></div>
       </div>
 
-      <!-- ── Profile Hero ──────────────────────────────────────────────── -->
-      <div class="profile-hero" style="margin-bottom:24px;">
-        <div class="profile-hero__avatar">DL</div>
-        <div class="profile-hero__info">
-          <p class="profile-hero__name">Demo Lawyer</p>
-          <p class="profile-hero__sub">lawyer@legalconnect.lk &nbsp;·&nbsp; BAR-DEMO-001 &nbsp;·&nbsp; Active</p>
-          <div class="profile-hero__tags" id="heroTags">
-            <span class="tag">Family Law</span>
-            <span class="tag">Criminal Law</span>
-            <span class="tag">Property Law</span>
+      <!-- ── Error state ────────────────────────────────────────────────── -->
+      <div id="errorState" style="display:none;">
+        <div class="empty-state" style="padding: 60px 20px;">
+          <div class="empty-state__icon">⚠</div>
+          <p class="empty-state__title">Could Not Load Profile</p>
+          <p id="errorMsg">Unable to connect to the server.</p>
+          <div class="empty-state__action">
+            <button class="btn primary" onclick="boot()">Retry</button>
           </div>
-        </div>
-        <div class="profile-hero__actions">
-          <span class="verif-badge verif-badge--approved">✓ Verified</span>
-          <button class="btn primary" type="button" id="saveBtn">Save Changes</button>
-          <button class="btn secondary" type="button" onclick="location.reload()">Reset</button>
         </div>
       </div>
 
-      <!-- ── Two-column layout ─────────────────────────────────────────── -->
-      <div class="profile-cols">
+      <!-- ── Profile content (shown after load) ────────────────────────── -->
+      <div id="profileContent" style="display:none;">
 
-        <!-- LEFT: Personal Info + Specializations -->
-        <div style="display:flex;flex-direction:column;gap:20px;">
-
-          <div class="panel">
-            <div class="panel-header">
-              <p class="panel-title">Personal Information</p>
-            </div>
-            <form id="profileForm" novalidate>
-              <div class="form-grid" style="grid-template-columns:1fr 1fr;">
-                <div class="field">
-                  <label for="firstName">First Name</label>
-                  <input type="text" id="firstName" value="Demo" placeholder="First name">
-                </div>
-                <div class="field">
-                  <label for="lastName">Last Name</label>
-                  <input type="text" id="lastName" value="Lawyer" placeholder="Last name">
-                </div>
-              </div>
-              <div class="field">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" value="lawyer@legalconnect.lk" disabled>
-              </div>
-              <div class="field">
-                <label for="bio">Professional Bio</label>
-                <textarea id="bio" rows="4" placeholder="Write a short professional bio highlighting your experience and practice areas…">Experienced legal practitioner specialising in Family Law, Criminal Law, and Property Law. Registered with the Bar Association of Sri Lanka (BASL) with 5 years of active practice.</textarea>
-              </div>
-              <div class="form-grid" style="grid-template-columns:1fr 1fr;">
-                <div class="field">
-                  <label for="court">Court Jurisdiction</label>
-                  <input type="text" id="court" value="" placeholder="e.g. Colombo District Court">
-                </div>
-                <div class="field">
-                  <label for="experience">Experience (Years)</label>
-                  <input type="number" id="experience" value="5" min="0" max="50">
-                </div>
-              </div>
-            </form>
+        <!-- ── Hero Card ────────────────────────────────────────────────── -->
+        <div class="profile-hero-card" id="heroCard">
+          <div class="hero-avatar" id="heroAvatar">DL</div>
+          <div class="hero-info">
+            <p class="hero-name" id="heroName">Demo Lawyer</p>
+            <p class="hero-sub" id="heroSub">lawyer@legalconnect.lk · BAR-DEMO-001 · Active</p>
+            <div class="hero-tags" id="heroTags"></div>
           </div>
-
-          <div class="panel">
-            <div class="panel-header">
-              <p class="panel-title">Legal Specializations</p>
-            </div>
-
-            <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Current specializations (click ✕ to remove):</p>
-            <div class="specialty-chips" id="specialtyChips">
-              <!-- Populated by JS -->
-            </div>
-
-            <div class="section-divider">Add from categories</div>
-
-            <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
-              <select id="categorySelect" style="flex:1;">
-                <option value="">Loading categories…</option>
-              </select>
-              <button class="btn primary" type="button" id="addSpecialtyBtn" style="height:42px;padding:0 16px;">Add</button>
-            </div>
-
-            <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">Or click any category to add directly:</p>
-            <div class="category-chip-list" id="categoryChips">
-              <!-- Populated by API -->
-            </div>
+          <div class="hero-actions">
+            <span class="verif-badge verif-badge--unknown" id="heroVerifBadge">Loading…</span>
+            <button class="btn primary" id="saveBtn" type="button" style="min-width:130px;">Save Changes</button>
+            <button class="btn secondary" id="resetBtn" type="button">Reset</button>
           </div>
-
         </div>
 
-        <!-- RIGHT: Verification + Credentials + Settings -->
-        <div style="display:flex;flex-direction:column;gap:20px;">
-
-          <div class="panel">
-            <div class="panel-header">
-              <p class="panel-title">Verification Status</p>
-            </div>
-            <div class="stepper">
-              <div class="stepper-step done">
-                <div class="stepper-step__track">
-                  <div class="stepper-step__num">✓</div>
-                  <div class="stepper-step__connector"></div>
-                </div>
-                <div class="stepper-step__content">
-                  <p class="stepper-step__title">Account Created</p>
-                  <p class="stepper-step__desc">Demo Lawyer registered successfully</p>
-                </div>
-              </div>
-              <div class="stepper-step done">
-                <div class="stepper-step__track">
-                  <div class="stepper-step__num">✓</div>
-                  <div class="stepper-step__connector"></div>
-                </div>
-                <div class="stepper-step__content">
-                  <p class="stepper-step__title">Bar Registration Submitted</p>
-                  <p class="stepper-step__desc">BASL No. BAR-DEMO-001</p>
-                </div>
-              </div>
-              <div class="stepper-step active">
-                <div class="stepper-step__track">
-                  <div class="stepper-step__num">3</div>
-                  <div class="stepper-step__connector"></div>
-                </div>
-                <div class="stepper-step__content">
-                  <p class="stepper-step__title">Admin Review</p>
-                  <p class="stepper-step__desc">Credentials approved by admin</p>
-                </div>
-              </div>
-              <div class="stepper-step done">
-                <div class="stepper-step__track">
-                  <div class="stepper-step__num">✓</div>
-                </div>
-                <div class="stepper-step__content">
-                  <p class="stepper-step__title">Verified &amp; Activated</p>
-                  <p class="stepper-step__desc">Available for client bookings</p>
-                </div>
-              </div>
-            </div>
+        <!-- ── Profile Completeness ─────────────────────────────────────── -->
+        <div class="completeness-bar-wrap">
+          <div class="completeness-bar-header">
+            <span class="completeness-bar-label">Profile Completeness</span>
+            <span class="completeness-pct" id="completenessPct">0%</span>
           </div>
-
-          <div class="panel">
-            <div class="panel-header">
-              <p class="panel-title">Professional Credentials</p>
-            </div>
-            <div class="detail-row">
-              <span class="detail-row__label">Bar Registration</span>
-              <span class="detail-row__value">BAR-DEMO-001 <span class="verif-badge verif-badge--approved" style="font-size:10px;padding:2px 8px;">✓</span></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-row__label">Supreme Court No.</span>
-              <span class="detail-row__value" style="color:var(--muted);font-size:13px;font-style:italic;">Not submitted yet</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-row__label">Rating</span>
-              <span class="detail-row__value">
-                <div class="stars-rating">
-                  <span class="stars-rating__star filled">★</span>
-                  <span class="stars-rating__star filled">★</span>
-                  <span class="stars-rating__star filled">★</span>
-                  <span class="stars-rating__star filled">★</span>
-                  <span class="stars-rating__star half">★</span>
-                  <span class="stars-rating__value">4.5</span>
-                  <span class="stars-rating__count">(11 reviews)</span>
-                </div>
-              </span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-row__label">Experience</span>
-              <span class="detail-row__value">5 Years</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-row__label">Account Status</span>
-              <span class="detail-row__value"><span class="badge active">Active</span></span>
-            </div>
+          <div class="completeness-bar-bg">
+            <div class="completeness-bar-fill" id="completenessBar" style="width:0%"></div>
           </div>
-
-          <div class="panel">
-            <div class="panel-header">
-              <p class="panel-title">Account Settings</p>
-            </div>
-            <div class="detail-row">
-              <span class="detail-row__label">Email</span>
-              <span class="detail-row__value" style="font-size:13px;">lawyer@legalconnect.lk</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-row__label">Role</span>
-              <span class="detail-row__value"><span class="role-badge role-badge--lawyer">Lawyer</span></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-row__label">Member Since</span>
-              <span class="detail-row__value" style="font-size:13px;">2026-07-30</span>
-            </div>
-            <div class="inline-alert inline-alert--warning" style="margin-top:12px;margin-bottom:0;">
-              <span class="inline-alert__icon">⚠</span>
-              <div>Password change available after authentication is implemented.</div>
-            </div>
-          </div>
-
+          <p class="completeness-missing" id="completenessMissing"></p>
         </div>
+
+        <!-- ── Two-column content ───────────────────────────────────────── -->
+        <div class="profile-grid">
+
+          <!-- LEFT: Editable sections -->
+          <div style="display:flex;flex-direction:column;gap:20px;">
+
+            <!-- Personal + Professional Information -->
+            <div class="panel">
+              <div class="panel-header">
+                <p class="panel-title">Personal & Professional Information</p>
+              </div>
+              <form id="profileForm" novalidate>
+
+                <p class="form-section-title">Personal Details</p>
+                <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+                  <div class="field">
+                    <label for="firstName">First Name <span style="color:var(--danger)">*</span></label>
+                    <input type="text" id="firstName" maxlength="100" required placeholder="First name">
+                  </div>
+                  <div class="field">
+                    <label for="lastName">Last Name <span style="color:var(--danger)">*</span></label>
+                    <input type="text" id="lastName" maxlength="100" required placeholder="Last name">
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="email">Email Address</label>
+                  <input type="email" id="email" disabled placeholder="Email address">
+                  <p style="font-size:11px;color:var(--muted);margin-top:4px;">Email cannot be changed here.</p>
+                </div>
+
+                <p class="form-section-title">Professional Details</p>
+                <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+                  <div class="field">
+                    <label for="barRegistrationNo">Bar Registration No.</label>
+                    <input type="text" id="barRegistrationNo" maxlength="50" placeholder="e.g. BAR-DEMO-001">
+                  </div>
+                  <div class="field">
+                    <label for="supremeCourtNo">Supreme Court No.</label>
+                    <input type="text" id="supremeCourtNo" maxlength="50" placeholder="e.g. SC-2023-001">
+                  </div>
+                </div>
+                <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+                  <div class="field">
+                    <label for="experienceYears">Years of Experience</label>
+                    <input type="number" id="experienceYears" min="0" max="60" placeholder="e.g. 5">
+                  </div>
+                  <div class="field">
+                    <label for="court">Court / Jurisdiction</label>
+                    <input type="text" id="court" maxlength="150" placeholder="e.g. Colombo District Court">
+                  </div>
+                </div>
+
+                <p class="form-section-title">Biography</p>
+                <div class="field">
+                  <label for="bio">Professional Biography</label>
+                  <textarea id="bio" rows="5" maxlength="2000"
+                    placeholder="Write a professional biography highlighting your experience, specializations, and approach to legal work…"></textarea>
+                  <p style="font-size:11px;color:var(--muted);margin-top:4px;text-align:right;">
+                    <span id="bioCharCount">0</span>/2000
+                  </p>
+                </div>
+
+                <p class="form-section-title">Education</p>
+                <div class="field">
+                  <label for="education">Education & Qualifications</label>
+                  <textarea id="education" rows="4" maxlength="2000"
+                    placeholder="e.g. LL.B (Hons), University of Colombo, 2015&#10;Admitted to the Bar, 2016"></textarea>
+                  <p style="font-size:11px;color:var(--muted);margin-top:4px;text-align:right;">
+                    <span id="eduCharCount">0</span>/2000
+                  </p>
+                </div>
+
+                <div class="form-actions" style="padding-top:8px;">
+                  <button class="btn primary" type="submit" id="saveFormBtn">Save Changes</button>
+                  <button class="btn secondary" type="button" id="resetFormBtn">Reset</button>
+                </div>
+
+              </form>
+            </div>
+
+            <!-- Legal Expertise / Categories -->
+            <div class="panel">
+              <div class="panel-header">
+                <p class="panel-title">Legal Expertise</p>
+              </div>
+
+              <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">
+                Your current areas of legal expertise (click <strong>✕</strong> to remove):
+              </p>
+              <div class="specialty-chips" id="specialtyChips">
+                <!-- Populated by JS -->
+              </div>
+
+              <div class="section-divider">Add from categories</div>
+
+              <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
+                <select id="categorySelect" style="flex:1;">
+                  <option value="">Loading categories…</option>
+                </select>
+                <button class="btn primary" type="button" id="addCategoryBtn"
+                  style="height:42px;padding:0 16px;">Add</button>
+              </div>
+
+              <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">
+                Or click a category to add directly:
+              </p>
+              <div class="category-chip-list" id="categoryChips">
+                <!-- Populated by API -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: Verification + summaries -->
+          <div style="display:flex;flex-direction:column;gap:20px;">
+
+            <!-- Verification Status -->
+            <div class="panel">
+              <div class="panel-header">
+                <p class="panel-title">Verification Status</p>
+              </div>
+              <div class="stepper" id="verificationStepper">
+                <!-- Populated by JS based on verification_status -->
+              </div>
+            </div>
+
+            <!-- Professional Credentials (read-only) -->
+            <div class="panel">
+              <div class="panel-header">
+                <p class="panel-title">Professional Credentials</p>
+              </div>
+              <div class="detail-row">
+                <span class="detail-row__label">Account Status</span>
+                <span class="detail-row__value" id="credStatus">—</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-row__label">Bar Registration</span>
+                <span class="detail-row__value" id="credBar">—</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-row__label">Supreme Court No.</span>
+                <span class="detail-row__value" id="credSC">—</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-row__label">Experience</span>
+                <span class="detail-row__value" id="credExperience">—</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-row__label">Rating</span>
+                <span class="detail-row__value" id="credRating">—</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-row__label">Member Since</span>
+                <span class="detail-row__value" id="credMemberSince">—</span>
+              </div>
+            </div>
+
+            <!-- Availability Summary -->
+            <div class="panel">
+              <div class="panel-header">
+                <p class="panel-title">Availability Summary</p>
+                <a href="lawyer_availability_slots.html" class="btn secondary" style="font-size:12px;padding:4px 10px;">Manage →</a>
+              </div>
+              <div class="stat-row" style="margin-bottom:12px;">
+                <div class="stat-box">
+                  <div class="stat-box__value" id="availTotal">—</div>
+                  <div class="stat-box__label">Total Slots</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-box__value" id="availAvailable">—</div>
+                  <div class="stat-box__label">Available</div>
+                </div>
+              </div>
+              <div class="detail-row">
+                <span class="detail-row__label">Next Available</span>
+                <span class="detail-row__value" id="availNext">—</span>
+              </div>
+            </div>
+
+            <!-- Consultation Package Summary -->
+            <div class="panel">
+              <div class="panel-header">
+                <p class="panel-title">Consultation Packages</p>
+                <a href="lawyer_consultation_packages.html" class="btn secondary" style="font-size:12px;padding:4px 10px;">Manage →</a>
+              </div>
+              <div class="stat-row" style="margin-bottom:16px;">
+                <div class="stat-box">
+                  <div class="stat-box__value" id="pkgTotal">—</div>
+                  <div class="stat-box__label">Total</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-box__value" id="pkgActive">—</div>
+                  <div class="stat-box__label">Active</div>
+                </div>
+              </div>
+              <div id="pkgList" style="display:flex;flex-direction:column;">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
+      <!-- end #profileContent -->
 
     </section>
   </main>

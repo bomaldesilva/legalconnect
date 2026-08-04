@@ -101,7 +101,7 @@
           </div>
           <div style="display:flex;gap:8px;">
             <a class="btn secondary" href="lawyer_profile.html" style="height:34px;font-size:13px;padding:0 14px;">Edit Profile</a>
-            <a class="btn secondary" href="#" style="height:34px;font-size:13px;padding:0 14px;">Public View</a>
+            <a class="btn secondary" href="lawyer_public_profile.html?id=2" target="_blank" style="height:34px;font-size:13px;padding:0 14px;">Public View</a>
           </div>
         </div>
       </div>
@@ -224,6 +224,7 @@
           <div class="panel">
             <div class="panel-header">
               <p class="panel-title">Practice Overview</p>
+              <a class="btn secondary" href="lawyer_profile.html" style="font-size:12px;padding:4px 10px;">Edit Profile →</a>
             </div>
             <div class="detail-row">
               <span class="detail-row__label">Bar Registration</span>
@@ -231,21 +232,22 @@
             </div>
             <div class="detail-row">
               <span class="detail-row__label">Court Jurisdiction</span>
-              <span class="detail-row__value" style="color:var(--muted);font-size:13px;">Not set — pending Module 4</span>
+              <span class="detail-row__value" id="dashCourtJurisdiction">Colombo District Court</span>
             </div>
             <div class="detail-row">
               <span class="detail-row__label">Specializations</span>
               <span class="detail-row__value">
                 <div class="tag-group" id="specTags">
                   <span class="tag tag--sm">Family Law</span>
-                  <span class="tag tag--sm">Criminal Law</span>
                   <span class="tag tag--sm">Property Law</span>
                 </div>
               </span>
             </div>
-            <div class="inline-alert inline-alert--info" style="margin-top:12px;margin-bottom:0;">
-              <span class="inline-alert__icon">ℹ</span>
-              <div>Full profile management available in <strong>Module 4</strong> — Lawyer Profile.</div>
+            <div class="detail-row">
+              <span class="detail-row__label">Profile Status</span>
+              <span class="detail-row__value">
+                <span class="verif-badge verif-badge--approved" style="font-size:11px;">✓ Module 4 Complete</span>
+              </span>
             </div>
           </div>
 

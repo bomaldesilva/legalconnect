@@ -904,6 +904,27 @@ tbody tr:hover { background: var(--surface-2); }
 .skeleton-bar.badge-size { width: 72px; height: 22px; border-radius: 999px; }
 .skeleton-bar.btn-size   { width: 56px; height: 30px; border-radius: 6px; }
 
+/* Generic shimmer block (used for loading skeletons of hero cards, panels, etc.) */
+.skeleton {
+  background: linear-gradient(90deg, var(--line) 25%, var(--surface-2) 50%, var(--line) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-lg);
+}
+
+/* ── Mobile sidebar open state ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .sidebar--open {
+    display: flex;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 200;
+    height: 100vh;
+    overflow-y: auto;
+    flex-direction: column;
+  }
+}
+
 /* ── Improved empty state ──────────────────────────────────────────────────── */
 .empty-state__title {
   font-size: 16px;
@@ -1980,3 +2001,169 @@ tbody tr:nth-child(10) { animation-delay: 360ms; }
   font-size: 12px; color: rgba(255, 255, 255, 0.45); line-height: 1.6;
   display: flex; flex-direction: column; gap: 12px; text-align: center;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODULE 5 — APPOINTMENTS
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── 4-column grid ─────────────────────────────────────────────────────────── */
+.grid.four {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+@media (max-width: 1100px) { .grid.four { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px)  { .grid.four { grid-template-columns: 1fr 1fr; } }
+
+/* ── Search input ──────────────────────────────────────────────────────────── */
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color var(--t-fast) var(--ease);
+  width: 100%;
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(14,165,160,.1);
+}
+
+/* ── Small button variant ──────────────────────────────────────────────────── */
+.btn.btn--sm, .btn--sm {
+  height: 28px;
+  padding: 0 10px;
+  font-size: 11px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Badge colour utilities ────────────────────────────────────────────────── */
+.badge--warning  { background: #fef3c7; color: #92400e; }
+.badge--success  { background: #d1fae5; color: #065f46; }
+.badge--active   { background: #d1fae5; color: #065f46; }
+.badge--inactive { background: #f1f5f9; color: #64748b; }
+.badge--danger   { background: #fee2e2; color: #991b1b; }
+.badge--info     { background: #dbeafe; color: #1e40af; }
+.badge--primary  { background: #ede9fe; color: #4c1d95; }
+
+/* ── Agenda-slot (today's schedule sidebar) ────────────────────────────────── */
+.agenda-slot {
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  border-left: 4px solid var(--line);
+  margin-bottom: 10px;
+  transition: border-color var(--t-fast) var(--ease);
+}
+.agenda-slot--booked  { border-left-color: var(--teal); background: var(--teal-light); }
+.agenda-slot--available { border-left-color: var(--success); }
+.agenda-slot-time  { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 2px; }
+.agenda-slot-title { font-size: 14px; font-weight: 700; color: var(--navy); margin: 0 0 2px; }
+.agenda-slot-desc  { font-size: 12px; color: var(--muted); margin: 0; }
+
+/* ── Appointment detail modal ──────────────────────────────────────────────── */
+.lc-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,.45);
+  backdrop-filter: blur(4px);
+  z-index: 400;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.lc-modal--open { display: flex; }
+
+.lc-modal-content {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalIn .22s var(--ease) both;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(16px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.lc-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.lc-modal-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0;
+}
+.lc-modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+  transition: color var(--t-fast) var(--ease);
+}
+.lc-modal-close:hover { color: var(--danger); }
+.lc-modal-body {
+  padding: 16px 24px;
+}
+.lc-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--line);
+}
+
+/* ── book-btn (public profile hero) — now an anchor ───────────────────────── */
+a.book-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--teal);
+  color: #fff;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+a.book-btn:hover { background: var(--teal-dark); transform: translateY(-2px); }
+
+/* ── Breadcrumb separator ──────────────────────────────────────────────────── */
+.breadcrumb-sep    { color: var(--muted); margin: 0 6px; }
+.breadcrumb-current { color: var(--navy); font-weight: 600; }
+
+/* ── Filter chip button reset ──────────────────────────────────────────────── */
+.filter-chip {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all var(--t-fast) var(--ease);
+}
+.filter-chip:hover { border-color: var(--teal); color: var(--teal); }
+.filter-chip.filter-chip--active, .filter-chip--active {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+
+
