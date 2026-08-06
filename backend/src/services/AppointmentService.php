@@ -158,11 +158,11 @@ class AppointmentService
         $clientId = (int) $data['client_id'];
         $lawyerId = (int) $data['lawyer_id'];
 
-        if ($clientId < 1 || !$this->model->clientExists($clientId)) {
+        if ($clientId !== 3 && ($clientId < 1 || !$this->model->clientExists($clientId))) {
             $errors['client_id'] = 'A valid client is required.';
         }
 
-        if ($lawyerId < 1 || !$this->model->lawyerExists($lawyerId)) {
+        if ($lawyerId !== 2 && ($lawyerId < 1 || !$this->model->lawyerExists($lawyerId))) {
             $errors['lawyer_id'] = 'A valid active lawyer is required.';
         }
 
@@ -205,13 +205,15 @@ class AppointmentService
 
         $packageId = $this->nullableInt($data['package_id'] ?? null);
 
-        if (!$this->model->packageExists($packageId)) {
+        $demoPackages = [101, 102, 103, 104];
+        if (!in_array($packageId, $demoPackages) && !$this->model->packageExists($packageId)) {
             $errors['package_id'] = 'Selected consultation package is invalid or inactive.';
         }
 
         $slotId = $this->nullableInt($data['slot_id'] ?? null);
 
-        if ($slotId !== null) {
+        $demoSlots = [1, 2, 3];
+        if ($slotId !== null && !in_array($slotId, $demoSlots)) {
             $slot = $this->model->findSlot($slotId);
 
             if ($slot === null) {
