@@ -173,15 +173,19 @@
         if (path.includes('lawyer_') && user.role !== 'Lawyer') window.location.href = 'login.html';
         if (path.includes('client_') && user.role !== 'Client') window.location.href = 'login.html';
         
-        // Populate user name in the topbar if the element exists
-        const userNameEl = document.querySelector('.header__user-name');
-        if (userNameEl) {
-          userNameEl.textContent = `${user.first_name} ${user.last_name}`;
+        // Populate user name/avatar in the topbar
+        const topbarAvatar = document.querySelector('.topbar-right .avatar');
+        if (topbarAvatar) {
+          topbarAvatar.title = `${user.first_name} ${user.last_name}`;
+          topbarAvatar.textContent = (user.first_name[0] + user.last_name[0]).toUpperCase();
         }
         
         // --- PHASE 1 DEMO WIPE FOR NEW USERS ---
         // If this is a newly registered user (ID > 3), clear out the hardcoded mock data
         if (user.user_id > 3 && isProtected) {
+          const profileAvatars = document.querySelectorAll('.profile-hero__avatar');
+          profileAvatars.forEach(a => a.textContent = (user.first_name[0] + user.last_name[0]).toUpperCase());
+          
           const names = document.querySelectorAll('.profile-hero__name');
           names.forEach(n => n.textContent = `${user.first_name} ${user.last_name}`);
           
