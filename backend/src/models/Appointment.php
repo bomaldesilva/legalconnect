@@ -2,12 +2,21 @@
 
 declare(strict_types=1);
 
+/**
+ * File: Appointment.php
+ * Description: Data access model for Appointments.
+ * Executes raw SQL queries and interacts directly with the database.
+ */
 class Appointment
 {
     public function __construct(private PDO $db)
     {
     }
 
+    /**
+     * Section: Fetch All Appointments
+     * Retrieves all appointments, joining related client, lawyer, and package details.
+     */
     public function all(): array
     {
         $statement = $this->db->query(
@@ -28,6 +37,10 @@ class Appointment
         return $statement->fetchAll();
     }
 
+    /**
+     * Section: Fetch Single Appointment
+     * Retrieves an appointment by ID with its joined details.
+     */
     public function find(int $id): ?array
     {
         $statement = $this->db->prepare(
@@ -50,6 +63,10 @@ class Appointment
         return $row ?: null;
     }
 
+    /**
+     * Section: Create Appointment
+     * Inserts a new appointment into the database and returns its ID.
+     */
     public function create(array $data): int
     {
         $statement = $this->db->prepare(
@@ -73,6 +90,10 @@ class Appointment
         return (int) $this->db->lastInsertId();
     }
 
+    /**
+     * Section: Update Appointment
+     * Updates an existing appointment by ID.
+     */
     public function update(int $id, array $data): bool
     {
         $statement = $this->db->prepare(

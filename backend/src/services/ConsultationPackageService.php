@@ -2,17 +2,30 @@
 
 declare(strict_types=1);
 
+/**
+ * File: ConsultationPackageService.php
+ * Description: Business logic layer for Consultation Packages.
+ * Handles validation and interacts with the ConsultationPackage model.
+ */
 class ConsultationPackageService
 {
     public function __construct(private ConsultationPackage $model)
     {
     }
 
+    /**
+     * Section: Fetch All Packages
+     * Retrieves all packages via the model.
+     */
     public function getAll(): array
     {
         return $this->model->all();
     }
 
+    /**
+     * Section: Fetch Single Package
+     * Retrieves a package by ID, throwing a 404 if not found.
+     */
     public function getById(int $id): array
     {
         $package = $this->model->find($id);
@@ -24,6 +37,10 @@ class ConsultationPackageService
         return $package;
     }
 
+    /**
+     * Section: Create Package
+     * Validates input data and creates a new consultation package.
+     */
     public function create(array $data): array
     {
         $errors = $this->validate($data);
@@ -37,6 +54,10 @@ class ConsultationPackageService
         return $this->model->find($id);
     }
 
+    /**
+     * Section: Update Package
+     * Ensures the package exists, validates input data, and updates the record.
+     */
     public function update(int $id, array $data): array
     {
         $this->getById($id);
@@ -52,6 +73,10 @@ class ConsultationPackageService
         return $this->model->find($id);
     }
 
+    /**
+     * Section: Deactivate Package
+     * Changes the status of the package to inactive instead of hard deleting it.
+     */
     public function deactivate(int $id): array
     {
         $this->getById($id);

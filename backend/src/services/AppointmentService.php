@@ -2,17 +2,30 @@
 
 declare(strict_types=1);
 
+/**
+ * File: AppointmentService.php
+ * Description: Business logic layer for Appointments. Handles validation,
+ * creation, updating, and slot status toggling when booking appointments.
+ */
 class AppointmentService
 {
     public function __construct(private Appointment $model)
     {
     }
 
+    /**
+     * Section: Fetch All Appointments
+     * Retrieves all appointments from the database via the model.
+     */
     public function getAll(): array
     {
         return $this->model->all();
     }
 
+    /**
+     * Section: Fetch Single Appointment
+     * Retrieves an appointment by ID, throwing a 404 exception if not found.
+     */
     public function getById(int $id): array
     {
         $appointment = $this->model->find($id);
@@ -24,6 +37,10 @@ class AppointmentService
         return $appointment;
     }
 
+    /**
+     * Section: Create Appointment
+     * Prepares data from a slot, validates it, creates the record, and triggers notifications.
+     */
     public function create(array $data): array
     {
         $prepared = $this->prepareFromSlot($data);
@@ -55,6 +72,10 @@ class AppointmentService
         return $this->model->find($id);
     }
 
+    /**
+     * Section: Update Appointment
+     * Validates and updates an appointment, adjusting slot availability if the slot changed.
+     */
     public function update(int $id, array $data): array
     {
         $existing = $this->getById($id);
@@ -87,6 +108,10 @@ class AppointmentService
         return $this->model->find($id);
     }
 
+    /**
+     * Section: Cancel Appointment
+     * Updates the status to Cancelled and frees up the associated slot.
+     */
     public function cancel(int $id): array
     {
         $existing = $this->getById($id);

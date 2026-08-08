@@ -3,15 +3,13 @@
 declare(strict_types=1);
 
 /**
- * LawyerProfile
+ * File: LawyerProfile.php
+ * Description: Repository layer for the Lawyer Profile module.
+ * Handles all DB queries across the users, lawyers, lawyer_categories, 
+ * lawyer_verifications, consultation_packages, and availability_slots tables.
  *
- * Repository layer for the Lawyer Profile module.
- * Handles all DB queries across the users, lawyers,
- * lawyer_categories, lawyer_verifications, consultation_packages,
- * and availability_slots tables.
- *
- * Uses parameterised queries throughout; never exposes raw
- * error messages to the controller layer.
+ * Uses parameterised queries throughout; never exposes raw error messages 
+ * to the controller layer.
  */
 class LawyerProfile
 {

@@ -2,12 +2,21 @@
 
 declare(strict_types=1);
 
+/**
+ * File: AvailabilitySlot.php
+ * Description: Data access model for Availability Slots.
+ * Interacts directly with the database via raw SQL statements.
+ */
 class AvailabilitySlot
 {
     public function __construct(private PDO $db)
     {
     }
 
+    /**
+     * Section: Fetch All Slots
+     * Retrieves all availability slots, joining lawyer details.
+     */
     public function all(): array
     {
         $statement = $this->db->query(
@@ -24,6 +33,10 @@ class AvailabilitySlot
         return $statement->fetchAll();
     }
 
+    /**
+     * Section: Fetch Single Slot
+     * Retrieves an availability slot by ID with lawyer details.
+     */
     public function find(int $id): ?array
     {
         $statement = $this->db->prepare(
@@ -42,6 +55,10 @@ class AvailabilitySlot
         return $slot ?: null;
     }
 
+    /**
+     * Section: Create Slot
+     * Inserts a new availability slot into the database.
+     */
     public function create(array $data): int
     {
         $statement = $this->db->prepare(
@@ -59,6 +76,10 @@ class AvailabilitySlot
         return (int) $this->db->lastInsertId();
     }
 
+    /**
+     * Section: Update Slot
+     * Updates an existing slot in the database by ID.
+     */
     public function update(int $id, array $data): bool
     {
         $statement = $this->db->prepare(

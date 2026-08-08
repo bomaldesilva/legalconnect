@@ -1,11 +1,5 @@
-// DEMO DATA
-const DEMO_CASES = [
-  { case_id:1, case_title:'Jayaweera vs Municipality', category:'Family Law', client:'Demo Client', status:'Open', outcome:'Pending', open_date:'2026-07-15', description:'Property rights dispute regarding municipal land acquisition.' },
-  { case_id:2, case_title:'Property Deed Dispute', category:'Property Law', client:'Demo Client', status:'InProgress', outcome:'Pending', open_date:'2026-06-01', description:'Title verification and deed challenge for land in Kandy.' },
-  { case_id:3, case_title:'Employment Termination', category:'Labour Law', client:'Demo Client', status:'Closed', outcome:'Won', open_date:'2026-03-10', description:'Wrongful termination case resolved in client\'s favor.' },
-  { case_id:4, case_title:'Criminal Bail Application', category:'Criminal Law', client:'Demo Client', status:'Archived', outcome:'Withdrawn', open_date:'2025-12-01', description:'Bail application for accused in financial fraud case.' },
-];
-
+const LAWYER_ID = window.LC?.currentUser?.id || 2;
+let casesList = [];
 let currentFilter = 'All';
 let searchQuery = '';
 
@@ -16,10 +10,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     initCategories();
-    renderKPIs();
-    renderTable();
     setupEventListeners();
+    fetchCases();
 });
+
+async function fetchCases() {
+    try {
+        const response = await fetch(`/api/lawyer-cases?lawyer_id=${LAWYER_ID}`);
+        if (!response.ok) throw new Error('Failed to fetch cases');
+        const data = await response.json();
+        casesList = data;
+        renderKPIs();
+        renderTable();
+    } catch (error) {
+        console.error('Error fetching cases:', error);
+        if (window.LC?.showToast) window.LC.showToast('Failed to load cases', 'error');
+    }
+}
 
 function setupEventListeners() {
     // Filter chips
@@ -79,7 +86,7 @@ function initCategories() {
 
 function renderKPIs() {
     let open = 0, inProg = 0, closed = 0, archived = 0;
-    DEMO_CASES.forEach(c => {
+    casesList.forEach(c => {
         if (c.status === 'Open') open++;
         else if (c.status === 'InProgress') inProg++;
         else if (c.status === 'Closed') closed++;
@@ -120,11 +127,11 @@ function renderTable() {
     const tbody = document.getElementById('casesTableBody');
     if (!tbody) return;
 
-    let filtered = DEMO_CASES.filter(c => {
+    let filtered = casesList.filter(c => {
         const matchFilter = currentFilter === 'All' || c.status === currentFilter;
         const matchSearch = c.case_title.toLowerCase().includes(searchQuery) || 
                             c.client.toLowerCase().includes(searchQuery) ||
-                            c.category.toLowerCase().includes(searchQuery);
+                            (c.category && c.category.toLowerCase().includes(searchQuery));
         return matchFilter && matchSearch;
     });
 
@@ -144,7 +151,7 @@ function renderTable() {
             <tr style="border-bottom: 1px solid #eee;">
                 <td style="padding: 12px;">${c.case_id}</td>
                 <td style="padding: 12px; font-weight: 500;">${c.case_title}</td>
-                <td style="padding: 12px;">${c.category}</td>
+                <td style="padding: 12px;">${c.category || 'N/A'}</td>
                 <td style="padding: 12px;">${c.client}</td>
                 <td style="padding: 12px;">${getStatusBadge(c.status)}</td>
                 <td style="padding: 12px;">${getOutcomeBadge(c.outcome)}</td>
@@ -180,7 +187,7 @@ function handleAddCase(e) {
 }
 
 function openCaseDetail(id) {
-    const caseData = DEMO_CASES.find(c => c.case_id === id);
+    const caseData = casesList.find(c => c.case_id === id);
     if (!caseData) return;
 
     const panel = document.getElementById('caseDetailPanel');
@@ -246,12 +253,30 @@ window.openCaseDetail = openCaseDetail;
 function closeCasePrompt(id) {
     if (window.LC?.openConfirmModal) {
         window.LC.openConfirmModal('Are you sure you want to close this case?', () => {
-            if (window.LC?.showToast) window.LC.showToast('Module 7 backend pending. Case status not changed.', 'info');
+            closeCaseAPI(id);
         });
     } else {
         if (confirm('Are you sure you want to close this case?')) {
-            alert('Module 7 backend pending. Case status not changed.');
+            closeCaseAPI(id);
         }
+    }
+}
+
+async function closeCaseAPI(id) {
+    try {
+        const response = await fetch(`/api/lawyer-cases/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'close' })
+        });
+        
+        if (!response.ok) throw new Error('Failed to close case');
+        
+        if (window.LC?.showToast) window.LC.showToast('Case closed successfully.', 'success');
+        fetchCases();
+    } catch (error) {
+        console.error('Error closing case:', error);
+        if (window.LC?.showToast) window.LC.showToast('Failed to close case', 'error');
     }
 }
 window.closeCasePrompt = closeCasePrompt;

@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 /**
- * AvailabilitySlotService
- *
- * Owns all business rules for the Availability Slot module.
+ * File: AvailabilitySlotService.php
+ * Description: Business rules for the Availability Slot module.
  * Handles date/time format validation, time-ordering rules,
  * duplicate detection, and lawyer existence checks.
  */

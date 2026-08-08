@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+/**
+ * File: DashboardController.php
+ * Description: HTTP Controller for aggregating dashboard metrics.
+ * Fetches high-level counts from various models for the admin/system overview.
+ */
 class DashboardController
 {
     public function __construct(
@@ -13,6 +18,10 @@ class DashboardController
     ) {
     }
 
+    /**
+     * Section: Fetch Dashboard Metrics
+     * Gathers counts across multiple domains and returns them in a single payload.
+     */
     public function index(): void
     {
         Response::success([

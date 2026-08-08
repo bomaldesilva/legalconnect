@@ -23,14 +23,14 @@
       </div>
       <nav class="nav-list">
         <a class="nav-link active" href="admin_dashboard.html">
-          <span class="nav-icon">⊞</span> Dashboard
+          <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg></span> Dashboard
         </a>
         <a class="nav-link" href="admin_verifications.html">
-          <span class="nav-icon">✓</span> Verifications
+          <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Verifications
           <span class="badge" id="pendingVerifBadge" style="margin-left:auto;font-size:10px;background:#fef3c7;color:#92400e;border-radius:999px;padding:0 6px;height:18px;line-height:18px;display:none;"></span>
         </a>
         <a class="nav-link" href="admin_users.html">
-          <span class="nav-icon">👤</span> Users
+          <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span> Users
         </a>
       </nav>
     </div>
@@ -41,13 +41,13 @@
       </div>
       <nav class="nav-list">
         <a class="nav-link" href="admin_legal_categories.html">
-          <span class="nav-icon">⊟</span> Legal Categories
+          <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></span> Legal Categories
         </a>
         <a class="nav-link" href="lawyer_availability_slots.html">
-          <span class="nav-icon">◷</span> Availability Slots
+          <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></span> Availability Slots
         </a>
         <a class="nav-link" href="lawyer_consultation_packages.html">
-          <span class="nav-icon">◈</span> Packages
+          <span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></span> Packages
         </a>
       </nav>
     </div>
@@ -71,11 +71,12 @@
       </div>
       <div class="topbar-right">
         <button class="notif-btn" title="Notifications" onclick="location.href='notifications.html'">
-          🔔
+          <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
           <span class="notif-btn__badge" id="notifCount" style="display:none;">3</span>
         </button>
         <div class="avatar avatar--md avatar--navy" style="cursor:pointer;" title="Admin">A</div>
         <span class="phase-pill">Admin</span>
+        <a href="#" onclick="if(confirm('Are you sure you want to log out?')) { window.location.href='login.html'; } return false;" class="btn btn--secondary btn--sm" style="margin-left: 12px; font-size: 0.75rem; padding: 4px 10px;">Logout</a>
       </div>
     </header>
 
@@ -93,21 +94,21 @@
       <!-- ── KPI Stat Cards ────────────────────────────────────────────── -->
       <div class="grid three" style="margin-bottom:28px;">
         <div class="stat-card stat-card--teal">
-          <div class="stat-card__icon-wrap">⚖</div>
+          <div class="stat-card__icon-wrap"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"></path><path d="M3 7h18"></path><path d="M3 7l2 7a2 2 0 0 0 4 0l2-7"></path><path d="M15 7l2 7a2 2 0 0 0 4 0l2-7"></path></svg></div>
           <div class="stat-card__body">
             <p class="stat-card__label">Active Legal Categories</p>
             <p class="stat-card__value" id="kpiCategories">—</p>
           </div>
         </div>
         <div class="stat-card stat-card--success">
-          <div class="stat-card__icon-wrap">◷</div>
+          <div class="stat-card__icon-wrap"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
           <div class="stat-card__body">
             <p class="stat-card__label">Available Slots</p>
             <p class="stat-card__value" id="kpiSlots">—</p>
           </div>
         </div>
         <div class="stat-card stat-card--warning">
-          <div class="stat-card__icon-wrap">✓</div>
+          <div class="stat-card__icon-wrap"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
           <div class="stat-card__body">
             <p class="stat-card__label">Pending Verifications</p>
             <p class="stat-card__value" id="kpiVerifications">—</p>
@@ -119,14 +120,14 @@
       <!-- Second row stat cards -->
       <div class="grid three" style="margin-bottom:28px;">
         <div class="stat-card stat-card--info">
-          <div class="stat-card__icon-wrap">◈</div>
+          <div class="stat-card__icon-wrap"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div>
           <div class="stat-card__body">
             <p class="stat-card__label">Active Packages</p>
             <p class="stat-card__value" id="kpiPackages">—</p>
           </div>
         </div>
         <div class="stat-card stat-card--navy">
-          <div class="stat-card__icon-wrap">👤</div>
+          <div class="stat-card__icon-wrap"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
           <div class="stat-card__body">
             <p class="stat-card__label">Total Users</p>
             <p class="stat-card__value"><!-- DEMO -->4</p>
@@ -134,7 +135,7 @@
           </div>
         </div>
         <div class="stat-card stat-card--danger">
-          <div class="stat-card__icon-wrap">☑</div>
+          <div class="stat-card__icon-wrap"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
           <div class="stat-card__body">
             <p class="stat-card__label">Appointments</p>
             <p class="stat-card__value"><span id="kpiApptCount">—</span></p>
@@ -155,22 +156,22 @@
             </div>
             <div style="display:flex;flex-direction:column;gap:8px;">
               <a class="btn primary" href="admin_verifications.html" style="justify-content:flex-start;">
-                <span>✓</span> Review Lawyer Verifications
+                <span><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Review Lawyer Verifications
               </a>
               <a class="btn secondary" href="admin_users.html" style="justify-content:flex-start;">
-                <span>👤</span> Manage Users
+                <span><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span> Manage Users
               </a>
               <a class="btn secondary" href="admin_legal_categories.html" style="justify-content:flex-start;">
-                <span>⊟</span> Manage Legal Categories
+                <span><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></span> Manage Legal Categories
               </a>
               <a class="btn secondary" href="lawyer_availability_slots.html" style="justify-content:flex-start;">
-                <span>◷</span> Manage Availability Slots
+                <span><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></span> Manage Availability Slots
               </a>
               <a class="btn secondary" href="lawyer_consultation_packages.html" style="justify-content:flex-start;">
-                <span>◈</span> Manage Consultation Packages
+                <span><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></span> Manage Consultation Packages
               </a>
               <a class="btn secondary" href="lawyer_profile.html" style="justify-content:flex-start;">
-                <span>👤</span> View Lawyer Profile
+                <span><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span> View Lawyer Profile
               </a>
             </div>
           </div>
@@ -218,7 +219,7 @@
             <div class="timeline" id="activityTimeline">
               <!-- Populated by JS -->
               <div class="empty-state" style="padding:32px 0;">
-                <div class="empty-state__icon">◷</div>
+                <div class="empty-state__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
                 <p>Loading activity…</p>
               </div>
             </div>
@@ -250,7 +251,7 @@
             <div class="stepper">
               <div class="stepper-step done">
                 <div class="stepper-step__track">
-                  <div class="stepper-step__num">✓</div>
+                  <div class="stepper-step__num"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                   <div class="stepper-step__connector"></div>
                 </div>
                 <div class="stepper-step__content">
@@ -260,7 +261,7 @@
               </div>
               <div class="stepper-step done">
                 <div class="stepper-step__track">
-                  <div class="stepper-step__num">✓</div>
+                  <div class="stepper-step__num"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                   <div class="stepper-step__connector"></div>
                 </div>
                 <div class="stepper-step__content">
@@ -270,7 +271,7 @@
               </div>
               <div class="stepper-step done">
                 <div class="stepper-step__track">
-                  <div class="stepper-step__num">✓</div>
+                  <div class="stepper-step__num"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                   <div class="stepper-step__connector"></div>
                 </div>
                 <div class="stepper-step__content">
@@ -280,7 +281,7 @@
               </div>
               <div class="stepper-step done">
                 <div class="stepper-step__track">
-                  <div class="stepper-step__num">✓</div>
+                  <div class="stepper-step__num"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                   <div class="stepper-step__connector"></div>
                 </div>
                 <div class="stepper-step__content">
@@ -290,7 +291,7 @@
               </div>
               <div class="stepper-step done">
                 <div class="stepper-step__track">
-                  <div class="stepper-step__num">✓</div>
+                  <div class="stepper-step__num"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                   <div class="stepper-step__connector"></div>
                 </div>
                 <div class="stepper-step__content">
@@ -374,16 +375,16 @@
 <nav class="mobile-nav">
   <div class="mobile-nav__items">
     <a class="mobile-nav__item active" href="admin_dashboard.html">
-      <span class="mobile-nav__icon">⊞</span>Dashboard
+      <span class="mobile-nav__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg></span>Dashboard
     </a>
     <a class="mobile-nav__item" href="admin_verifications.html">
-      <span class="mobile-nav__icon">✓</span>Verify
+      <span class="mobile-nav__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Verify
     </a>
     <a class="mobile-nav__item" href="admin_users.html">
-      <span class="mobile-nav__icon">👤</span>Users
+      <span class="mobile-nav__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>Users
     </a>
     <a class="mobile-nav__item" href="admin_legal_categories.html">
-      <span class="mobile-nav__icon">⊟</span>Categories
+      <span class="mobile-nav__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></span>Categories
     </a>
   </div>
 </nav>

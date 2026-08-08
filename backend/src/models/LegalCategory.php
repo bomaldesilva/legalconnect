@@ -2,12 +2,21 @@
 
 declare(strict_types=1);
 
+/**
+ * File: LegalCategory.php
+ * Description: Data access model for Legal Categories.
+ * Executes raw SQL queries and interacts directly with the database.
+ */
 class LegalCategory
 {
     public function __construct(private PDO $db)
     {
     }
 
+    /**
+     * Section: Fetch All Categories
+     * Retrieves all legal categories from the database.
+     */
     public function all(): array
     {
         $statement = $this->db->query(
@@ -19,6 +28,10 @@ class LegalCategory
         return $statement->fetchAll();
     }
 
+    /**
+     * Section: Fetch Single Category
+     * Retrieves a single legal category by ID.
+     */
     public function find(int $id): ?array
     {
         $statement = $this->db->prepare(
@@ -32,6 +45,10 @@ class LegalCategory
         return $category ?: null;
     }
 
+    /**
+     * Section: Create Category
+     * Inserts a new legal category into the database.
+     */
     public function create(array $data): int
     {
         $statement = $this->db->prepare(
@@ -47,6 +64,10 @@ class LegalCategory
         return (int) $this->db->lastInsertId();
     }
 
+    /**
+     * Section: Update Category
+     * Updates an existing legal category by ID.
+     */
     public function update(int $id, array $data): bool
     {
         $statement = $this->db->prepare(
@@ -63,6 +84,10 @@ class LegalCategory
         ]);
     }
 
+    /**
+     * Section: Deactivate Category
+     * Marks a legal category as inactive instead of deleting it.
+     */
     public function deactivate(int $id): bool
     {
         $statement = $this->db->prepare(

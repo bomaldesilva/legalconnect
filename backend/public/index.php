@@ -18,6 +18,10 @@ require_once __DIR__ . '/../src/models/ConsultationPackage.php';
 require_once __DIR__ . '/../src/models/Appointment.php';
 require_once __DIR__ . '/../src/models/Payment.php';
 require_once __DIR__ . '/../src/models/LawyerProfile.php';
+require_once __DIR__ . '/../src/models/ClientRecord.php';
+require_once __DIR__ . '/../src/models/CaseModel.php';
+require_once __DIR__ . '/../src/models/Document.php';
+require_once __DIR__ . '/../src/models/DocumentTemplate.php';
 
 // ─── Services ─────────────────────────────────────────────────────────────────
 require_once __DIR__ . '/../src/services/LegalCategoryService.php';
@@ -26,6 +30,10 @@ require_once __DIR__ . '/../src/services/ConsultationPackageService.php';
 require_once __DIR__ . '/../src/services/AppointmentService.php';
 require_once __DIR__ . '/../src/services/PaymentService.php';
 require_once __DIR__ . '/../src/services/LawyerProfileService.php';
+require_once __DIR__ . '/../src/services/ClientRecordService.php';
+require_once __DIR__ . '/../src/services/CaseService.php';
+require_once __DIR__ . '/../src/services/DocumentService.php';
+require_once __DIR__ . '/../src/services/DocumentTemplateService.php';
 
 // ─── Controllers ──────────────────────────────────────────────────────────────
 require_once __DIR__ . '/../src/controllers/DashboardController.php';
@@ -35,6 +43,10 @@ require_once __DIR__ . '/../src/controllers/ConsultationPackageController.php';
 require_once __DIR__ . '/../src/controllers/AppointmentController.php';
 require_once __DIR__ . '/../src/controllers/PaymentController.php';
 require_once __DIR__ . '/../src/controllers/LawyerProfileController.php';
+require_once __DIR__ . '/../src/controllers/ClientRecordController.php';
+require_once __DIR__ . '/../src/controllers/CaseController.php';
+require_once __DIR__ . '/../src/controllers/DocumentController.php';
+require_once __DIR__ . '/../src/controllers/DocumentTemplateController.php';
 
 // ─── CORS pre-flight ──────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -54,20 +66,28 @@ try {
     );
 
     // ── Models ────────────────────────────────────────────────────────────────
-    $categoryModel      = new LegalCategory($db);
-    $slotModel          = new AvailabilitySlot($db);
-    $packageModel       = new ConsultationPackage($db);
-    $appointmentModel   = new Appointment($db);
-    $paymentModel       = new Payment($db);
-    $lawyerProfileModel = new LawyerProfile($db);
+    $categoryModel         = new LegalCategory($db);
+    $slotModel             = new AvailabilitySlot($db);
+    $packageModel          = new ConsultationPackage($db);
+    $appointmentModel      = new Appointment($db);
+    $paymentModel          = new Payment($db);
+    $lawyerProfileModel    = new LawyerProfile($db);
+    $clientRecordModel     = new ClientRecord($db);
+    $caseModel             = new CaseModel($db);
+    $documentModel         = new Document($db);
+    $documentTemplateModel = new DocumentTemplate($db);
 
     // ── Services ──────────────────────────────────────────────────────────────
-    $categoryService       = new LegalCategoryService($categoryModel);
-    $slotService           = new AvailabilitySlotService($slotModel);
-    $packageService        = new ConsultationPackageService($packageModel);
-    $appointmentService    = new AppointmentService($appointmentModel);
-    $paymentService        = new PaymentService($paymentModel);
-    $lawyerProfileService  = new LawyerProfileService($lawyerProfileModel);
+    $categoryService          = new LegalCategoryService($categoryModel);
+    $slotService              = new AvailabilitySlotService($slotModel);
+    $packageService           = new ConsultationPackageService($packageModel);
+    $appointmentService       = new AppointmentService($appointmentModel);
+    $paymentService           = new PaymentService($paymentModel);
+    $lawyerProfileService     = new LawyerProfileService($lawyerProfileModel);
+    $clientRecordService      = new ClientRecordService($clientRecordModel);
+    $caseService              = new CaseService($caseModel);
+    $documentService          = new DocumentService($documentModel);
+    $documentTemplateService  = new DocumentTemplateService($documentTemplateModel);
 
     // ── Controllers ───────────────────────────────────────────────────────────
     $dashboardController  = new DashboardController(
@@ -77,12 +97,16 @@ try {
         $appointmentModel,
         $paymentModel
     );
-    $categoryController       = new LegalCategoryController($categoryService);
-    $slotController           = new AvailabilitySlotController($slotService);
-    $packageController        = new ConsultationPackageController($packageService);
-    $appointmentController    = new AppointmentController($appointmentService);
-    $paymentController        = new PaymentController($paymentService);
-    $lawyerProfileController  = new LawyerProfileController($lawyerProfileService);
+    $categoryController          = new LegalCategoryController($categoryService);
+    $slotController              = new AvailabilitySlotController($slotService);
+    $packageController           = new ConsultationPackageController($packageService);
+    $appointmentController       = new AppointmentController($appointmentService);
+    $paymentController           = new PaymentController($paymentService);
+    $lawyerProfileController     = new LawyerProfileController($lawyerProfileService);
+    $clientRecordController      = new ClientRecordController($clientRecordService);
+    $caseController              = new CaseController($caseService);
+    $documentController          = new DocumentController($documentService);
+    $documentTemplateController  = new DocumentTemplateController($documentTemplateService);
 
     // ── Routing ───────────────────────────────────────────────────────────────
 
@@ -113,6 +137,26 @@ try {
 
     if (preg_match('#^/api/payments/?(\d+)?$#', $path, $matches)) {
         routeCrud($method, $matches[1] ?? null, $paymentController);
+        exit;
+    }
+
+    if (preg_match('#^/api/lawyer-clients/?(\d+)?$#', $path, $matches)) {
+        routeCrud($method, $matches[1] ?? null, $clientRecordController);
+        exit;
+    }
+
+    if (preg_match('#^/api/lawyer-cases/?(\d+)?$#', $path, $matches)) {
+        routeCrud($method, $matches[1] ?? null, $caseController);
+        exit;
+    }
+
+    if (preg_match('#^/api/lawyer-documents/?(\d+)?$#', $path, $matches)) {
+        routeCrud($method, $matches[1] ?? null, $documentController);
+        exit;
+    }
+
+    if (preg_match('#^/api/templates/?(\d+)?$#', $path, $matches)) {
+        routeCrud($method, $matches[1] ?? null, $documentTemplateController);
         exit;
     }
 

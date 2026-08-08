@@ -1,46 +1,40 @@
-// DEMO DATA
-const DEMO_DOCS = [
-    {
-        id: 1,
-        name: "Divorce_Petition_Signed.pdf",
-        type: "PDF",
-        case: "CASE-2026-001",
-        uploadedBy: "Demo Client",
-        date: "2026-07-30",
-        status: "Approved"
-    },
-    {
-        id: 2,
-        name: "Property_Deed.jpg",
-        type: "JPG",
-        case: "CASE-2026-002",
-        uploadedBy: "Demo Client",
-        date: "2026-07-29",
-        status: "Uploaded"
-    },
-    {
-        id: 3,
-        name: "Witness_Statement_Draft.docx",
-        type: "DOCX",
-        case: "CASE-2026-001",
-        uploadedBy: "Me",
-        date: "2026-07-28",
-        status: "Pending Review"
-    },
-    {
-        id: 4,
-        name: "Court_Order_Initial.pdf",
-        type: "PDF",
-        case: "CASE-2026-002",
-        uploadedBy: "Admin",
-        date: "2026-07-20",
-        status: "Reviewed"
-    }
-];
-
+const LAWYER_ID = window.LC?.currentUser?.id || 2;
+let docsList = [];
 let currentFilter = 'All';
 let currentSearch = '';
 let pendingFiles = [];
+
+document.addEventListener('DOMContentLoaded', () => {
+    initSidebar();
+    bindEvents();
+    initDropzone();
+    fetchDocuments();
+});
+
+async function fetchDocuments() {
+    try {
+        const response = await fetch(`/api/lawyer-documents?lawyer_id=${LAWYER_ID}`);
+        if (!response.ok) throw new Error('Failed to fetch documents');
+        const data = await response.json();
+        
+        // Map backend API data to the fields the frontend expects
+        docsList = data.map(doc => ({
+            id: doc.id,
+            name: doc.name,
+            type: doc.type,
+            case: doc.case_name || 'General',
+            uploadedBy: "Me", // Mocked for now since backend doesn't resolve uploader name easily yet
+            date: doc.uploaded,
+            status: "Uploaded" // Defaulting since document_status might be null in old records
+        }));
+        
+        renderKPIs();
+        renderTable();
+    } catch (error) {
+        console.error('Error fetching documents:', error);
+        if (window.LC?.showToast) window.LC.showToast('Failed to load documents', 'error');
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
@@ -79,15 +73,15 @@ function bindEvents() {
 }
 
 function renderKPIs() {
-    document.getElementById('kpiTotal').textContent = DEMO_DOCS.length;
-    document.getElementById('kpiPending').textContent = DEMO_DOCS.filter(d => d.status === 'Pending Review' || d.status === 'Uploaded').length;
-    document.getElementById('kpiApproved').textContent = DEMO_DOCS.filter(d => d.status === 'Approved').length;
+    document.getElementById('kpiTotal').textContent = docsList.length;
+    document.getElementById('kpiPending').textContent = docsList.filter(d => d.status === 'Pending Review' || d.status === 'Uploaded').length;
+    document.getElementById('kpiApproved').textContent = docsList.filter(d => d.status === 'Approved').length;
 }
 
 function getFileIcon(type) {
-    if (type === 'PDF') return '<span style="color:var(--danger)">📄</span>';
-    if (type === 'DOCX') return '<span style="color:var(--info)">📝</span>';
-    if (type === 'JPG' || type === 'PNG') return '<span style="color:var(--success)">🖼️</span>';
+    if (type === 'PDF' || type === 'application/pdf') return '<span style="color:var(--danger)">📄</span>';
+    if (type === 'DOCX' || type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') return '<span style="color:var(--info)">📝</span>';
+    if (type === 'JPG' || type === 'PNG' || type === 'image/jpeg' || type === 'image/png') return '<span style="color:var(--success)">🖼️</span>';
     return '📄';
 }
 
@@ -95,7 +89,7 @@ function renderTable() {
     const tbody = document.getElementById('docsTableBody');
     const emptyState = document.getElementById('emptyState');
     
-    let filtered = DEMO_DOCS.filter(d => {
+    let filtered = docsList.filter(d => {
         const matchesFilter = currentFilter === 'All' || d.status === currentFilter || (currentFilter === 'Uploaded' && d.status === 'Pending Review');
         const matchesSearch = d.name.toLowerCase().includes(currentSearch) || d.case.toLowerCase().includes(currentSearch);
         return matchesFilter && matchesSearch;
@@ -206,14 +200,37 @@ window.removePendingFile = function(index) {
     renderPendingFiles();
 };
 
-window.uploadPendingFiles = function() {
+window.uploadPendingFiles = async function() {
     if (pendingFiles.length === 0) {
         if(window.LC && window.LC.showToast) window.LC.showToast('Please select files first', 'warning');
         return;
     }
-    if(window.LC && window.LC.showToast) {
-        window.LC.showToast('Module 8 backend pending. Upload not saved.', 'warning');
+    
+    try {
+        for (let file of pendingFiles) {
+            const formData = new FormData();
+            formData.append('document', file);
+            formData.append('lawyer_id', LAWYER_ID);
+            
+            const response = await fetch('/api/lawyer-documents', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) throw new Error('Upload failed');
+        }
+        
+        if(window.LC && window.LC.showToast) {
+            window.LC.showToast('Documents uploaded successfully', 'success');
+        }
+        
+        pendingFiles = [];
+        renderPendingFiles();
+        fetchDocuments();
+    } catch (err) {
+        console.error('Upload Error:', err);
+        if(window.LC && window.LC.showToast) {
+            window.LC.showToast('Error uploading documents', 'error');
+        }
     }
-    pendingFiles = [];
-    renderPendingFiles();
 };

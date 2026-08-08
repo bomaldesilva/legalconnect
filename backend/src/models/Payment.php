@@ -2,12 +2,21 @@
 
 declare(strict_types=1);
 
+/**
+ * File: Payment.php
+ * Description: Data access model for Payments.
+ * Executes raw SQL queries and interacts directly with the database.
+ */
 class Payment
 {
     public function __construct(private PDO $db)
     {
     }
 
+    /**
+     * Section: Fetch All Payments
+     * Retrieves all payment records, joining appointment and user details.
+     */
     public function all(): array
     {
         $statement = $this->db->query(
@@ -28,6 +37,10 @@ class Payment
         return $statement->fetchAll();
     }
 
+    /**
+     * Section: Fetch Single Payment
+     * Retrieves a single payment record by ID.
+     */
     public function find(int $id): ?array
     {
         $statement = $this->db->prepare(
@@ -50,6 +63,10 @@ class Payment
         return $row ?: null;
     }
 
+    /**
+     * Section: Create Payment
+     * Inserts a new payment record into the database.
+     */
     public function create(array $data): int
     {
         $statement = $this->db->prepare(
@@ -70,6 +87,10 @@ class Payment
         return (int) $this->db->lastInsertId();
     }
 
+    /**
+     * Section: Update Payment
+     * Updates an existing payment record by ID.
+     */
     public function update(int $id, array $data): bool
     {
         $statement = $this->db->prepare(
@@ -94,6 +115,10 @@ class Payment
         ]);
     }
 
+    /**
+     * Section: Mark Payment Failed
+     * Updates the status of a payment to Failed.
+     */
     public function markFailed(int $id): bool
     {
         $statement = $this->db->prepare(

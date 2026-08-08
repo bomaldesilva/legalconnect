@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 /**
- * LawyerProfileService
- *
- * Owns all business rules for the Lawyer Profile module.
+ * File: LawyerProfileService.php
+ * Description: Business rules for the Lawyer Profile module.
  * Controllers delegate every decision here; they only handle HTTP.
  */
 class LawyerProfileService

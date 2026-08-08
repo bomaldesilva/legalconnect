@@ -1,46 +1,123 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LegalConnect | Lawyer Search &amp; Discovery</title>
-    <meta name="description" content="Search verified Attorneys-at-Law in Sri Lanka. Compare consultation packages, practice areas, rating reviews, and book instant legal consultations.">
-    <link rel="stylesheet" href="../css/main.css">
-  </head>
-  <body style="background:var(--bg);">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegalConnect | Client Workspace Dashboard</title>
+  <meta name="description" content="LegalConnect Client Portal — Workspace dashboard for consultation management, service requests, and document portal.">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    /* Local grid layout rules */
+    .grid-four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .grid-two-wide { display: grid; grid-template-columns: 3fr 2fr; gap: 20px; align-items: start; }
+    @media (max-width: 1100px) {
+      .grid-four { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .grid-four { grid-template-columns: repeat(2, 1fr); }
+      .grid-two-wide { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .grid-four { grid-template-columns: 1fr 1fr; }
+    }
+    .consultation-card {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .consultation-card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .consultation-card__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .consultation-card__actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-top: 8px;
+      border-top: 1px dashed var(--line);
+    }
+    .service-req-item, .doc-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      gap: 12px;
+    }
+    .service-req-item:last-child, .doc-item:last-child { border-bottom: none; }
+  </style>
+</head>
+<body>
+<div class="app-shell">
 
-    <!-- ── Public Header ────────────────────────────────────────────────── -->
-    <header class="landing-header" style="background:var(--navy);">
-      <div class="landing-header-container">
-        <a class="brand" href="../index.html" aria-label="LegalConnect Home">
-          <span class="brand-mark">LC</span>
-          <span class="brand-name">LegalConnect</span>
-        </a>
+  <!-- ── Client Sidebar ─────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="client_dashboard.html" aria-label="LegalConnect">
+      <span class="brand-mark">LC</span>
+      <span class="brand-name">LegalConnect</span>
+    </a>
+    <div class="nav-group">
+      <p class="nav-group-label">Workspace</p>
+      <nav class="nav-list">
+        <a class="nav-link" href="client_dashboard.html"><span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg></span> Dashboard</a>
+        <a class="nav-link" href="client_appointments.html"><span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> Appointments</a>
+        <a class="nav-link" href="client_documents.html"><span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></span> My Documents</a>
+        <a class="nav-link" href="client_requests.html"><span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg></span> Service Requests</a>
+      </nav>
+    </div>
+    <div class="nav-group">
+      <p class="nav-group-label">Quick Actions</p>
+      <nav class="nav-list">
+        <a class="nav-link active" href="client_lawyers.html"><span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span> Find Lawyer</a>
+        <a class="nav-link" href="client_book_appointment.html"><span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span> Book Consultation</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <p class="sidebar-footer-text">LegalConnect · Client Portal<br>University Project</p>
+    </div>
+  </aside>
 
-        <nav>
-          <ul class="landing-nav-links">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="lawyer_search.html" class="active">Find Lawyers</a></li>
-            <li><a href="../index.html#services">Services</a></li>
-            <li><a href="../index.html#categories">Categories</a></li>
-          </ul>
-        </nav>
+  <!-- ── Main Page Area ─────────────────────────────────────────────────── -->
+  <main class="page">
 
-        <div class="landing-portal-btns">
-          <a href="client_login.html" class="btn secondary btn-glass" style="font-size:13px; padding:0 14px; height:36px;">Client Login</a>
-          <a href="login.html" class="btn primary" style="font-size:13px; padding:0 16px; height:36px;">Lawyer Workspace</a>
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left" style="display:flex;align-items:center;gap:12px;">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div>
+          <p class="topbar-title">Find a Lawyer</p>
+          <p class="topbar-subtitle" id="currentDate">Loading date…</p>
         </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" title="Notifications"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></button>
+        <div class="avatar avatar--md avatar--teal" title="Demo Client">DC</div>
+        <span class="phase-pill">Client</span>
+        <a href="#" onclick="if(confirm('Are you sure you want to log out?')) { window.location.href='login.html'; } return false;" class="btn btn--secondary btn--sm" style="margin-left: 12px; font-size: 0.75rem; padding: 4px 10px;">Logout</a>
       </div>
     </header>
 
-    <!-- ── Main Search Page Container ───────────────────────────────────── -->
-    <main class="content" style="max-width:1200px; padding-top:24px; padding-bottom:60px;">
+    <section class="content">
 
       <!-- Breadcrumb -->
-      <nav class="breadcrumb" style="margin-bottom:16px;" aria-label="Breadcrumb">
-        <a href="../index.html">Home</a>
-        <span class="breadcrumb__sep">›</span>
-        <span class="breadcrumb__current">Lawyer Search</span>
+      <nav class="breadcrumb" aria-label="Breadcrumb" style="margin-bottom:16px;">
+        <a href="client_dashboard.html">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Find a Lawyer</span>
       </nav>
 
       <!-- Section Head -->
@@ -140,7 +217,7 @@
         <button type="button" class="btn secondary" id="resetSearchBtn">Reset Filters</button>
       </div>
 
-    </main>
+    </section>
 
     <!-- ── Lawyer Detail / Booking Modal ───────────────────────────────── -->
     <div id="lawyerModal" class="slide-panel__overlay" style="display:none;" aria-hidden="true">
@@ -198,76 +275,21 @@
       </div>
     </div>
 
-    <!-- ── Public Footer ────────────────────────────────────────────────── -->
-    <footer class="landing-footer">
-      <div class="footer-container">
-        <div class="footer-brand">
-          <a class="brand" href="../index.html">
-            <span class="brand-mark">LC</span>
-            <span class="brand-name">LegalConnect</span>
-          </a>
-          <p>Sri Lanka's leading digital legal platform connecting clients with verified Attorneys-at-Law and providing practice management solutions.</p>
-        </div>
+  </main>
+</div>
 
-        <div class="footer-col">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="lawyer_search.html">Find Lawyers</a></li>
-            <li><a href="../index.html#services">Services</a></li>
-            <li><a href="../index.html#categories">Legal Categories</a></li>
-          </ul>
-        </div>
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+  <div class="mobile-nav__items">
+    <a class="mobile-nav__item" href="client_dashboard.html"><span class="mobile-nav__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg></span>Home</a>
+    <a class="mobile-nav__item active" href="client_lawyers.html"><span class="mobile-nav__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>Search</a>
+    <a class="mobile-nav__item" href="client_appointments.html"><span class="mobile-nav__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>Appts</a>
+    <a class="mobile-nav__item" href="client_book_appointment.html"><span class="mobile-nav__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>Book</a>
+  </div>
+</nav>
 
-        <div class="footer-col">
-          <h4>User Portals</h4>
-          <ul>
-            <li><a href="client_login.html">Client Portal</a></li>
-            <li><a href="login.html">Lawyer Workspace</a></li>
-            <li><a href="admin_login.html">Admin Portal</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Contact &amp; Help</h4>
-          <ul>
-            <li><span style="color:rgba(255,255,255,0.7)">📍 Colombo, Sri Lanka</span></li>
-            <li><span style="color:rgba(255,255,255,0.7)">📧 support@legalconnect.lk</span></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="footer-disclaimer">
-        <p><strong>BASL &amp; Sri Lanka Legal Disclaimer:</strong> LegalConnect is an administrative technology platform connecting clients with verified Attorneys-at-Law in Sri Lanka. All legal advice and court representations are provided directly by independent legal practitioners bound by the Bar Association of Sri Lanka (BASL).</p>
-        <p>© 2026 LegalConnect Sri Lanka. All rights reserved.</p>
-      </div>
-    </footer>
-
-    <!-- ── Mobile Navigation ────────────────────────────────────────────── -->
-    <div class="mobile-nav">
-      <div class="mobile-nav__items">
-        <a href="../index.html" class="mobile-nav__item">
-          <span class="mobile-nav__icon">🏠</span>
-          <span>Home</span>
-        </a>
-        <a href="lawyer_search.html" class="mobile-nav__item active">
-          <span class="mobile-nav__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
-          <span>Search</span>
-        </a>
-        <a href="client_login.html" class="mobile-nav__item">
-          <span class="mobile-nav__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
-          <span>Client</span>
-        </a>
-        <a href="login.html" class="mobile-nav__item">
-          <span class="mobile-nav__icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"></path><path d="M3 7h18"></path><path d="M3 7l2 7a2 2 0 0 0 4 0l2-7"></path><path d="M15 7l2 7a2 2 0 0 0 4 0l2-7"></path></svg></span>
-          <span>Lawyer</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- ── Scripts ───────────────────────────────────────────────────────── -->
-    <script src="../js/utils.js"></script>
-    <script src="../js/api.js"></script>
-    <script src="../js/pages/lawyer_search.js"></script>
-  </body>
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/pages/lawyer_search.js"></script>
+</body>
 </html>

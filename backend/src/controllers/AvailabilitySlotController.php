@@ -3,11 +3,10 @@
 declare(strict_types=1);
 
 /**
- * AvailabilitySlotController
- *
- * Thin HTTP adapter for the Availability Slot module.
- * Reads the request, delegates all business logic to AvailabilitySlotService,
- * then writes the JSON response.
+ * File: AvailabilitySlotController.php
+ * Description: HTTP Controller for managing Lawyer Availability Slots. 
+ * Reads the request, delegates business logic to AvailabilitySlotService, 
+ * and returns JSON responses.
  */
 class AvailabilitySlotController
 {
@@ -15,11 +14,19 @@ class AvailabilitySlotController
     {
     }
 
+    /**
+     * Section: Fetch All Slots
+     * Retrieves all availability slots and returns a success response.
+     */
     public function index(): void
     {
         Response::success($this->service->getAll(), 'Availability slots loaded.');
     }
 
+    /**
+     * Section: Fetch Single Slot
+     * Retrieves a slot by ID. Returns 404 if not found.
+     */
     public function show(int $id): void
     {
         try {
@@ -29,6 +36,10 @@ class AvailabilitySlotController
         }
     }
 
+    /**
+     * Section: Create Slot
+     * Parses the request body and creates a new availability slot.
+     */
     public function store(): void
     {
         try {
@@ -39,6 +50,10 @@ class AvailabilitySlotController
         }
     }
 
+    /**
+     * Section: Update Slot
+     * Parses the request body and updates an existing slot.
+     */
     public function update(int $id): void
     {
         try {
@@ -51,6 +66,10 @@ class AvailabilitySlotController
         }
     }
 
+    /**
+     * Section: Cancel Slot
+     * Marks an availability slot as cancelled.
+     */
     public function destroy(int $id): void
     {
         try {

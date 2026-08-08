@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 /**
- * LawyerProfileController
- *
- * Thin HTTP adapter for the Lawyer Profile module.
+ * File: LawyerProfileController.php
+ * Description: HTTP Controller for managing Lawyer Profiles.
  * Reads the request, delegates all business logic to LawyerProfileService,
  * then writes the JSON response.
  *

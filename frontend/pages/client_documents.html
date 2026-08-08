@@ -53,9 +53,9 @@
       <div class="nav-group">
         <p class="nav-label">Client Portal</p>
         <nav class="nav-list">
-          <a class="nav-link" href="client_appointments.html"><span class="nav-icon">📅</span> Appointments</a>
-          <a class="nav-link active" href="client_documents.html"><span class="nav-icon">📄</span> My Documents</a>
-          <a class="nav-link" href="client_service_requests.html"><span class="nav-icon">⚖</span> Service Requests</a>
+          <a class="nav-link" href="client_appointments.html"><span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> Appointments</a>
+          <a class="nav-link active" href="client_documents.html"><span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></span> My Documents</a>
+          <a class="nav-link" href="client_service_requests.html"><span class="nav-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"></path><path d="M3 7h18"></path><path d="M3 7l2 7a2 2 0 0 0 4 0l2-7"></path><path d="M15 7l2 7a2 2 0 0 0 4 0l2-7"></path></svg></span> Service Requests</a>
         </nav>
       </div>
       <div class="sidebar-footer">
@@ -74,9 +74,10 @@
           </div>
         </div>
         <div class="topbar-right">
-          <div class="notif-btn" title="Notifications">🔔</div>
+          <div class="notif-btn" title="Notifications"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
           <div class="avatar avatar--md avatar--teal" title="Demo Client">DC</div>
           <span class="phase-pill">Client</span>
+          <a href="#" onclick="if(confirm('Are you sure you want to log out?')) { window.location.href='login.html'; } return false;" class="btn btn--secondary btn--sm" style="margin-left: 12px; font-size: 0.75rem; padding: 4px 10px;">Logout</a>
         </div>
       </header>
 
@@ -99,7 +100,7 @@
         <!-- DEMO DATA NOTICE -->
         <!-- DEMO DATA -->
         <div class="inline-alert inline-alert--info" style="margin-bottom:24px;">
-          <span class="alert-icon">ℹ️</span>
+          <span class="alert-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span>
           <div class="alert-content">
             <p style="margin:0;"><strong>Notice:</strong> File storage backend (Module 8) is pending. The drag-and-drop dropzone below is for UI demonstration purposes.</p>
           </div>
@@ -122,17 +123,17 @@
         <!-- KPI METRICS -->
         <div class="grid three" style="margin-bottom: 24px;">
           <div class="metric-card">
-            <div class="metric-icon">📄</div>
+            <div class="metric-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
             <p class="metric-label">Total Documents</p>
             <p class="metric-value" id="kpiTotalDocs">0</p>
           </div>
           <div class="metric-card">
-            <div class="metric-icon">✓</div>
+            <div class="metric-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
             <p class="metric-label">Approved Files</p>
             <p class="metric-value" id="kpiApprovedDocs">0</p>
           </div>
           <div class="metric-card">
-            <div class="metric-icon">🔍</div>
+            <div class="metric-icon"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
             <p class="metric-label">Under Review</p>
             <p class="metric-value" id="kpiReviewedDocs">0</p>
           </div>
@@ -178,7 +179,7 @@
 
           <!-- EMPTY STATE -->
           <div id="emptyStateDocs" style="display:none;text-align:center;padding:48px 16px;">
-            <div style="font-size:2.5rem;margin-bottom:8px;">📄</div>
+            <div style="font-size:2.5rem;margin-bottom:8px;"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
             <h3 style="margin:0 0 4px;font-size:1.1rem;color:var(--navy);">No Documents Found</h3>
             <p style="margin:0;color:#64748b;font-size:0.875rem;">No files match your search criteria or filter options.</p>
           </div>
@@ -188,10 +189,10 @@
 
       <!-- MOBILE NAV -->
       <nav class="mobile-nav" style="display:none;">
-        <a href="client_appointments.html">📅 Appts</a>
-        <a href="client_documents.html" class="active">📄 Docs</a>
-        <a href="client_service_requests.html">⚖ Services</a>
-        <a href="client_login.html">👤 Logout</a>
+        <a href="client_appointments.html"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Appts</a>
+        <a href="client_documents.html" class="active"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Docs</a>
+        <a href="client_service_requests.html"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"></path><path d="M3 7h18"></path><path d="M3 7l2 7a2 2 0 0 0 4 0l2-7"></path><path d="M15 7l2 7a2 2 0 0 0 4 0l2-7"></path></svg> Services</a>
+        <a href="#" onclick="if(confirm('Are you sure you want to log out?')) { window.location.href='login.html'; } return false;"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Logout</a>
       </nav>
 
     </div>

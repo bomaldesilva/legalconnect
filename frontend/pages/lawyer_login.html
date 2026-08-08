@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LegalConnect | Client Login</title>
-    <meta name="description" content="Client login for LegalConnect — book legal consultations and connect with expert lawyers.">
+    <title>LegalConnect | Lawyer Login</title>
+    <meta name="description" content="Lawyer login for LegalConnect — manage consultations, cases, and clients.">
     <link rel="stylesheet" href="../css/auth.css">
   </head>
   <body>
@@ -12,9 +12,9 @@
     <!-- Background -->
     <div class="auth-bg"></div>
 
-    <!-- Ambient glow — teal accent for clients -->
-    <div class="ambient-glow glow-1" style="background:#0ea5a0;"></div>
-    <div class="ambient-glow glow-2" style="background:#1e3a68;"></div>
+    <!-- Ambient glow — navy accent for lawyers -->
+    <div class="ambient-glow glow-1" style="background:#1e3a68;"></div>
+    <div class="ambient-glow glow-2" style="background:#0ea5a0;"></div>
 
     <!-- Page -->
     <div class="auth-page">
@@ -33,24 +33,24 @@
 
         <!-- Left — hero copy -->
         <div class="login-hero">
-          <span class="login-hero-tag"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"></path><path d="M3 7h18"></path><path d="M3 7l2 7a2 2 0 0 0 4 0l2-7"></path><path d="M15 7l2 7a2 2 0 0 0 4 0l2-7"></path></svg> Client Access</span>
-          <h1>Legal Support You Can Trust, Guidance When You Need It Most.</h1>
+          <span class="login-hero-tag"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> Lawyer Access</span>
+          <h1>Manage Your Practice, Serve Your Clients Efficiently.</h1>
           <p>
-            We are a dedicated legal platform committed to delivering trusted legal
-            guidance with integrity and expertise. Our mission is to protect your rights.
+            We provide a dedicated platform to help you organize your cases,
+            manage client consultations, and streamline your legal workflow.
           </p>
           <div class="hero-stat-row">
             <div class="hero-stat">
-              <strong>2.5k+</strong>
-              <span>Happy Clients</span>
+              <strong>150+</strong>
+              <span>Active Lawyers</span>
             </div>
             <div class="hero-stat">
-              <strong>520</strong>
-              <span>Cases Solved</span>
+              <strong>5k+</strong>
+              <span>Consultations</span>
             </div>
             <div class="hero-stat">
-              <strong>4.8★</strong>
-              <span>Average Rating</span>
+              <strong>99%</strong>
+              <span>Uptime</span>
             </div>
           </div>
         </div>
@@ -60,9 +60,9 @@
           <div class="login-card">
 
             <div class="login-card-header">
-              <div class="login-role-badge teal">Client Portal</div>
+              <div class="login-role-badge teal">Lawyer Portal</div>
               <h2>Sign In to Your Account</h2>
-              <p class="subtitle">Access your consultations and legal documents.</p>
+              <p class="subtitle">Access your practice management tools.</p>
             </div>
 
             <!-- Phase 1 notice -->
@@ -70,13 +70,13 @@
               ℹ Authentication is not yet implemented in Phase 1. This UI is a preview only.
             </div>
 
-            <form id="clientLoginForm" novalidate>
+            <form id="lawyerLoginForm" novalidate>
               <div class="auth-fields">
 
                 <div class="auth-field">
-                  <label for="clientEmail">Email Address</label>
+                  <label for="lawyerEmail">Email Address</label>
                   <input
-                    id="clientEmail"
+                    id="lawyerEmail"
                     type="email"
                     placeholder="you@example.com"
                     autocomplete="username"
@@ -85,11 +85,11 @@
 
                 <div class="auth-field">
                   <div class="field-row">
-                    <label for="clientPassword">Password</label>
+                    <label for="lawyerPassword">Password</label>
                     <a class="forgot-link" href="#">Forgot password?</a>
                   </div>
                   <input
-                    id="clientPassword"
+                    id="lawyerPassword"
                     type="password"
                     placeholder="Enter your password"
                     autocomplete="current-password"
@@ -98,7 +98,7 @@
 
               </div>
 
-              <button class="auth-submit teal" type="submit" id="clientSubmit">
+              <button class="auth-submit teal" type="submit" id="lawyerSubmit">
                 Sign In →
               </button>
             </form>
@@ -106,9 +106,9 @@
             <div class="auth-divider"><span>don't have an account?</span></div>
 
             <div class="auth-footer-note">
-              <a href="#">Create a new account</a>
+              <a href="#">Register as a Lawyer</a>
               &nbsp;·&nbsp;
-              <a href="client_dashboard.html">Demo Dashboard →</a>
+              <a href="lawyer_dashboard.html">Demo Dashboard →</a>
             </div>
 
           </div>
@@ -118,8 +118,8 @@
     </div>
 
     <script>
-      const form   = document.getElementById('clientLoginForm');
-      const submit = document.getElementById('clientSubmit');
+      const form   = document.getElementById('lawyerLoginForm');
+      const submit = document.getElementById('lawyerSubmit');
 
       form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -128,7 +128,7 @@
 
         // Phase 1: redirect to dashboard after brief delay (no real auth yet)
         setTimeout(() => {
-          window.location.href = 'client_dashboard.html';
+          window.location.href = 'lawyer_dashboard.html';
         }, 900);
       });
     </script>

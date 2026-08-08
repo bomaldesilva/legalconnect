@@ -238,11 +238,13 @@ a { color: inherit; text-decoration: none; }
 .role-icon.teal {
   background: linear-gradient(135deg, rgba(14,165,160,.25), rgba(14,165,160,.10));
   border: 1px solid rgba(14,165,160,.25);
+  color: var(--teal);
 }
 
 .role-icon.gold {
   background: linear-gradient(135deg, rgba(201,169,110,.25), rgba(201,169,110,.10));
   border: 1px solid rgba(201,169,110,.25);
+  color: var(--gold-light);
 }
 
 .role-card h2 {

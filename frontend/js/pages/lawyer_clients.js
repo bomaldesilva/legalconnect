@@ -1,45 +1,32 @@
-// DEMO DATA
-const DEMO_CLIENTS = [
-    {
-        id: 1,
-        name: "Demo Client",
-        email: "client@legalconnect.lk",
-        cases: 2,
-        since: "2026-07-30",
-        status: "Active"
-    },
-    {
-        id: 2,
-        name: "Nimal Perera",
-        email: "nimal@example.com",
-        cases: 1,
-        since: "2026-06-15",
-        status: "Active"
-    },
-    {
-        id: 3,
-        name: "Kamala Fernando",
-        email: "kamala@example.com",
-        cases: 3,
-        since: "2026-04-01",
-        status: "Closed"
-    }
-];
-
+const LAWYER_ID = window.LC?.currentUser?.id || 2;
+let clientsList = [];
 let currentFilter = 'All';
 let currentSearch = '';
 
 document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
     bindEvents();
-    renderKPIs();
-    renderTable();
+    fetchClients();
 });
 
 function initSidebar() {
     document.getElementById('sidebarToggle')?.addEventListener('click', () => {
         document.getElementById('sidebar').classList.toggle('sidebar--open');
     });
+}
+
+async function fetchClients() {
+    try {
+        const response = await fetch(`/api/lawyer-clients?lawyer_id=${LAWYER_ID}`);
+        if (!response.ok) throw new Error('Failed to fetch clients');
+        const data = await response.json();
+        clientsList = data;
+        renderKPIs();
+        renderTable();
+    } catch (error) {
+        console.error('Error fetching clients:', error);
+        if (window.LC?.showToast) window.LC.showToast('Failed to load clients', 'error');
+    }
 }
 
 function bindEvents() {
@@ -65,16 +52,16 @@ function bindEvents() {
 }
 
 function renderKPIs() {
-    document.getElementById('kpiTotal').textContent = DEMO_CLIENTS.length;
-    document.getElementById('kpiActive').textContent = DEMO_CLIENTS.filter(c => c.status === 'Active').length;
-    document.getElementById('kpiClosed').textContent = DEMO_CLIENTS.filter(c => c.status === 'Closed').length;
+    document.getElementById('kpiTotal').textContent = clientsList.length;
+    document.getElementById('kpiActive').textContent = clientsList.filter(c => c.status === 'Active').length;
+    document.getElementById('kpiClosed').textContent = clientsList.filter(c => c.status === 'Closed').length;
 }
 
 function renderTable() {
     const tbody = document.getElementById('clientsTableBody');
     const emptyState = document.getElementById('emptyState');
     
-    let filtered = DEMO_CLIENTS.filter(c => {
+    let filtered = clientsList.filter(c => {
         const matchesFilter = currentFilter === 'All' || c.status === currentFilter;
         const matchesSearch = c.name.toLowerCase().includes(currentSearch) || c.email.toLowerCase().includes(currentSearch);
         return matchesFilter && matchesSearch;
@@ -117,7 +104,7 @@ function renderTable() {
 }
 
 function openViewClient(id) {
-    const client = DEMO_CLIENTS.find(c => c.id === id);
+    const client = clientsList.find(c => c.id === id);
     if (!client) return;
 
     const modalBody = document.getElementById('clientModalBody');

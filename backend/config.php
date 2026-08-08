@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-/*
- * LegalConnect — Database Configuration
- *
+/**
+ * File: config.php
+ * Description: Database Configuration constants.
  * Edit these values to match your local XAMPP MySQL setup.
  * This file lives outside public/ and is never served directly by Apache.
  */

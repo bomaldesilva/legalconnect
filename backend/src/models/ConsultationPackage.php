@@ -2,12 +2,21 @@
 
 declare(strict_types=1);
 
+/**
+ * File: ConsultationPackage.php
+ * Description: Data access model for Consultation Packages.
+ * Performs database interactions such as fetching and persisting package details.
+ */
 class ConsultationPackage
 {
     public function __construct(private PDO $db)
     {
     }
 
+    /**
+     * Section: Fetch All Packages
+     * Retrieves all consultation packages, joining lawyer and category info.
+     */
     public function all(): array
     {
         $statement = $this->db->query(
@@ -26,6 +35,10 @@ class ConsultationPackage
         return $statement->fetchAll();
     }
 
+    /**
+     * Section: Fetch Single Package
+     * Retrieves a single package by ID.
+     */
     public function find(int $id): ?array
     {
         $statement = $this->db->prepare(
@@ -46,6 +59,10 @@ class ConsultationPackage
         return $row ?: null;
     }
 
+    /**
+     * Section: Create Package
+     * Inserts a new consultation package into the database.
+     */
     public function create(array $data): int
     {
         $statement = $this->db->prepare(
@@ -67,6 +84,10 @@ class ConsultationPackage
         return (int) $this->db->lastInsertId();
     }
 
+    /**
+     * Section: Update Package
+     * Updates an existing consultation package by ID.
+     */
     public function update(int $id, array $data): bool
     {
         $statement = $this->db->prepare(

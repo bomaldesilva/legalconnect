@@ -1,61 +1,35 @@
-// DEMO DATA
-const DEMO_TEMPLATES = [
-    {
-        id: 1,
-        name: "Divorce Petition Form",
-        category: "Family Law",
-        desc: "Standard form for initiating divorce proceedings with necessary disclaimers and information fields.",
-        status: "Active"
-    },
-    {
-        id: 2,
-        name: "Child Custody Agreement",
-        category: "Family Law",
-        desc: "Agreement template detailing joint or sole custody arrangements and visitation schedules.",
-        status: "Active"
-    },
-    {
-        id: 3,
-        name: "Land Deed Transfer",
-        category: "Property Law",
-        desc: "Official deed transfer document for changing property ownership between parties.",
-        status: "Active"
-    },
-    {
-        id: 4,
-        name: "Property Sale Agreement",
-        category: "Property Law",
-        desc: "Binding agreement for the sale of residential or commercial properties.",
-        status: "Active"
-    },
-    {
-        id: 5,
-        name: "Bail Application",
-        category: "Criminal Law",
-        desc: "Standard application format for requesting bail in magistrate or high courts.",
-        status: "Active"
-    },
-    {
-        id: 6,
-        name: "Employment Contract",
-        category: "Labour Law",
-        desc: "General employment agreement covering terms, conditions, and non-disclosure clauses.",
-        status: "Active"
-    }
-];
-
+let templatesList = [];
 let currentCat = 'All';
 let currentSearch = '';
 
 document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
     bindEvents();
-    renderKPIs();
-    renderGrid();
-    
-    // In a real app, we would load categories from API
-    // loadCategories();
+    fetchTemplates();
 });
+
+async function fetchTemplates() {
+    try {
+        const response = await fetch('/api/templates');
+        if (!response.ok) throw new Error('Failed to fetch templates');
+        const data = await response.json();
+        
+        // Map backend data to frontend model
+        templatesList = data.map(t => ({
+            id: t.id,
+            name: t.name,
+            category: t.category || 'General',
+            desc: t.description || 'No description provided.',
+            status: t.status || 'Active'
+        }));
+        
+        renderKPIs();
+        renderGrid();
+    } catch (error) {
+        console.error('Error fetching templates:', error);
+        if (window.LC?.showToast) window.LC.showToast('Failed to load templates', 'error');
+    }
+}
 
 function initSidebar() {
     document.getElementById('sidebarToggle')?.addEventListener('click', () => {
@@ -86,9 +60,9 @@ function bindEvents() {
 }
 
 function renderKPIs() {
-    document.getElementById('kpiTotal').textContent = DEMO_TEMPLATES.length;
-    document.getElementById('kpiActive').textContent = DEMO_TEMPLATES.filter(t => t.status === 'Active').length;
-    document.getElementById('kpiInactive').textContent = DEMO_TEMPLATES.filter(t => t.status === 'Inactive').length;
+    document.getElementById('kpiTotal').textContent = templatesList.length;
+    document.getElementById('kpiActive').textContent = templatesList.filter(t => t.status === 'Active').length;
+    document.getElementById('kpiInactive').textContent = templatesList.filter(t => t.status === 'Inactive').length;
 }
 
 function renderGrid() {
@@ -96,7 +70,7 @@ function renderGrid() {
     const emptyState = document.getElementById('emptyState');
     const countEl = document.getElementById('resultsCount');
     
-    let filtered = DEMO_TEMPLATES.filter(t => {
+    let filtered = templatesList.filter(t => {
         const matchesCat = currentCat === 'All' || t.category === currentCat;
         const matchesSearch = t.name.toLowerCase().includes(currentSearch) || t.desc.toLowerCase().includes(currentSearch);
         return matchesCat && matchesSearch;

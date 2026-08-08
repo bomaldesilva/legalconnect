@@ -3,11 +3,9 @@
 declare(strict_types=1);
 
 /**
- * LegalCategoryService
- *
- * Owns all business rules for the Legal Category module.
- * The controller delegates to this service and only handles
- * HTTP request/response concerns.
+ * File: LegalCategoryService.php
+ * Description: Business rules for the Legal Category module.
+ * The controller delegates to this service and only handles HTTP concerns.
  */
 class LegalCategoryService
 {

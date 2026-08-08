@@ -2,17 +2,30 @@
 
 declare(strict_types=1);
 
+/**
+ * File: PaymentService.php
+ * Description: Business logic layer for Payments.
+ * Handles validation and interacts with the Payment model.
+ */
 class PaymentService
 {
     public function __construct(private Payment $model)
     {
     }
 
+    /**
+     * Section: Fetch All Payments
+     * Retrieves all payment records via the model.
+     */
     public function getAll(): array
     {
         return $this->model->all();
     }
 
+    /**
+     * Section: Fetch Single Payment
+     * Retrieves a payment by ID, throwing a 404 if not found.
+     */
     public function getById(int $id): array
     {
         $payment = $this->model->find($id);
@@ -24,6 +37,10 @@ class PaymentService
         return $payment;
     }
 
+    /**
+     * Section: Create Payment
+     * Validates input data, normalizes it, and creates a new payment record.
+     */
     public function create(array $data): array
     {
         $errors = $this->validate($data);
@@ -38,6 +55,10 @@ class PaymentService
         return $this->model->find($id);
     }
 
+    /**
+     * Section: Update Payment
+     * Ensures the payment exists, validates input data, and updates the record.
+     */
     public function update(int $id, array $data): array
     {
         $this->getById($id);
@@ -54,6 +75,10 @@ class PaymentService
         return $this->model->find($id);
     }
 
+    /**
+     * Section: Mark Payment Failed
+     * Changes the status of the payment to Failed instead of deleting it entirely.
+     */
     public function markFailed(int $id): array
     {
         $this->getById($id);

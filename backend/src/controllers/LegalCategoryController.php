@@ -3,11 +3,10 @@
 declare(strict_types=1);
 
 /**
- * LegalCategoryController
- *
- * Thin HTTP adapter for the Legal Category module.
+ * File: LegalCategoryController.php
+ * Description: HTTP Controller for managing Legal Categories. 
  * Reads the request, delegates all business logic to LegalCategoryService,
- * then writes the JSON response.
+ * and writes the JSON responses.
  */
 class LegalCategoryController
 {
@@ -15,11 +14,19 @@ class LegalCategoryController
     {
     }
 
+    /**
+     * Section: Fetch All Categories
+     * Retrieves all legal categories and returns a success response.
+     */
     public function index(): void
     {
         Response::success($this->service->getAll(), 'Legal categories loaded.');
     }
 
+    /**
+     * Section: Fetch Single Category
+     * Retrieves a single legal category by ID. Returns 404 if not found.
+     */
     public function show(int $id): void
     {
         try {
@@ -29,6 +36,10 @@ class LegalCategoryController
         }
     }
 
+    /**
+     * Section: Create Category
+     * Parses the request body and creates a new legal category.
+     */
     public function store(): void
     {
         try {
@@ -39,6 +50,10 @@ class LegalCategoryController
         }
     }
 
+    /**
+     * Section: Update Category
+     * Parses the request body and updates an existing legal category.
+     */
     public function update(int $id): void
     {
         try {
@@ -51,6 +66,10 @@ class LegalCategoryController
         }
     }
 
+    /**
+     * Section: Deactivate Category
+     * Marks a legal category as deactivated.
+     */
     public function destroy(int $id): void
     {
         try {

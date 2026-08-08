@@ -3,11 +3,9 @@
 declare(strict_types=1);
 
 /**
- * ValidationException
- *
- * Thrown by Service classes when input data fails business-rule validation.
- * Carries a map of field => error message so the controller can return
- * a structured 400 response without knowing the validation details.
+ * File: ValidationException.php
+ * Description: Thrown by Service classes when input data fails business-rule validation.
+ * Carries a map of field => error message for standard 400 responses.
  */
 class ValidationException extends RuntimeException
 {
