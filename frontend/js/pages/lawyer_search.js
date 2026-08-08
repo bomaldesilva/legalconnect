@@ -309,10 +309,18 @@ function renderLawyerResults() {
       const id = e.currentTarget.dataset.id;
       const target = DEMO_LAWYERS.find(l => String(l.lawyer_id) === String(id));
       if (target) {
-        LC.showToast(`Selected ${target.name}. Redirecting to Client Login...`, 'success');
-        setTimeout(() => {
-          window.location.href = `client_login.html?lawyer=${target.lawyer_id}`;
-        }, 1000);
+        const isDashboard = window.location.pathname.includes('client_lawyers.html');
+        if (isDashboard) {
+            LC.showToast(`Selected ${target.name}. Redirecting to Booking...`, 'success');
+            setTimeout(() => {
+              window.location.href = `client_book_appointment.html?lawyer=${target.lawyer_id}`;
+            }, 500);
+        } else {
+            LC.showToast(`Selected ${target.name}. Redirecting to Client Login...`, 'success');
+            setTimeout(() => {
+              window.location.href = `client_login.html?lawyer=${target.lawyer_id}`;
+            }, 1000);
+        }
       }
     });
   });
@@ -404,7 +412,14 @@ function openLawyerModal(lawyer) {
     modalPkgsList.innerHTML = '<p style="font-size:13px; color:var(--muted);">No specific packages listed.</p>';
   }
 
-  modalClientBook.href = `client_login.html?lawyer=${lawyer.lawyer_id}`;
+  const isDashboard = window.location.pathname.includes('client_lawyers.html');
+  if (isDashboard) {
+    modalClientBook.href = `client_book_appointment.html?lawyer=${lawyer.lawyer_id}`;
+    modalClientBook.textContent = 'Book Consultation Now';
+  } else {
+    modalClientBook.href = `client_login.html?lawyer=${lawyer.lawyer_id}`;
+    modalClientBook.textContent = 'Login to Book Consultation';
+  }
 
   lawyerModal.style.display = 'block';
   lawyerModal.classList.add('slide-panel__overlay--show');

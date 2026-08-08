@@ -181,8 +181,9 @@
         }
         
         // --- PHASE 1 DEMO WIPE FOR NEW USERS ---
-        // If this is a newly registered user (ID > 3), clear out the hardcoded mock data
-        if (user.user_id > 3 && isProtected) {
+        // If this is a newly registered user (not the default demo client), clear out the hardcoded mock data
+        const demoEmails = ['client@legalconnect.lk', 'lawyer@legalconnect.lk', 'admin@legalconnect.lk'];
+        if (!demoEmails.includes(user.email) && isProtected) {
           const profileAvatars = document.querySelectorAll('.profile-hero__avatar');
           profileAvatars.forEach(a => a.textContent = (user.first_name[0] + user.last_name[0]).toUpperCase());
           
