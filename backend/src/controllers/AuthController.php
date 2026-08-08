@@ -14,7 +14,7 @@ class AuthController
 
     public function login(): void
     {
-        $data = Request::json();
+        $data = Request::body();
         $user = $this->service->login($data);
 
         Response::json([
@@ -26,7 +26,7 @@ class AuthController
 
     public function register(): void
     {
-        $data = Request::json();
+        $data = Request::body();
         $user = $this->service->register($data);
 
         Response::json([
