@@ -1,9 +1,9 @@
-const LAWYER_ID = window.LC?.currentUser?.id || 2;
+let LAWYER_ID = null;
 let casesList = [];
 let currentFilter = 'All';
 let searchQuery = '';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Sidebar toggle
     document.getElementById('sidebarToggle')?.addEventListener('click', () => {
         document.getElementById('sidebar').classList.toggle('sidebar--open');
@@ -11,20 +11,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initCategories();
     setupEventListeners();
-    fetchCases();
+    
+    try {
+        const user = await window.authApi.me();
+        LAWYER_ID = user.user_id;
+        await fetchCases();
+    } catch (e) {
+        console.error("Auth error:", e);
+        if (window.LC?.showToast) window.LC.showToast('Authentication failed', 'error');
+    }
 });
 
 async function fetchCases() {
     try {
-        const response = await fetch(`/api/lawyer-cases?lawyer_id=${LAWYER_ID}`);
-        if (!response.ok) throw new Error('Failed to fetch cases');
-        const data = await response.json();
-        casesList = data;
+        const data = await window.request(`/lawyer-cases?lawyer_id=${LAWYER_ID}`);
+        casesList = data || [];
         renderKPIs();
         renderTable();
     } catch (error) {
         console.error('Error fetching cases:', error);
-        if (window.LC?.showToast) window.LC.showToast('Failed to load cases', 'error');
+        casesList = [];
+        renderKPIs();
+        renderTable();
+        // if (window.LC?.showToast) window.LC.showToast('Failed to load cases', 'error');
     }
 }
 
@@ -264,13 +273,10 @@ function closeCasePrompt(id) {
 
 async function closeCaseAPI(id) {
     try {
-        const response = await fetch(`/api/lawyer-cases/${id}`, {
+        await window.request(`/lawyer-cases/${id}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'close' })
         });
-        
-        if (!response.ok) throw new Error('Failed to close case');
         
         if (window.LC?.showToast) window.LC.showToast('Case closed successfully.', 'success');
         fetchCases();

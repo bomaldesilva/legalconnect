@@ -1,12 +1,20 @@
-const LAWYER_ID = window.LC?.currentUser?.id || 2;
+let LAWYER_ID = null;
 let clientsList = [];
 let currentFilter = 'All';
 let currentSearch = '';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     initSidebar();
     bindEvents();
-    fetchClients();
+    
+    try {
+        const user = await window.authApi.me();
+        LAWYER_ID = user.user_id;
+        await fetchClients();
+    } catch (e) {
+        console.error("Auth error:", e);
+        if (window.LC?.showToast) window.LC.showToast('Authentication failed', 'error');
+    }
 });
 
 function initSidebar() {
@@ -17,15 +25,16 @@ function initSidebar() {
 
 async function fetchClients() {
     try {
-        const response = await fetch(`/api/lawyer-clients?lawyer_id=${LAWYER_ID}`);
-        if (!response.ok) throw new Error('Failed to fetch clients');
-        const data = await response.json();
-        clientsList = data;
+        const data = await window.request(`/lawyer-clients?lawyer_id=${LAWYER_ID}`);
+        clientsList = data || [];
         renderKPIs();
         renderTable();
     } catch (error) {
         console.error('Error fetching clients:', error);
-        if (window.LC?.showToast) window.LC.showToast('Failed to load clients', 'error');
+        clientsList = [];
+        renderKPIs();
+        renderTable();
+        // if (window.LC?.showToast) window.LC.showToast('Failed to load clients', 'error');
     }
 }
 

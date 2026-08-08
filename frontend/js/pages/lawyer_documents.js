@@ -1,30 +1,36 @@
-const LAWYER_ID = window.LC?.currentUser?.id || 2;
+let LAWYER_ID = null;
 let docsList = [];
 let currentFilter = 'All';
 let currentSearch = '';
 let pendingFiles = [];
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     initSidebar();
     bindEvents();
     initDropzone();
-    fetchDocuments();
+    
+    try {
+        const user = await window.authApi.me();
+        LAWYER_ID = user.user_id;
+        await fetchDocuments();
+    } catch (e) {
+        console.error("Auth error:", e);
+        if (window.LC?.showToast) window.LC.showToast('Authentication failed', 'error');
+    }
 });
 
 async function fetchDocuments() {
     try {
-        const response = await fetch(`/api/lawyer-documents?lawyer_id=${LAWYER_ID}`);
-        if (!response.ok) throw new Error('Failed to fetch documents');
-        const data = await response.json();
+        const data = await window.request(`/lawyer-documents?lawyer_id=${LAWYER_ID}`);
         
         // Map backend API data to the fields the frontend expects
-        docsList = data.map(doc => ({
-            id: doc.id,
-            name: doc.name,
-            type: doc.type,
-            case: doc.case_name || 'General',
+        docsList = (data || []).map(doc => ({
+            id: doc.document_id || doc.id,
+            name: doc.file_name || doc.name,
+            type: doc.file_type || doc.type || 'Document',
+            case: doc.case_title || doc.case_name || 'General',
             uploadedBy: "Me", // Mocked for now since backend doesn't resolve uploader name easily yet
-            date: doc.uploaded,
+            date: doc.uploaded_at || doc.uploaded,
             status: "Uploaded" // Defaulting since document_status might be null in old records
         }));
         
@@ -32,7 +38,10 @@ async function fetchDocuments() {
         renderTable();
     } catch (error) {
         console.error('Error fetching documents:', error);
-        if (window.LC?.showToast) window.LC.showToast('Failed to load documents', 'error');
+        docsList = [];
+        renderKPIs();
+        renderTable();
+        // if (window.LC?.showToast) window.LC.showToast('Failed to load documents', 'error');
     }
 }
 
@@ -212,7 +221,8 @@ window.uploadPendingFiles = async function() {
             formData.append('document', file);
             formData.append('lawyer_id', LAWYER_ID);
             
-            const response = await fetch('/api/lawyer-documents', {
+            const basePath = window.LEGALCONNECT_API_BASE_URL || `${window.location.origin}/legalconnect/backend/public/api`;
+            const response = await fetch(`${basePath}/lawyer-documents`, {
                 method: 'POST',
                 body: formData
             });

@@ -2,23 +2,31 @@ let templatesList = [];
 let currentCat = 'All';
 let currentSearch = '';
 
-document.addEventListener('DOMContentLoaded', () => {
+let LAWYER_ID = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
     initSidebar();
     bindEvents();
-    fetchTemplates();
+    
+    try {
+        const user = await window.authApi.me();
+        LAWYER_ID = user.user_id;
+        await fetchTemplates();
+    } catch (e) {
+        console.error("Auth error:", e);
+        if (window.LC?.showToast) window.LC.showToast('Authentication failed', 'error');
+    }
 });
 
 async function fetchTemplates() {
     try {
-        const response = await fetch('/api/templates');
-        if (!response.ok) throw new Error('Failed to fetch templates');
-        const data = await response.json();
+        const data = await window.request('/templates');
         
         // Map backend data to frontend model
-        templatesList = data.map(t => ({
+        templatesList = (data || []).map(t => ({
             id: t.id,
-            name: t.name,
-            category: t.category || 'General',
+            name: t.name || t.template_name,
+            category: t.category || t.template_category || 'General',
             desc: t.description || 'No description provided.',
             status: t.status || 'Active'
         }));
@@ -27,7 +35,10 @@ async function fetchTemplates() {
         renderGrid();
     } catch (error) {
         console.error('Error fetching templates:', error);
-        if (window.LC?.showToast) window.LC.showToast('Failed to load templates', 'error');
+        templatesList = [];
+        renderKPIs();
+        renderGrid();
+        // if (window.LC?.showToast) window.LC.showToast('Failed to load templates', 'error');
     }
 }
 
