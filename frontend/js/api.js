@@ -1,8 +1,9 @@
 const API_BASE_URL = window.LEGALCONNECT_API_BASE_URL
-  || `${window.location.origin}/legalConnect/backend/public/api`;
+  || `${window.location.origin}/legalconnect/backend/public/api`;
 
 async function request(path, options = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       ...(options.headers || {}),
@@ -85,6 +86,13 @@ const lawyerProfileApi = {
   getPublic:      (id)           => request(`/lawyer-profile/${id}/public`),
 };
 
+const authApi = {
+  login:    (email, password) => request('/auth/login', jsonOptions('POST', { email, password })),
+  register: (data)            => request('/auth/register', jsonOptions('POST', data)),
+  logout:   ()                => request('/auth/logout', { method: 'POST' }),
+  me:       ()                => request('/auth/me'),
+};
+
 window.legalCategories    = legalCategories;
 window.availabilitySlots  = availabilitySlots;
 window.consultationPackages = consultationPackages;
@@ -92,3 +100,4 @@ window.appointmentsApi    = appointmentsApi;
 window.paymentsApi        = paymentsApi;
 window.dashboardApi       = dashboardApi;
 window.lawyerProfileApi   = lawyerProfileApi;
+window.authApi            = authApi;

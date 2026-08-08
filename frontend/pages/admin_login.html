@@ -65,18 +65,15 @@
               <p class="subtitle">Sign in to access the administration dashboard.</p>
             </div>
 
-            <!-- Phase 1 notice -->
-            <div class="auth-notice warning">
-              <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Authentication is not yet implemented in Phase 1. This UI is a preview only.
-            </div>
+            <div class="auth-notice error" id="authError" style="display:none; color:#ff4d4f; font-size:14px; margin-bottom:15px; padding:10px; background:rgba(255,77,79,0.1); border-radius:6px; border:1px solid rgba(255,77,79,0.2);"></div>
 
-            <form id="adminLoginForm" novalidate>
+            <form id="loginForm" data-role="Admin" novalidate>
               <div class="auth-fields">
 
                 <div class="auth-field">
-                  <label for="adminEmail">Email Address</label>
+                  <label for="loginEmail">Email Address</label>
                   <input
-                    id="adminEmail"
+                    id="loginEmail"
                     type="email"
                     placeholder="admin@legalconnect.lk"
                     autocomplete="username"
@@ -85,11 +82,11 @@
 
                 <div class="auth-field">
                   <div class="field-row">
-                    <label for="adminPassword">Password</label>
+                    <label for="loginPassword">Password</label>
                     <a class="forgot-link gold" href="#">Forgot password?</a>
                   </div>
                   <input
-                    id="adminPassword"
+                    id="loginPassword"
                     type="password"
                     placeholder="Enter your password"
                     autocomplete="current-password"
@@ -98,7 +95,7 @@
 
               </div>
 
-              <button class="auth-submit gold" type="submit" id="adminSubmit">
+              <button class="auth-submit gold" type="submit" id="loginSubmit">
                 Sign in to Admin Portal →
               </button>
             </form>
@@ -106,7 +103,7 @@
             <div class="auth-divider"><span>or continue to</span></div>
 
             <div class="auth-footer-note">
-              <a class="blue" href="admin_dashboard.html">Skip login → Go to Dashboard</a>
+              <!-- Admin cannot register from here -->
             </div>
 
           </div>
@@ -115,20 +112,7 @@
       </div>
     </div>
 
-    <script>
-      const form   = document.getElementById('adminLoginForm');
-      const submit = document.getElementById('adminSubmit');
-
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        submit.disabled = true;
-        submit.textContent = 'Signing in…';
-
-        // Phase 1: redirect to dashboard after brief delay (no real auth yet)
-        setTimeout(() => {
-          window.location.href = 'admin_dashboard.html';
-        }, 900);
-      });
-    </script>
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/auth.js"></script>
   </body>
 </html>

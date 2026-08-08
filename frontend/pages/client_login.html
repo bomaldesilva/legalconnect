@@ -65,18 +65,15 @@
               <p class="subtitle">Access your consultations and legal documents.</p>
             </div>
 
-            <!-- Phase 1 notice -->
-            <div class="auth-notice info">
-              ℹ Authentication is not yet implemented in Phase 1. This UI is a preview only.
-            </div>
+            <div class="auth-notice error" id="authError" style="display:none; color:#ff4d4f; font-size:14px; margin-bottom:15px; padding:10px; background:rgba(255,77,79,0.1); border-radius:6px; border:1px solid rgba(255,77,79,0.2);"></div>
 
-            <form id="clientLoginForm" novalidate>
+            <form id="loginForm" data-role="Client" novalidate>
               <div class="auth-fields">
 
                 <div class="auth-field">
-                  <label for="clientEmail">Email Address</label>
+                  <label for="loginEmail">Email Address</label>
                   <input
-                    id="clientEmail"
+                    id="loginEmail"
                     type="email"
                     placeholder="you@example.com"
                     autocomplete="username"
@@ -85,11 +82,11 @@
 
                 <div class="auth-field">
                   <div class="field-row">
-                    <label for="clientPassword">Password</label>
+                    <label for="loginPassword">Password</label>
                     <a class="forgot-link" href="#">Forgot password?</a>
                   </div>
                   <input
-                    id="clientPassword"
+                    id="loginPassword"
                     type="password"
                     placeholder="Enter your password"
                     autocomplete="current-password"
@@ -98,7 +95,7 @@
 
               </div>
 
-              <button class="auth-submit teal" type="submit" id="clientSubmit">
+              <button class="auth-submit teal" type="submit" id="loginSubmit">
                 Sign In →
               </button>
             </form>
@@ -106,9 +103,7 @@
             <div class="auth-divider"><span>don't have an account?</span></div>
 
             <div class="auth-footer-note">
-              <a href="#">Create a new account</a>
-              &nbsp;·&nbsp;
-              <a href="client_dashboard.html">Demo Dashboard →</a>
+              <a href="register.html">Create a new account</a>
             </div>
 
           </div>
@@ -117,20 +112,7 @@
       </div>
     </div>
 
-    <script>
-      const form   = document.getElementById('clientLoginForm');
-      const submit = document.getElementById('clientSubmit');
-
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        submit.disabled = true;
-        submit.textContent = 'Signing in…';
-
-        // Phase 1: redirect to dashboard after brief delay (no real auth yet)
-        setTimeout(() => {
-          window.location.href = 'client_dashboard.html';
-        }, 900);
-      });
-    </script>
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/auth.js"></script>
   </body>
 </html>

@@ -22,6 +22,7 @@ require_once __DIR__ . '/../src/models/ClientRecord.php';
 require_once __DIR__ . '/../src/models/CaseModel.php';
 require_once __DIR__ . '/../src/models/Document.php';
 require_once __DIR__ . '/../src/models/DocumentTemplate.php';
+require_once __DIR__ . '/../src/models/User.php';
 
 // ─── Services ─────────────────────────────────────────────────────────────────
 require_once __DIR__ . '/../src/services/LegalCategoryService.php';
@@ -34,6 +35,7 @@ require_once __DIR__ . '/../src/services/ClientRecordService.php';
 require_once __DIR__ . '/../src/services/CaseService.php';
 require_once __DIR__ . '/../src/services/DocumentService.php';
 require_once __DIR__ . '/../src/services/DocumentTemplateService.php';
+require_once __DIR__ . '/../src/services/AuthService.php';
 
 // ─── Controllers ──────────────────────────────────────────────────────────────
 require_once __DIR__ . '/../src/controllers/DashboardController.php';
@@ -47,6 +49,7 @@ require_once __DIR__ . '/../src/controllers/ClientRecordController.php';
 require_once __DIR__ . '/../src/controllers/CaseController.php';
 require_once __DIR__ . '/../src/controllers/DocumentController.php';
 require_once __DIR__ . '/../src/controllers/DocumentTemplateController.php';
+require_once __DIR__ . '/../src/controllers/AuthController.php';
 
 // ─── CORS pre-flight ──────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -58,6 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 sendCorsHeaders();
 
 // ─── Bootstrap & route ────────────────────────────────────────────────────────
+session_start();
+
 try {
     $db     = getDatabaseConnection();
     $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
@@ -76,6 +81,7 @@ try {
     $caseModel             = new CaseModel($db);
     $documentModel         = new Document($db);
     $documentTemplateModel = new DocumentTemplate($db);
+    $userModel             = new User($db);
 
     // ── Services ──────────────────────────────────────────────────────────────
     $categoryService          = new LegalCategoryService($categoryModel);
@@ -88,6 +94,7 @@ try {
     $caseService              = new CaseService($caseModel);
     $documentService          = new DocumentService($documentModel);
     $documentTemplateService  = new DocumentTemplateService($documentTemplateModel);
+    $authService              = new AuthService($userModel);
 
     // ── Controllers ───────────────────────────────────────────────────────────
     $dashboardController  = new DashboardController(
@@ -107,8 +114,27 @@ try {
     $caseController              = new CaseController($caseService);
     $documentController          = new DocumentController($documentService);
     $documentTemplateController  = new DocumentTemplateController($documentTemplateService);
+    $authController              = new AuthController($authService);
 
     // ── Routing ───────────────────────────────────────────────────────────────
+
+    // Auth Routes
+    if ($path === '/api/auth/login' && $method === 'POST') {
+        $authController->login();
+        exit;
+    }
+    if ($path === '/api/auth/register' && $method === 'POST') {
+        $authController->register();
+        exit;
+    }
+    if ($path === '/api/auth/logout' && $method === 'POST') {
+        $authController->logout();
+        exit;
+    }
+    if ($path === '/api/auth/me' && $method === 'GET') {
+        $authController->me();
+        exit;
+    }
 
     if ($path === '/api/dashboard' && $method === 'GET') {
         $dashboardController->index();

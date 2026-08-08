@@ -158,4 +158,45 @@
     showToast,
     openConfirmModal,
   };
+  // ── Auth Guard ───────────────────────────────────────────────────────────
+  window.addEventListener('load', async () => {
+    // Determine if page requires auth based on its path
+    const path = window.location.pathname;
+    const isProtected = (path.includes('admin_') || path.includes('lawyer_') || path.includes('client_')) && !path.includes('login');
+    
+    if (isProtected && window.authApi) {
+      try {
+        const user = await window.authApi.me();
+        
+        // Simple role check based on filename prefix
+        if (path.includes('admin_') && user.role !== 'Admin') window.location.href = 'login.html';
+        if (path.includes('lawyer_') && user.role !== 'Lawyer') window.location.href = 'login.html';
+        if (path.includes('client_') && user.role !== 'Client') window.location.href = 'login.html';
+        
+        // Populate user name in the topbar if the element exists
+        const userNameEl = document.querySelector('.header__user-name');
+        if (userNameEl) {
+          userNameEl.textContent = `${user.first_name} ${user.last_name}`;
+        }
+        
+        // Wire up all logout buttons dynamically
+        const logoutBtns = Array.from(document.querySelectorAll('a')).filter(a => a.textContent.trim() === 'Logout');
+        logoutBtns.forEach(btn => {
+            btn.onclick = null; // remove inline onclick
+            btn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                if (confirm('Are you sure you want to log out?')) {
+                    try { await window.authApi.logout(); } catch(e) {}
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+
+      } catch (err) {
+        // Not logged in -> redirect to login
+        window.location.href = 'login.html';
+      }
+    }
+  });
+
 })();

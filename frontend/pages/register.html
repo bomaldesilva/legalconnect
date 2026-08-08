@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalConnect | Create Account</title>
+    <meta name="description" content="Sign up for LegalConnect.">
+    <link rel="stylesheet" href="../css/auth.css">
+  </head>
+  <body>
+
+    <!-- Background -->
+    <div class="auth-bg"></div>
+    <div class="ambient-glow glow-1" style="background:#0ea5a0;"></div>
+    <div class="ambient-glow glow-2" style="background:#1e3a68;"></div>
+
+    <!-- Page -->
+    <div class="auth-page">
+      <!-- Top bar -->
+      <div class="auth-topbar">
+        <a class="auth-brand" href="login.html" aria-label="Back to portal">
+          <div class="auth-brand-mark">LC</div>
+          <span class="auth-brand-name">LegalConnect</span>
+        </a>
+        <a class="back-link" href="login.html">← Back to Portal</a>
+      </div>
+
+      <div class="login-body">
+        <!-- Left — hero copy -->
+        <div class="login-hero">
+          <span class="login-hero-tag">Join LegalConnect</span>
+          <h1>Join Our Growing Network of Legal Professionals & Clients.</h1>
+          <p>
+            Whether you are seeking expert legal advice or you are a lawyer looking to expand your practice, creating an account takes just a few seconds.
+          </p>
+        </div>
+
+        <!-- Right — registration card -->
+        <div class="login-panel">
+          <div class="login-card">
+
+            <div class="login-card-header">
+              <h2>Create an Account</h2>
+              <p class="subtitle">Enter your details to get started.</p>
+            </div>
+
+            <div class="auth-notice error" id="authError" style="display:none; color:#ff4d4f; font-size:14px; margin-bottom:15px; padding:10px; background:rgba(255,77,79,0.1); border-radius:6px; border:1px solid rgba(255,77,79,0.2);"></div>
+
+            <form id="registerForm" novalidate>
+              <div class="auth-fields">
+
+                <div class="auth-field">
+                  <label for="regRole">I am a...</label>
+                  <select id="regRole" required style="width:100%; padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; font-size:15px; font-family:inherit; outline:none; transition:border-color 0.2s;">
+                    <option value="" disabled selected style="color:#000;">Select your role</option>
+                    <option value="Client" style="color:#000;">Client (Seeking Legal Help)</option>
+                    <option value="Lawyer" style="color:#000;">Lawyer (Offering Legal Services)</option>
+                  </select>
+                </div>
+
+                <div class="auth-field">
+                  <div style="display: flex; gap: 12px;">
+                    <div style="flex:1;">
+                      <label for="regFirstName">First Name</label>
+                      <input id="regFirstName" type="text" placeholder="John" required>
+                    </div>
+                    <div style="flex:1;">
+                      <label for="regLastName">Last Name</label>
+                      <input id="regLastName" type="text" placeholder="Doe" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="auth-field">
+                  <label for="regEmail">Email Address</label>
+                  <input
+                    id="regEmail"
+                    type="email"
+                    placeholder="you@example.com"
+                    autocomplete="username"
+                    required>
+                </div>
+
+                <div class="auth-field">
+                  <label for="regPassword">Password</label>
+                  <input
+                    id="regPassword"
+                    type="password"
+                    placeholder="Create a strong password"
+                    autocomplete="new-password"
+                    required>
+                </div>
+
+              </div>
+
+              <button class="auth-submit teal" type="submit" id="registerSubmit">
+                Sign Up →
+              </button>
+            </form>
+
+            <div class="auth-divider"><span>already have an account?</span></div>
+
+            <div class="auth-footer-note">
+              <a href="login.html">Sign In here</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/auth.js"></script>
+  </body>
+</html>
