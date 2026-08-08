@@ -74,11 +74,34 @@ document.getElementById('btnEditProfile')?.addEventListener('click', (e) => {
 // ── Initial Data Load ─────────────────────────────────────────────────────────
 (async () => {
   try {
-    // // DEMO DATA: Animate stat card values
-    animateCounter(document.getElementById('kpiUpcoming'), 1);
-    animateCounter(document.getElementById('kpiRequests'), 2);
-    animateCounter(document.getElementById('kpiDocs'), 4);
-    animateCounter(document.getElementById('kpiPayments'), 15000, true);
+    // Determine if this is a demo account or a real new user
+    const DEMO_EMAILS = ['client@legalconnect.lk', 'lawyer@legalconnect.lk', 'admin@legalconnect.lk'];
+    let isDemo = false;
+    if (window.authApi) {
+      try {
+        const user = await window.authApi.me();
+        isDemo = DEMO_EMAILS.includes(user.email);
+      } catch (e) {
+        isDemo = false;
+      }
+    }
+
+    if (isDemo) {
+      // DEMO ACCOUNT: animate with hardcoded demo numbers
+      animateCounter(document.getElementById('kpiUpcoming'), 1);
+      animateCounter(document.getElementById('kpiRequests'), 2);
+      animateCounter(document.getElementById('kpiDocs'), 4);
+      animateCounter(document.getElementById('kpiPayments'), 15000, true);
+    } else {
+      // NEW / REAL USER: show zeros — real data would come from live API calls
+      animateCounter(document.getElementById('kpiUpcoming'), 0);
+      animateCounter(document.getElementById('kpiRequests'), 0);
+      animateCounter(document.getElementById('kpiDocs'), 0);
+      animateCounter(document.getElementById('kpiPayments'), 0, true);
+
+      // Clear stat delta subtitles ("Next: 2026-08-05", "1 Under Review", etc.)
+      document.querySelectorAll('.stat-card__delta').forEach(d => d.textContent = '');
+    }
 
     // Fetch live availability slots & consultation packages for context check
     const [slots, pkgs] = await Promise.all([

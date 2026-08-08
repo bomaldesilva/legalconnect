@@ -177,16 +177,20 @@
         if (isLawyerPage && user.role !== 'Lawyer') { window.location.href = 'login.html'; return; }
         if (isClientPage && user.role !== 'Client') { window.location.href = 'login.html'; return; }
 
-        // Populate user name/avatar in the topbar
+        // Populate topbar: avatar initials + subtitle with real user name
         const topbarAvatar = document.querySelector('.topbar-right .avatar');
         if (topbarAvatar) {
           topbarAvatar.title       = `${user.first_name} ${user.last_name}`;
           topbarAvatar.textContent = (user.first_name[0] + user.last_name[0]).toUpperCase();
         }
+        // Update topbar subtitle (shows "Demo Client — …" by default)
+        const topbarSubtitle = document.querySelector('.topbar-left .topbar-subtitle');
+        if (topbarSubtitle) {
+          topbarSubtitle.textContent = `${user.first_name} ${user.last_name} — LegalConnect Portal`;
+        }
 
         // --- PHASE 1 DEMO WIPE FOR NEW USERS ---
-        // --- PHASE 1 DEMO WIPE FOR NEW USERS ---
-        // If this is a newly registered user (not the default demo client), clear out the hardcoded mock data
+        // If this is NOT a demo account, clear hardcoded mock data from profile hero
         const demoEmails = ['client@legalconnect.lk', 'lawyer@legalconnect.lk', 'admin@legalconnect.lk'];
         if (!demoEmails.includes(user.email) && isProtected) {
           document.querySelectorAll('.profile-hero__avatar')
@@ -195,14 +199,9 @@
             .forEach(n => n.textContent = `${user.first_name} ${user.last_name}`);
           document.querySelectorAll('.profile-hero__sub')
             .forEach(s => s.innerHTML = `${user.email} &nbsp;&middot;&nbsp; User ID: ${user.user_id}`);
-          document.querySelectorAll('.stat-card__value')
-            .forEach(s => s.textContent = '0');
-          const upcomingList = document.getElementById('upcomingConsultationsList');
-          if (upcomingList) upcomingList.innerHTML = '<p style="padding:20px;color:var(--muted);text-align:center;">No upcoming consultations.</p>';
-          const requestsList = document.getElementById('recentRequestsList');
-          if (requestsList) requestsList.innerHTML = '<p style="padding:20px;color:var(--muted);text-align:center;">No active requests.</p>';
         }
         // -----------------------------------------
+
 
         // Wire up logout buttons dynamically
         Array.from(document.querySelectorAll('a'))
