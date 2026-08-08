@@ -207,11 +207,11 @@ window.openViewModal = function(id) {
               <button class="btn primary" onclick="actionComplete(${id});closeModal();">Mark Complete</button>` + footer;
   }
   document.getElementById('viewApptFooter').innerHTML = footer;
-  document.getElementById('viewApptModal').classList.add('lc-modal--open');
+  document.getElementById('viewApptModal').classList.add('lc-appt-modal--open');
 };
 
 window.closeModal = function() {
-  document.getElementById('viewApptModal').classList.remove('lc-modal--open');
+  document.getElementById('viewApptModal').classList.remove('lc-appt-modal--open');
 };
 
 // ── Status Actions ────────────────────────────────────────────────────────────
