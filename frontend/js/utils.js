@@ -179,6 +179,28 @@
           userNameEl.textContent = `${user.first_name} ${user.last_name}`;
         }
         
+        // --- PHASE 1 DEMO WIPE FOR NEW USERS ---
+        // If this is a newly registered user (ID > 3), clear out the hardcoded mock data
+        if (user.user_id > 3 && isProtected) {
+          const names = document.querySelectorAll('.profile-hero__name');
+          names.forEach(n => n.textContent = `${user.first_name} ${user.last_name}`);
+          
+          const subs = document.querySelectorAll('.profile-hero__sub');
+          subs.forEach(s => s.innerHTML = `${user.email} &nbsp;&middot;&nbsp; User ID: ${user.user_id}`);
+          
+          // Zero out stats
+          const stats = document.querySelectorAll('.stat-card__value');
+          stats.forEach(s => s.textContent = '0');
+          
+          // Clear upcoming lists
+          const upcomingList = document.getElementById('upcomingConsultationsList');
+          if (upcomingList) upcomingList.innerHTML = '<p style="padding: 20px; color: var(--muted); text-align: center;">No upcoming consultations.</p>';
+          
+          const requestsList = document.getElementById('recentRequestsList');
+          if (requestsList) requestsList.innerHTML = '<p style="padding: 20px; color: var(--muted); text-align: center;">No active requests.</p>';
+        }
+        // ---------------------------------------
+        
         // Wire up all logout buttons dynamically
         const logoutBtns = Array.from(document.querySelectorAll('a')).filter(a => a.textContent.trim() === 'Logout');
         logoutBtns.forEach(btn => {

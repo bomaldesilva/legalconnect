@@ -39,7 +39,7 @@ class CaseController
     public function update(int $caseId): void
     {
         try {
-            $data = Request::json();
+            $data = Request::body();
             
             // For now, we just support closing cases
             if (isset($data['action']) && $data['action'] === 'close') {
