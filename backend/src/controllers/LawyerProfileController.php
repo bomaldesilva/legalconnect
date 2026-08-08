@@ -33,7 +33,9 @@ class LawyerProfileController
         try {
             Response::success($this->service->getProfile($lawyerId), 'Lawyer profile loaded.');
         } catch (RuntimeException $exception) {
-            Response::error($exception->getMessage(), $exception->getCode() ?: 404);
+            $code = $exception->getCode();
+            $code = (is_int($code) && $code >= 400 && $code <= 599) ? $code : 500;
+            Response::error($exception->getMessage(), $code);
         }
     }
 
@@ -50,7 +52,9 @@ class LawyerProfileController
         } catch (ValidationException $exception) {
             Response::error($exception->getMessage(), 400, $exception->getErrors());
         } catch (RuntimeException $exception) {
-            Response::error($exception->getMessage(), $exception->getCode() ?: 404);
+            $code = $exception->getCode();
+            $code = (is_int($code) && $code >= 400 && $code <= 599) ? $code : 500;
+            Response::error($exception->getMessage(), $code);
         }
     }
 
@@ -68,7 +72,9 @@ class LawyerProfileController
                 'Lawyer categories loaded.'
             );
         } catch (RuntimeException $exception) {
-            Response::error($exception->getMessage(), $exception->getCode() ?: 404);
+            $code = $exception->getCode();
+            $code = (is_int($code) && $code >= 400 && $code <= 599) ? $code : 500;
+            Response::error($exception->getMessage(), $code);
         }
     }
 
@@ -85,7 +91,9 @@ class LawyerProfileController
         } catch (ValidationException $exception) {
             Response::error($exception->getMessage(), 400, $exception->getErrors());
         } catch (RuntimeException $exception) {
-            Response::error($exception->getMessage(), $exception->getCode() ?: 404);
+            $code = $exception->getCode();
+            $code = (is_int($code) && $code >= 400 && $code <= 599) ? $code : 500;
+            Response::error($exception->getMessage(), $code);
         }
     }
 
@@ -99,7 +107,9 @@ class LawyerProfileController
             $categories = $this->service->removeCategory($lawyerId, $categoryId);
             Response::success($categories, 'Legal category removed from profile.');
         } catch (RuntimeException $exception) {
-            Response::error($exception->getMessage(), $exception->getCode() ?: 404);
+            $code = $exception->getCode();
+            $code = (is_int($code) && $code >= 400 && $code <= 599) ? $code : 500;
+            Response::error($exception->getMessage(), $code);
         }
     }
 
@@ -118,7 +128,9 @@ class LawyerProfileController
                 'Public lawyer profile loaded.'
             );
         } catch (RuntimeException $exception) {
-            Response::error($exception->getMessage(), $exception->getCode() ?: 404);
+            $code = $exception->getCode();
+            $code = (is_int($code) && $code >= 400 && $code <= 599) ? $code : 500;
+            Response::error($exception->getMessage(), $code);
         }
     }
 }
