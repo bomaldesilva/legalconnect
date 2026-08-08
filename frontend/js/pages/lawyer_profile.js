@@ -19,10 +19,7 @@
 
 'use strict';
 
-// ── Configuration ─────────────────────────────────────────────────────────────
-// Hardcoded to Demo Lawyer (ID=2) until auth is implemented (Module auth phase).
-// This matches the same convention used by lawyer_consultation_packages.js.
-const LAWYER_ID = 2;
+let LAWYER_ID = null;
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let profile       = null;   // Full profile object from API
@@ -100,6 +97,8 @@ async function boot() {
   showLoading();
 
   try {
+    const user = await window.authApi.me();
+    LAWYER_ID = user.user_id;
     profile = await window.lawyerProfileApi.get(LAWYER_ID);
     myCategories = profile.categories || [];
     renderAll();
