@@ -116,6 +116,43 @@
 
     <section class="content">
 
+      <!-- ── Welcome Banner (shown only after registration) ──────────────── -->
+      <div id="welcomeBanner" style="display:none; background:linear-gradient(135deg,#0d9488,#0f766e); color:#fff; border-radius:12px; padding:18px 24px; margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; gap:16px; box-shadow:0 4px 20px rgba(13,148,136,0.35); animation: slideDown 0.4s ease;">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div style="font-size:36px;line-height:1;">🎉</div>
+          <div>
+            <p style="font-size:16px;font-weight:800;margin:0 0 4px;">Welcome to LegalConnect!</p>
+            <p style="font-size:13px;opacity:0.9;margin:0;" id="welcomeBannerMsg">Your account has been created successfully. You're all set to connect with verified attorneys.</p>
+          </div>
+        </div>
+        <button onclick="document.getElementById('welcomeBanner').style.display='none';" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;" title="Dismiss">✕</button>
+      </div>
+      <style>
+        @keyframes slideDown {
+          from { opacity:0; transform:translateY(-16px); }
+          to   { opacity:1; transform:translateY(0); }
+        }
+      </style>
+      <script>
+        (function() {
+          const params = new URLSearchParams(window.location.search);
+          if (params.get('welcome') === '1') {
+            const banner = document.getElementById('welcomeBanner');
+            if (banner) {
+              banner.style.display = 'flex';
+              // Auto-dismiss after 8 seconds
+              setTimeout(() => {
+                banner.style.transition = 'opacity 0.5s';
+                banner.style.opacity = '0';
+                setTimeout(() => banner.style.display = 'none', 500);
+              }, 8000);
+              // Clean URL without reloading
+              history.replaceState({}, '', window.location.pathname);
+            }
+          }
+        })();
+      </script>
+
       <!-- Breadcrumb -->
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="client_dashboard.html">Home</a>
@@ -356,6 +393,12 @@ window.addEventListener('load', async () => {
 
   const demoEmails = ['client@legalconnect.lk', 'lawyer@legalconnect.lk', 'admin@legalconnect.lk'];
   if (demoEmails.includes(user.email)) return; // keep demo data for demo accounts
+
+  // Update welcome banner message with user's name (banner shown via ?welcome=1)
+  const welcomeMsg = document.getElementById('welcomeBannerMsg');
+  if (welcomeMsg) {
+    welcomeMsg.textContent = `Welcome, ${user.first_name}! Your account has been created. You're ready to connect with verified Sri Lankan attorneys.`;
+  }
 
   // --- KPI stat cards ---
   const kpiUpcoming = document.getElementById('kpiUpcoming');

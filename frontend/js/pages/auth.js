@@ -35,13 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
           password
         });
         
-        // Redirect based on role
+        // Redirect based on role — pass ?welcome=1 so dashboard shows a welcome banner
         if (data.role === 'Client') {
-          window.location.href = 'client_dashboard.html';
+          window.location.href = 'client_dashboard.html?welcome=1';
         } else if (data.role === 'Lawyer') {
-          window.location.href = 'lawyer_dashboard.html';
+          window.location.href = 'lawyer_dashboard.html?welcome=1';
         } else {
-          window.location.href = 'admin_dashboard.html';
+          window.location.href = 'admin_dashboard.html?welcome=1';
         }
 
       } catch (err) {
