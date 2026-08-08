@@ -80,21 +80,48 @@
 
     <section class="content">
 
+      <!-- ── Welcome Banner (shown only after registration) ──────────────── -->
+      <div id="welcomeBanner" style="display:none; background:linear-gradient(135deg,#0d9488,#0f766e); color:#fff; border-radius:12px; padding:18px 24px; margin-bottom:24px; align-items:center; justify-content:space-between; gap:16px; box-shadow:0 4px 20px rgba(13,148,136,0.35);">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div style="font-size:36px;line-height:1;">🎉</div>
+          <div>
+            <p style="font-size:16px;font-weight:800;margin:0 0 4px;">Welcome to LegalConnect!</p>
+            <p style="font-size:13px;opacity:0.9;margin:0;" id="welcomeBannerMsg">Your lawyer account has been created. Complete your profile to get verified.</p>
+          </div>
+        </div>
+        <button onclick="document.getElementById('welcomeBanner').style.display='none';" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;" title="Dismiss">✕</button>
+      </div>
+      <script>
+        (function() {
+          const params = new URLSearchParams(window.location.search);
+          if (params.get('welcome') === '1') {
+            const banner = document.getElementById('welcomeBanner');
+            if (banner) {
+              banner.style.display = 'flex';
+              setTimeout(() => { banner.style.transition='opacity 0.5s'; banner.style.opacity='0'; setTimeout(()=>banner.style.display='none',500); }, 8000);
+              history.replaceState({}, '', window.location.pathname);
+            }
+          }
+        })();
+      </script>
+
       <!-- ── Profile Hero ────────────────────────────────────────────────── -->
       <div class="profile-hero">
-        <div class="profile-hero__avatar">DL</div>
+        <div class="profile-hero__avatar" id="lawyerAvatarHero">DL</div>
         <div class="profile-hero__info">
-          <p class="profile-hero__name">Demo Lawyer</p>
-          <p class="profile-hero__sub">BAR-DEMO-001 &nbsp;·&nbsp; Active Lawyer &nbsp;·&nbsp; 5 Years Experience</p>
-          <div class="profile-hero__tags">
+          <p class="profile-hero__name" id="lawyerNameHero">Demo Lawyer</p>
+          <p class="profile-hero__sub" id="lawyerSubHero">BAR-DEMO-001 &nbsp;·&nbsp; Active Lawyer &nbsp;·&nbsp; 5 Years Experience</p>
+          <div class="profile-hero__tags" id="lawyerTagsHero">
             <span class="tag">Family Law</span>
             <span class="tag">Criminal Law</span>
             <span class="tag">Property Law</span>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0;">
-          <span class="verif-badge verif-badge--approved"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Verified</span>
-          <div class="stars-rating">
+          <span class="verif-badge" id="lawyerVerifBadge" style="background:#fff3cd;color:#856404;border:1px solid #ffeeba;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;">
+            &#9201; Pending Verification
+          </span>
+          <div class="stars-rating" id="lawyerStarsSection">
             <span class="stars-rating__star filled">★</span>
             <span class="stars-rating__star filled">★</span>
             <span class="stars-rating__star filled">★</span>
@@ -276,5 +303,37 @@
 <script src="../js/utils.js?v=5"></script>
 <script src="../js/api.js"></script>
 <script src="../js/pages/lawyer_dashboard.js"></script>
+<script>
+// ── New-user demo wipe for Lawyer Dashboard ───────────────────────────────────
+window.addEventListener('load', async () => {
+  if (!window.authApi) return;
+  let user;
+  try { user = await window.authApi.me(); } catch(e) { return; }
+
+  const demoEmails = ['client@legalconnect.lk', 'lawyer@legalconnect.lk', 'admin@legalconnect.lk'];
+  if (demoEmails.includes(user.email)) return; // keep demo data for the demo lawyer account
+
+  // --- Profile hero ---
+  const avatarEl = document.getElementById('lawyerAvatarHero');
+  const nameEl   = document.getElementById('lawyerNameHero');
+  const subEl    = document.getElementById('lawyerSubHero');
+  const tagsEl   = document.getElementById('lawyerTagsHero');
+  const starsEl  = document.getElementById('lawyerStarsSection');
+
+  if (avatarEl) avatarEl.textContent = (user.first_name[0] + user.last_name[0]).toUpperCase();
+  if (nameEl)   nameEl.textContent   = `${user.first_name} ${user.last_name}`;
+  if (subEl)    subEl.textContent    = `${user.email} · User ID: ${user.user_id}`;
+  if (tagsEl)   tagsEl.innerHTML     = '<span class="tag" style="background:#fff3cd;color:#856404;">Profile Incomplete</span>';
+  if (starsEl)  starsEl.style.display = 'none'; // hide demo rating — no reviews yet
+
+  // Badge is already "Pending Verification" in the HTML — no change needed for new users
+
+  // --- Welcome banner personalisation ---
+  const welcomeMsg = document.getElementById('welcomeBannerMsg');
+  if (welcomeMsg) {
+    welcomeMsg.textContent = `Welcome, ${user.first_name}! Your lawyer account has been created. Complete your profile to get verified and start accepting consultations.`;
+  }
+});
+</script>
 </body>
 </html>
