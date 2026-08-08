@@ -100,7 +100,7 @@
    * @param {'danger'|'primary'} [confirmStyle='danger']  Button variant.
    * @returns {Promise<boolean>}
    */
-  function openConfirmModal(message, confirmLabel = 'Confirm', confirmStyle = 'danger') {
+  function openConfirmModal(message, confirmLabel = 'Confirm', confirmStyle = 'danger', cancelLabel = 'Cancel') {
     return new Promise((resolve) => {
       let overlay = document.getElementById('lc-modal-overlay');
 
@@ -122,12 +122,14 @@
       const confirmEl = document.getElementById('lc-modal-confirm');
       const cancelEl  = document.getElementById('lc-modal-cancel');
 
-      msgEl.textContent    = message;
+      msgEl.textContent     = message;
       confirmEl.textContent = confirmLabel;
       confirmEl.className   = `btn ${confirmStyle}`;
+      cancelEl.textContent  = cancelLabel;
 
       overlay.classList.add('lc-modal-overlay--show');
-      confirmEl.focus();
+      // Slight delay so CSS transition runs before focus (avoids instant-click on Enter)
+      setTimeout(() => confirmEl.focus(), 80);
 
       function close(result) {
         overlay.classList.remove('lc-modal-overlay--show');
@@ -160,67 +162,70 @@
   };
   // ── Auth Guard ───────────────────────────────────────────────────────────
   window.addEventListener('load', async () => {
-    // Determine if page requires auth based on its path
     const path = window.location.pathname;
-    const isProtected = (path.includes('admin_') || path.includes('lawyer_') || path.includes('client_')) && !path.includes('login');
-    
+    const isAdminPage  = path.includes('admin_')  && !path.includes('login');
+    const isLawyerPage = path.includes('lawyer_') && !path.includes('login');
+    const isClientPage = path.includes('client_') && !path.includes('login');
+    const isProtected  = isAdminPage || isLawyerPage || isClientPage;
+
     if (isProtected && window.authApi) {
       try {
         const user = await window.authApi.me();
-        
-        // Simple role check based on filename prefix
-        if (path.includes('admin_') && user.role !== 'Admin') window.location.href = 'login.html';
-        if (path.includes('lawyer_') && user.role !== 'Lawyer') window.location.href = 'login.html';
-        if (path.includes('client_') && user.role !== 'Client') window.location.href = 'login.html';
-        
+
+        // Role mismatch: redirect for all portal types
+        if (isAdminPage  && user.role !== 'Admin')  { window.location.href = 'login.html'; return; }
+        if (isLawyerPage && user.role !== 'Lawyer') { window.location.href = 'login.html'; return; }
+        if (isClientPage && user.role !== 'Client') { window.location.href = 'login.html'; return; }
+
         // Populate user name/avatar in the topbar
         const topbarAvatar = document.querySelector('.topbar-right .avatar');
         if (topbarAvatar) {
-          topbarAvatar.title = `${user.first_name} ${user.last_name}`;
+          topbarAvatar.title       = `${user.first_name} ${user.last_name}`;
           topbarAvatar.textContent = (user.first_name[0] + user.last_name[0]).toUpperCase();
         }
-        
+
         // --- PHASE 1 DEMO WIPE FOR NEW USERS ---
-        // If this is a newly registered user (ID > 3), clear out the hardcoded mock data
         if (user.user_id > 3 && isProtected) {
-          const profileAvatars = document.querySelectorAll('.profile-hero__avatar');
-          profileAvatars.forEach(a => a.textContent = (user.first_name[0] + user.last_name[0]).toUpperCase());
-          
-          const names = document.querySelectorAll('.profile-hero__name');
-          names.forEach(n => n.textContent = `${user.first_name} ${user.last_name}`);
-          
-          const subs = document.querySelectorAll('.profile-hero__sub');
-          subs.forEach(s => s.innerHTML = `${user.email} &nbsp;&middot;&nbsp; User ID: ${user.user_id}`);
-          
-          // Zero out stats
-          const stats = document.querySelectorAll('.stat-card__value');
-          stats.forEach(s => s.textContent = '0');
-          
-          // Clear upcoming lists
+          document.querySelectorAll('.profile-hero__avatar')
+            .forEach(a => a.textContent = (user.first_name[0] + user.last_name[0]).toUpperCase());
+          document.querySelectorAll('.profile-hero__name')
+            .forEach(n => n.textContent = `${user.first_name} ${user.last_name}`);
+          document.querySelectorAll('.profile-hero__sub')
+            .forEach(s => s.innerHTML = `${user.email} &nbsp;&middot;&nbsp; User ID: ${user.user_id}`);
+          document.querySelectorAll('.stat-card__value')
+            .forEach(s => s.textContent = '0');
           const upcomingList = document.getElementById('upcomingConsultationsList');
-          if (upcomingList) upcomingList.innerHTML = '<p style="padding: 20px; color: var(--muted); text-align: center;">No upcoming consultations.</p>';
-          
+          if (upcomingList) upcomingList.innerHTML = '<p style="padding:20px;color:var(--muted);text-align:center;">No upcoming consultations.</p>';
           const requestsList = document.getElementById('recentRequestsList');
-          if (requestsList) requestsList.innerHTML = '<p style="padding: 20px; color: var(--muted); text-align: center;">No active requests.</p>';
+          if (requestsList) requestsList.innerHTML = '<p style="padding:20px;color:var(--muted);text-align:center;">No active requests.</p>';
         }
-        // ---------------------------------------
-        
-        // Wire up all logout buttons dynamically
-        const logoutBtns = Array.from(document.querySelectorAll('a')).filter(a => a.textContent.trim() === 'Logout');
-        logoutBtns.forEach(btn => {
-            btn.onclick = null; // remove inline onclick
+        // -----------------------------------------
+
+        // Wire up logout buttons dynamically
+        Array.from(document.querySelectorAll('a'))
+          .filter(a => a.textContent.trim() === 'Logout')
+          .forEach(btn => {
+            btn.onclick = null;
             btn.addEventListener('click', async (e) => {
-                e.preventDefault();
-                if (confirm('Are you sure you want to log out?')) {
-                    try { await window.authApi.logout(); } catch(e) {}
-                    window.location.href = 'login.html';
-                }
+              e.preventDefault();
+              if (confirm('Are you sure you want to log out?')) {
+                try { await window.authApi.logout(); } catch (e) {}
+                window.location.href = 'login.html';
+              }
             });
-        });
+          });
 
       } catch (err) {
-        // Not logged in -> redirect to login
-        window.location.href = 'login.html';
+        // ── NOT AUTHENTICATED ─────────────────────────────────────────────
+        // Admin pages → hard redirect (admin must always be authenticated).
+        // Lawyer / client pages → allow the page to stay and work in demo
+        //   mode. The backend API endpoints do not enforce session auth, so
+        //   data loads and CRUD still functions without a session cookie.
+        //   Redirecting here would destroy any open confirm dialogs.
+        if (isAdminPage) {
+          window.location.href = 'login.html';
+        }
+        // else: silently remain on page
       }
     }
   });

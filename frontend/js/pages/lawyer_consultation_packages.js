@@ -337,10 +337,15 @@ resetButton.addEventListener('click', () => {
 // ── Table row actions ─────────────────────────────────────────────────────────
 rows.addEventListener('click', async (event) => {
   const button = event.target.closest('button[data-action]');
-  if (!button || button.disabled) return;
+  console.log('[packages] click on rows, button=', button);
+  if (!button || button.disabled) {
+    console.log('[packages] button null or disabled, returning early');
+    return;
+  }
 
   const id  = Number(button.dataset.id);
   const pkg = packages.find((p) => Number(p.package_id) === id);
+  console.log('[packages] action=', button.dataset.action, 'id=', id, 'pkg=', pkg);
 
   if (button.dataset.action === 'edit' && pkg) {
     fillForm(pkg);
@@ -348,21 +353,31 @@ rows.addEventListener('click', async (event) => {
   }
 
   if (button.dataset.action === 'delete') {
-    const confirmed = await LC.openConfirmModal(
-      `Deactivate "${pkg?.package_name || 'this package'}"? It will be marked as Inactive.`,
-      'Deactivate',
-      'danger'
-    );
+    console.log('[packages] opening confirm modal, LC=', window.LC);
+    let confirmed = false;
+    try {
+      confirmed = await LC.openConfirmModal(
+        `Deactivate "${pkg?.package_name || 'this package'}"? It will be marked as Inactive.`,
+        'Deactivate',
+        'danger'
+      );
+    } catch (modalErr) {
+      console.error('[packages] confirm modal error:', modalErr);
+    }
+    console.log('[packages] confirmed=', confirmed);
 
     if (!confirmed) return;
 
     button.disabled = true;
 
     try {
-      await window.consultationPackages.delete(id);
+      console.log('[packages] calling delete API for id=', id);
+      const result = await window.consultationPackages.delete(id);
+      console.log('[packages] delete API result=', result);
       LC.showToast('Consultation package deactivated.');
       await loadPackages();
     } catch (error) {
+      console.error('[packages] delete API error:', error.message, error);
       LC.showToast(error.message || 'Unable to deactivate package.', 'error');
       button.disabled = false;
     }
