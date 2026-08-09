@@ -9,8 +9,10 @@ declare(strict_types=1);
  */
 class AppointmentService
 {
-    public function __construct(private Appointment $model)
-    {
+    public function __construct(
+        private Appointment $model,
+        private ?NotificationService $notificationService = null
+    ) {
     }
 
     /**
@@ -129,6 +131,28 @@ class AppointmentService
             'Appointment #' . $id . ' was cancelled.',
             'appointment'
         );
+
+        // Notify lawyer via notifications system
+        if ($this->notificationService !== null) {
+            $lawyerUserId = (int) ($existing['lawyer_id'] ?? 0);
+            $clientName = $existing['client_name'] ?? 'Client';
+            $date = $existing['appointment_date'] ?? '';
+            $startTime = substr((string) ($existing['start_time'] ?? ''), 0, 5);
+
+            if ($lawyerUserId > 0) {
+                try {
+                    $this->notificationService->create([
+                        'user_id' => $lawyerUserId,
+                        'type' => 'appointment_cancelled',
+                        'title' => 'Appointment Cancelled',
+                        'message' => "Client {$clientName} cancelled appointment #{$id} scheduled for {$date} at {$startTime}.",
+                        'reference_id' => $id,
+                    ]);
+                } catch (Throwable $e) {
+                    // Log or swallow notification error so cancellation doesn't fail
+                }
+            }
+        }
 
         return $this->model->find($id);
     }

@@ -282,11 +282,11 @@ window.openDocModal = function(id) {
   `;
 
   document.getElementById('modalDocFooter').innerHTML = footerHtml;
-  document.getElementById('viewDocModal').classList.add('lc-modal--open');
+  document.getElementById('viewDocModal').classList.add('lc-appt-modal--open');
 };
 
 window.closeDocModal = function() {
-  document.getElementById('viewDocModal').classList.remove('lc-modal--open');
+  document.getElementById('viewDocModal').classList.remove('lc-appt-modal--open');
 };
 
 window.downloadDoc = function(id) {

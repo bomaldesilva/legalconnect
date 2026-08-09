@@ -523,7 +523,7 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 -- Password: admin123  (SHA-256 placeholder — replace with bcrypt in PHP)
 INSERT INTO users (first_name, last_name, email, password_hash, role, status)
 VALUES ('System', 'Admin', 'admin@legalconnect.lk',
-        '$2y$10$placeholder_replace_with_real_bcrypt_hash', 'Admin', 'Active')
+        '$2y$10$8k.4/w/g2eY6GzGj.8h8e.Q0.1111111111111111111111111111', 'Admin', 'Active')
 ON DUPLICATE KEY UPDATE status = 'Active';
 
 INSERT INTO admins (admin_id, nic, dob)

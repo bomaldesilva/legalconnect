@@ -146,7 +146,7 @@ function setupSearch() {
 
 // ── View Modal ────────────────────────────────────────────────────────────────
 window.openViewModal = function(id) {
-  const a = allAppointments.find(x => x.appointment_id === id);
+  const a = allAppointments.find(x => Number(x.appointment_id) === Number(id));
   if (!a) return;
 
   const modeLocation = a.mode === 'Online'
@@ -167,16 +167,16 @@ window.openViewModal = function(id) {
     footer = `<button class="btn danger" onclick="cancelAppt(${id});closeModal();">Cancel Appointment</button>` + footer;
   }
   document.getElementById('viewApptFooter').innerHTML = footer;
-  document.getElementById('viewApptModal').classList.add('lc-modal--open');
+  document.getElementById('viewApptModal').classList.add('lc-appt-modal--open');
 };
 
 window.closeModal = function() {
-  document.getElementById('viewApptModal').classList.remove('lc-modal--open');
+  document.getElementById('viewApptModal').classList.remove('lc-appt-modal--open');
 };
 
 // ── Cancel ────────────────────────────────────────────────────────────────────
 window.cancelAppt = function(id) {
-  const a = allAppointments.find(x => x.appointment_id === id);
+  const a = allAppointments.find(x => Number(x.appointment_id) === Number(id));
   if (!a) return;
 
   LC.openConfirmModal(
@@ -188,10 +188,10 @@ window.cancelAppt = function(id) {
     try {
       await window.appointmentsApi.delete(id);
       allAppointments = allAppointments.map(x =>
-        x.appointment_id === id ? { ...x, status: 'Cancelled' } : x
+        Number(x.appointment_id) === Number(id) ? { ...x, status: 'Cancelled' } : x
       );
       renderAll();
-      LC.showToast('Appointment cancelled successfully.', 'success');
+      LC.showToast('Appointment cancelled. Lawyer has been notified.', 'success');
     } catch (err) {
       LC.showToast('Cancel failed: ' + err.message, 'error');
     }

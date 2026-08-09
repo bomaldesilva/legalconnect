@@ -185,7 +185,7 @@ function setupSearch() {
 
 // ── View Modal ────────────────────────────────────────────────────────────────
 window.openViewModal = function(id) {
-  const a = allAppointments.find(x => x.appointment_id === id);
+  const a = allAppointments.find(x => Number(x.appointment_id) === Number(id));
   if (!a) return;
 
   document.getElementById('viewApptBody').innerHTML = `
@@ -222,16 +222,20 @@ window.actionComplete = async function(id) {
   await changeStatus(id, 'Completed');
 };
 window.actionCancel = function(id) {
+  const a = allAppointments.find(x => Number(x.appointment_id) === Number(id));
+  const clientName = a ? a.client_name : 'this client';
+  const apptDate = a ? a.appointment_date : '';
+
   LC.openConfirmModal(
-    'Are you sure you want to cancel this appointment? The slot will be released.',
+    `Are you sure you want to cancel the appointment with ${LC.escapeHtml(clientName)} on ${apptDate}? The slot will be released.`,
     'Cancel Appointment',
     'danger'
   ).then(async confirmed => {
     if (!confirmed) return;
     try {
       await window.appointmentsApi.delete(id);
-      allAppointments = allAppointments.map(a =>
-        a.appointment_id === id ? { ...a, status: 'Cancelled' } : a
+      allAppointments = allAppointments.map(x =>
+        Number(x.appointment_id) === Number(id) ? { ...x, status: 'Cancelled' } : x
       );
       renderAll();
       LC.showToast('Appointment cancelled and slot released.', 'success');
@@ -242,7 +246,7 @@ window.actionCancel = function(id) {
 };
 
 async function changeStatus(id, newStatus) {
-  const a = allAppointments.find(x => x.appointment_id === id);
+  const a = allAppointments.find(x => Number(x.appointment_id) === Number(id));
   if (!a) return;
   try {
     const updated = await window.appointmentsApi.update(id, {
@@ -257,7 +261,7 @@ async function changeStatus(id, newStatus) {
       status:           newStatus,
     });
     allAppointments = allAppointments.map(x =>
-      x.appointment_id === id ? { ...x, status: updated.status } : x
+      Number(x.appointment_id) === Number(id) ? { ...x, status: updated.status } : x
     );
     renderAll();
     LC.showToast(`Appointment marked as ${newStatus}.`, 'success');

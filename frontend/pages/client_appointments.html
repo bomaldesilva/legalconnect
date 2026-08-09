@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LegalConnect | My Appointments</title>
   <meta name="description" content="View and manage your legal consultation appointments on LegalConnect.">
-  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/main.css?v=2">
 </head>
 <body>
 <div class="app-shell">
@@ -170,23 +170,23 @@
 </nav>
 
 <!-- ── Appointment Details Modal ─────────────────────────────────────────── -->
-<div class="lc-modal" id="viewApptModal" role="dialog" aria-modal="true" aria-labelledby="viewApptTitle">
-  <div class="lc-modal-content" style="max-width:520px;">
-    <div class="lc-modal-header">
-      <h3 class="lc-modal-title" id="viewApptTitle">Consultation Details</h3>
-      <button class="lc-modal-close" id="closeViewModalBtn" aria-label="Close">&times;</button>
+<div class="lc-appt-modal" id="viewApptModal" role="dialog" aria-modal="true" aria-labelledby="viewApptTitle">
+  <div class="lc-appt-modal-content" style="max-width:520px;">
+    <div class="lc-appt-modal-header">
+      <h3 class="lc-appt-modal-title" id="viewApptTitle">Consultation Details</h3>
+      <button class="lc-appt-modal-close" id="closeViewModalBtn" aria-label="Close">&times;</button>
     </div>
-    <div class="lc-modal-body" id="viewApptBody">
+    <div class="lc-appt-modal-body" id="viewApptBody">
       <!-- Populated by JS -->
     </div>
-    <div class="lc-modal-footer" id="viewApptFooter">
+    <div class="lc-appt-modal-footer" id="viewApptFooter">
       <!-- Populated by JS -->
     </div>
   </div>
 </div>
 
 <script src="../js/utils.js?v=5"></script>
-<script src="../js/api.js"></script>
-<script src="../js/pages/client_appointments.js"></script>
+<script src="../js/api.js?v=2"></script>
+<script src="../js/pages/client_appointments.js?v=2"></script>
 </body>
 </html>
