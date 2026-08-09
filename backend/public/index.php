@@ -23,6 +23,7 @@ require_once __DIR__ . '/../src/models/CaseModel.php';
 require_once __DIR__ . '/../src/models/Document.php';
 require_once __DIR__ . '/../src/models/DocumentTemplate.php';
 require_once __DIR__ . '/../src/models/User.php';
+require_once __DIR__ . '/../src/models/Notification.php';
 
 // ─── Services ─────────────────────────────────────────────────────────────────
 require_once __DIR__ . '/../src/services/LegalCategoryService.php';
@@ -36,6 +37,7 @@ require_once __DIR__ . '/../src/services/CaseService.php';
 require_once __DIR__ . '/../src/services/DocumentService.php';
 require_once __DIR__ . '/../src/services/DocumentTemplateService.php';
 require_once __DIR__ . '/../src/services/AuthService.php';
+require_once __DIR__ . '/../src/services/NotificationService.php';
 
 // ─── Controllers ──────────────────────────────────────────────────────────────
 require_once __DIR__ . '/../src/controllers/DashboardController.php';
@@ -50,6 +52,7 @@ require_once __DIR__ . '/../src/controllers/CaseController.php';
 require_once __DIR__ . '/../src/controllers/DocumentController.php';
 require_once __DIR__ . '/../src/controllers/DocumentTemplateController.php';
 require_once __DIR__ . '/../src/controllers/AuthController.php';
+require_once __DIR__ . '/../src/controllers/NotificationController.php';
 
 // ─── CORS pre-flight ──────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -82,12 +85,14 @@ try {
     $documentModel         = new Document($db);
     $documentTemplateModel = new DocumentTemplate($db);
     $userModel             = new User($db);
+    $notificationModel     = new Notification($db);
 
     // ── Services ──────────────────────────────────────────────────────────────
+    $notificationService      = new NotificationService($notificationModel);
     $categoryService          = new LegalCategoryService($categoryModel);
     $slotService              = new AvailabilitySlotService($slotModel);
     $packageService           = new ConsultationPackageService($packageModel);
-    $appointmentService       = new AppointmentService($appointmentModel);
+    $appointmentService       = new AppointmentService($appointmentModel, $notificationService);
     $paymentService           = new PaymentService($paymentModel);
     $lawyerProfileService     = new LawyerProfileService($lawyerProfileModel);
     $clientRecordService      = new ClientRecordService($clientRecordModel);
@@ -115,8 +120,27 @@ try {
     $documentController          = new DocumentController($documentService);
     $documentTemplateController  = new DocumentTemplateController($documentTemplateService);
     $authController              = new AuthController($authService);
+    $notificationController      = new NotificationController($notificationService);
 
     // ── Routing ───────────────────────────────────────────────────────────────
+
+    // Notification Routes
+    if ($path === '/api/notifications/unread-count' && $method === 'GET') {
+        $notificationController->unreadCount();
+        exit;
+    }
+    if ($path === '/api/notifications/mark-all-read' && ($method === 'PUT' || $method === 'POST')) {
+        $notificationController->markAllRead();
+        exit;
+    }
+    if (preg_match('#^/api/notifications/(\d+)/read$#', $path, $matches) && ($method === 'PUT' || $method === 'POST')) {
+        $notificationController->markRead((int) $matches[1]);
+        exit;
+    }
+    if ($path === '/api/notifications' && $method === 'GET') {
+        $notificationController->index();
+        exit;
+    }
 
     // Auth Routes
     if ($path === '/api/auth/login' && $method === 'POST') {

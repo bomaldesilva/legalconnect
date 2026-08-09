@@ -93,6 +93,13 @@ const authApi = {
   me:       ()                => request('/auth/me'),
 };
 
+const notificationsApi = {
+  list:        (userId) => request(`/notifications?user_id=${userId}`),
+  unreadCount: (userId) => request(`/notifications/unread-count?user_id=${userId}`),
+  markRead:    (id, userId) => request(`/notifications/${id}/read`, jsonOptions('PUT', { user_id: userId })),
+  markAllRead: (userId) => request(`/notifications/mark-all-read`, jsonOptions('PUT', { user_id: userId })),
+};
+
 window.legalCategories    = legalCategories;
 window.availabilitySlots  = availabilitySlots;
 window.consultationPackages = consultationPackages;
@@ -101,3 +108,5 @@ window.paymentsApi        = paymentsApi;
 window.dashboardApi       = dashboardApi;
 window.lawyerProfileApi   = lawyerProfileApi;
 window.authApi            = authApi;
+window.notificationsApi   = notificationsApi;
+
