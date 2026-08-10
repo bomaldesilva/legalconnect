@@ -74,34 +74,62 @@ document.getElementById('btnEditProfile')?.addEventListener('click', (e) => {
 // ── Initial Data Load ─────────────────────────────────────────────────────────
 (async () => {
   try {
-    // Determine if this is a demo account or a real new user
-    const DEMO_EMAILS = ['client@legalconnect.lk', 'lawyer@legalconnect.lk', 'admin@legalconnect.lk'];
-    let isDemo = false;
+    let currentUser = null;
     if (window.authApi) {
       try {
-        const user = await window.authApi.me();
-        isDemo = DEMO_EMAILS.includes(user.email);
+        currentUser = await window.authApi.me();
       } catch (e) {
-        isDemo = false;
+        console.warn("Not logged in or error fetching user context");
       }
     }
 
-    if (isDemo) {
-      // DEMO ACCOUNT: animate with hardcoded demo numbers
-      animateCounter(document.getElementById('kpiUpcoming'), 1);
-      animateCounter(document.getElementById('kpiRequests'), 2);
-      animateCounter(document.getElementById('kpiDocs'), 4);
-      animateCounter(document.getElementById('kpiPayments'), 15000, true);
-    } else {
-      // NEW / REAL USER: show zeros — real data would come from live API calls
+    if (!currentUser) {
+      // Fallback to zeros if not authenticated
       animateCounter(document.getElementById('kpiUpcoming'), 0);
       animateCounter(document.getElementById('kpiRequests'), 0);
       animateCounter(document.getElementById('kpiDocs'), 0);
       animateCounter(document.getElementById('kpiPayments'), 0, true);
-
-      // Clear stat delta subtitles ("Next: 2026-08-05", "1 Under Review", etc.)
       document.querySelectorAll('.stat-card__delta').forEach(d => d.textContent = '');
+      return;
     }
+    
+    // Fetch live data
+    const clientId = currentUser.user_id;
+    
+    // 1. Appointments
+    let upcomingCount = 0;
+    try {
+      const appts = await window.appointmentsApi.list();
+      const myAppts = appts.filter(a => String(a.client_id) === String(clientId) && (a.status === 'Pending' || a.status === 'Confirmed'));
+      upcomingCount = myAppts.length;
+    } catch(e) { console.error(e); }
+    
+    // 2. Documents
+    let docsCount = 0;
+    try {
+      const docs = await window.clientDocumentsApi.list(clientId);
+      docsCount = docs.length;
+    } catch(e) { console.error(e); }
+    
+    // 3. Payments
+    let totalPayments = 0;
+    try {
+      const payments = await window.paymentsApi.list();
+      const myPayments = payments.filter(p => String(p.client_id) === String(clientId));
+      totalPayments = myPayments.reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
+    } catch(e) { console.error(e); }
+    
+    // 4. Requests (Backend not implemented yet, default to 0)
+    let requestsCount = 0;
+    
+    // Animate the counters with real data
+    animateCounter(document.getElementById('kpiUpcoming'), upcomingCount);
+    animateCounter(document.getElementById('kpiRequests'), requestsCount);
+    animateCounter(document.getElementById('kpiDocs'), docsCount);
+    animateCounter(document.getElementById('kpiPayments'), totalPayments, true);
+
+    // Clear stat delta subtitles for real data, or update them based on the data if needed
+    document.querySelectorAll('.stat-card__delta').forEach(d => d.textContent = '');
 
     // Fetch live availability slots & consultation packages for context check
     const [slots, pkgs] = await Promise.all([
