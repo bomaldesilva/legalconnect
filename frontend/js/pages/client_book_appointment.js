@@ -15,10 +15,12 @@ const state = {
   selectedSlot: null,
   selectedDate: '',
   consultationMode: 'Online Video Consultation',
-  clientName: 'Demo Client',
-  clientEmail: 'client@legalconnect.lk',
-  clientPhone: '+94 77 123 4567',
-  clientNotes: ''
+  clientName: '',
+  clientEmail: '',
+  clientPhone: '',
+  clientNotes: '',
+  clientId: null,
+  lawyerId: null
 };
 
 // ── Fallback Demo Data (Used if API returns empty array) ──────────────────────
@@ -180,6 +182,7 @@ function renderPackages() {
   
   const filtered = rawPkgs.filter(p => {
     if (p.status && p.status !== 'Active') return false;
+    if (String(p.lawyer_id) !== String(state.lawyerId)) return false;
     if (state.selectedCategoryId === 'all') return true;
     return String(p.category_id) === String(state.selectedCategoryId);
   });
@@ -235,8 +238,9 @@ function initDateFilter() {
 
   const allSlots = state.slots.length > 0 ? state.slots : FALLBACK_SLOTS;
   const availDates = allSlots
-    .filter(s => s.status === 'Available')
+    .filter(s => s.status === 'Available' && String(s.lawyer_id) === String(state.lawyerId))
     .map(s => s.available_date)
+    .filter((v, i, a) => a.indexOf(v) === i)
     .sort();
 
   const initialDate = availDates[0] || new Date().toISOString().slice(0, 10);
@@ -262,6 +266,7 @@ function renderSlots() {
 
   const filtered = rawSlots.filter(s => {
     if (s.status && s.status !== 'Available') return false;
+    if (String(s.lawyer_id) !== String(state.lawyerId)) return false;
     if (state.selectedDate === 'all' || !state.selectedDate) return true;
     return s.available_date === state.selectedDate;
   });
@@ -391,8 +396,8 @@ btnNext?.addEventListener('click', async () => {
     const pkg  = state.selectedPackage;
 
     const payload = {
-      client_id:        3,          // Demo client ID
-      lawyer_id:        2,          // Demo lawyer ID
+      client_id:        state.clientId,
+      lawyer_id:        state.lawyerId,
       slot_id:          slot ? slot.slot_id        : null,
       package_id:       pkg  ? pkg.package_id      : null,
       appointment_date: slot ? slot.available_date : '',
@@ -421,6 +426,25 @@ btnNext?.addEventListener('click', async () => {
 
 // ── Initialize App ────────────────────────────────────────────────────────────
 (async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetLawyerId = parseInt(urlParams.get('lawyer'));
+  if (!targetLawyerId) {
+    LC.showToast('No lawyer specified. Redirecting...', 'error');
+    setTimeout(() => window.location.href = 'client_lawyers.html', 1500);
+    return;
+  }
+  state.lawyerId = targetLawyerId;
+
+  try {
+    const user = await window.authApi.me();
+    state.clientId = user.user_id;
+    state.clientName = user.first_name + ' ' + user.last_name;
+    state.clientEmail = user.email;
+  } catch(err) {
+    window.location.href = 'login.html';
+    return;
+  }
+
   try {
     const [catData, pkgData, slotData] = await Promise.all([
       window.legalCategories?.list().catch(() => []) || [],

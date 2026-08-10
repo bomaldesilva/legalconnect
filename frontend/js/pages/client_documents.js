@@ -1,51 +1,32 @@
-// LegalConnect Client Document Portal Logic
+/**
+ * LegalConnect — Client Document Portal Logic
+ * Implements full CRUD (Create, Read, Update, Delete) against the backend API.
+ */
+'use strict';
 
-// DEMO DATA for Client Documents (Module 8 storage backend pending)
-const DEMO_DOCUMENTS = [
-  {
-    doc_id: 1,
-    file_name: 'NIC_Copy.pdf',
-    category: 'Identity Document',
-    file_size: '1.2 MB',
-    upload_date: '2026-07-20',
-    status: 'Approved',
-    file_type: 'pdf',
-    notes: 'National Identity Card copy submitted for client identity authentication.'
-  },
-  {
-    doc_id: 2,
-    file_name: 'Property_Deed_Kandy.pdf',
-    category: 'Property Deed',
-    file_size: '4.5 MB',
-    upload_date: '2026-07-25',
-    status: 'Reviewed',
-    file_type: 'pdf',
-    notes: 'Land title deed folio extract 482/12 from Kandy District Land Registry.'
-  },
-  {
-    doc_id: 3,
-    file_name: 'Legal_Opinion_Draft.docx',
-    category: 'Legal Advice',
-    file_size: '850 KB',
-    upload_date: '2026-07-30',
-    status: 'Uploaded',
-    file_type: 'docx',
-    notes: 'Draft legal opinion note prepared by Demo Lawyer regarding boundary dispute.'
-  }
-];
-
+// ── Constants & State ─────────────────────────────────────────────────────────
+let CLIENT_ID = null;
+let documentsData = [];
 let activeDocFilter = 'All';
 let searchDocQuery = '';
 
-document.addEventListener('DOMContentLoaded', () => {
+// ── Init ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const user = await window.authApi.me();
+    CLIENT_ID = user.user_id;
+  } catch(err) {
+    window.location.href = 'login.html';
+    return;
+  }
+  
   initDocPage();
 });
 
 function initDocPage() {
-  updateDocKPIs();
-  renderDocTable();
   setupDocEventListeners();
   setupDropzone();
+  loadDocuments();
 
   // Sidebar toggle
   document.getElementById('sidebarToggle')?.addEventListener('click', () => {
@@ -53,6 +34,25 @@ function initDocPage() {
   });
 }
 
+// ── Load Data (READ) ──────────────────────────────────────────────────────────
+async function loadDocuments() {
+  try {
+    documentsData = await window.clientDocumentsApi.list(CLIENT_ID);
+    updateDocKPIs();
+    renderDocTable();
+  } catch (err) {
+    console.error(err);
+    if (window.LC?.showToast) {
+      window.LC.showToast('Failed to load documents.', 'error');
+    }
+    const tbody = document.getElementById('documentsTableBody');
+    if (tbody) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:red;">Error loading documents.</td></tr>`;
+    }
+  }
+}
+
+// ── Rendering & UI Helpers ────────────────────────────────────────────────────
 function getStatusBadgeClass(status) {
   switch (status) {
     case 'Approved': return 'badge--success';
@@ -72,9 +72,9 @@ function getFileIcon(fileName) {
 }
 
 function updateDocKPIs() {
-  const total = DEMO_DOCUMENTS.length;
-  const approved = DEMO_DOCUMENTS.filter(d => d.status === 'Approved').length;
-  const reviewed = DEMO_DOCUMENTS.filter(d => d.status === 'Reviewed' || d.status === 'Uploaded').length;
+  const total = documentsData.length;
+  const approved = documentsData.filter(d => d.status === 'Approved').length;
+  const reviewed = documentsData.filter(d => d.status === 'Reviewed' || d.status === 'Uploaded').length;
 
   const totalEl = document.getElementById('kpiTotalDocs');
   const approvedEl = document.getElementById('kpiApprovedDocs');
@@ -92,21 +92,21 @@ function renderDocTable() {
 
   if (!tbody) return;
 
-  let filtered = DEMO_DOCUMENTS.filter(d => {
+  let filtered = documentsData.filter(d => {
     if (activeDocFilter !== 'All') {
       if (activeDocFilter === 'Approved' && d.status !== 'Approved') return false;
       if (activeDocFilter !== 'Approved' && d.category !== activeDocFilter) return false;
     }
     if (searchDocQuery) {
       const q = searchDocQuery.toLowerCase();
-      if (!d.file_name.toLowerCase().includes(q) && !d.category.toLowerCase().includes(q)) {
+      if (!d.file_name.toLowerCase().includes(q) && !(d.category || '').toLowerCase().includes(q)) {
         return false;
       }
     }
     return true;
   });
 
-  if (resultsCount) resultsCount.textContent = `Showing ${filtered.length} results`;
+  if (resultsCount) resultsCount.textContent = `Showing ${filtered.length} result${filtered.length !== 1 ? 's' : ''}`;
 
   if (filtered.length === 0) {
     tbody.innerHTML = '';
@@ -129,14 +129,15 @@ function renderDocTable() {
             <span style="font-weight:600;color:var(--navy);">${window.LC?.escapeHtml(d.file_name)}</span>
           </div>
         </td>
-        <td style="padding:12px 10px;color:#475569;">${window.LC?.escapeHtml(d.category)}</td>
-        <td style="padding:12px 10px;color:#64748b;font-size:0.8rem;">${d.file_size}</td>
+        <td style="padding:12px 10px;color:#475569;">${window.LC?.escapeHtml(d.category || 'General')}</td>
+        <td style="padding:12px 10px;color:#64748b;font-size:0.8rem;">${d.file_size || 'N/A'}</td>
         <td style="padding:12px 10px;color:#64748b;">${d.upload_date}</td>
         <td style="padding:12px 10px;">${statusHtml}</td>
         <td style="padding:12px 10px;">
           <div style="display:flex;gap:6px;flex-wrap:wrap;">
             <button class="btn btn--secondary btn--sm" onclick="openDocModal(${d.doc_id})">View</button>
-            <button class="btn btn--secondary btn--sm" onclick="downloadDoc(${d.doc_id})">📥 Download</button>
+            <button class="btn btn--secondary btn--sm" onclick="openEditModal(${d.doc_id})">Edit</button>
+            <button class="btn btn--secondary btn--sm" onclick="downloadDoc(${d.doc_id}, '${d.file_path}')">📥 Download</button>
             <button class="btn btn--danger btn--sm" onclick="deleteDoc(${d.doc_id})">Delete</button>
           </div>
         </td>
@@ -163,8 +164,35 @@ function setupDocEventListeners() {
   });
 
   document.getElementById('closeDocModalBtn')?.addEventListener('click', closeDocModal);
+  
+  // Edit Form Submit (UPDATE)
+  document.getElementById('saveEditDocBtn')?.addEventListener('click', async () => {
+    const docId = document.getElementById('editDocId').value;
+    const category = document.getElementById('editDocCategory').value;
+    const notes = document.getElementById('editDocNotes').value;
+    
+    try {
+      const btn = document.getElementById('saveEditDocBtn');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      
+      await window.clientDocumentsApi.update(docId, { client_id: CLIENT_ID, category, notes });
+      
+      if (window.LC?.showToast) window.LC.showToast('Document updated successfully', 'success');
+      closeEditDocModal();
+      await loadDocuments();
+    } catch (err) {
+      console.error(err);
+      if (window.LC?.showToast) window.LC.showToast('Failed to update document', 'error');
+    } finally {
+      const btn = document.getElementById('saveEditDocBtn');
+      btn.disabled = false;
+      btn.textContent = 'Save Changes';
+    }
+  });
 }
 
+// ── Create Document ───────────────────────────────────────────────────────────
 function setupDropzone() {
   const dropzone = document.getElementById('dropzone');
   const fileInput = document.getElementById('fileInput');
@@ -208,7 +236,8 @@ function setupDropzone() {
   });
 }
 
-function handleFilesUpload(files) {
+async function handleFilesUpload(files) {
+  const file = files[0];
   const progressArea = document.getElementById('uploadProgressArea');
   const progressBar = document.getElementById('uploadProgressBar');
   const statusText = document.getElementById('uploadStatusText');
@@ -216,68 +245,58 @@ function handleFilesUpload(files) {
   if (progressArea) progressArea.style.display = 'block';
   if (statusText) {
     statusText.style.display = 'block';
-    statusText.textContent = `Uploading ${files[0].name}... (UI demonstration)`;
+    statusText.textContent = `Uploading ${file.name}...`;
   }
+  
+  if (progressBar) progressBar.style.width = '50%';
 
-  let progress = 0;
-  const interval = setInterval(() => {
-    progress += 25;
-    if (progressBar) progressBar.style.width = `${progress}%`;
+  try {
+    const formData = new FormData();
+    formData.append('document', file);
+    formData.append('client_id', CLIENT_ID);
+    
+    // Auto-detect category based on extension for better UX
+    const ext = file.name.split('.').pop().toLowerCase();
+    const category = ext === 'pdf' ? 'Property Deed' : 'Identity Document';
+    formData.append('category', category);
 
-    if (progress >= 100) {
-      clearInterval(interval);
-      setTimeout(() => {
-        if (progressArea) progressArea.style.display = 'none';
-        if (statusText) statusText.style.display = 'none';
-        if (progressBar) progressBar.style.width = '0%';
+    await window.clientDocumentsApi.upload(formData);
+    
+    if (progressBar) progressBar.style.width = '100%';
+    if (window.LC?.showToast) window.LC.showToast(`Document "${file.name}" uploaded successfully!`, 'success');
+    
+    setTimeout(() => {
+      if (progressArea) progressArea.style.display = 'none';
+      if (progressBar) progressBar.style.width = '0%';
+    }, 500);
 
-        // Add demo document to array
-        const fileName = files[0].name;
-        const ext = fileName.split('.').pop().toLowerCase();
-        const category = ext === 'pdf' ? 'Property Deed' : 'Identity Document';
-        
-        const newDoc = {
-          doc_id: DEMO_DOCUMENTS.length + 1,
-          file_name: fileName,
-          category: category,
-          file_size: `${(files[0].size / (1024 * 1024)).toFixed(1)} MB`,
-          upload_date: new Date().toISOString().split('T')[0],
-          status: 'Uploaded',
-          file_type: ext,
-          notes: 'Uploaded by client via drag-and-drop portal.'
-        };
-
-        // // DEMO DATA
-        DEMO_DOCUMENTS.unshift(newDoc);
-        updateDocKPIs();
-        renderDocTable();
-
-        if (window.LC?.showToast) {
-          window.LC.showToast(`Document "${fileName}" uploaded successfully! (UI demonstration)`, 'success');
-        } else {
-          alert(`Document "${fileName}" uploaded successfully! (UI demonstration)`);
-        }
-      }, 400);
-    }
-  }, 150);
+    // Refresh list
+    await loadDocuments();
+  } catch (err) {
+    console.error(err);
+    if (window.LC?.showToast) window.LC.showToast(`Upload failed: ${err.message}`, 'error');
+    if (progressArea) progressArea.style.display = 'none';
+  }
 }
 
+// ── View Document (READ Details) ──────────────────────────────────────────────
 window.openDocModal = function(id) {
-  const doc = DEMO_DOCUMENTS.find(d => d.doc_id === id);
+  const doc = documentsData.find(d => d.doc_id === id);
   if (!doc) return;
 
   const icon = getFileIcon(doc.file_name);
   document.getElementById('docIconLarge').textContent = icon;
   document.getElementById('modalDocTitle').textContent = doc.file_name;
-  document.getElementById('modalDocCategoryBadge').innerHTML = `<span class="badge badge--primary">${doc.category}</span>`;
-  document.getElementById('modalDocSize').textContent = doc.file_size;
+  document.getElementById('modalDocCategoryBadge').innerHTML = `<span class="badge badge--primary">${doc.category || 'General'}</span>`;
+  document.getElementById('modalDocSize').textContent = doc.file_size || 'N/A';
   document.getElementById('modalDocDate').textContent = doc.upload_date;
   document.getElementById('modalDocStatus').innerHTML = `<span class="badge ${getStatusBadgeClass(doc.status)}">${doc.status}</span>`;
   document.getElementById('modalDocNotes').textContent = doc.notes || 'No notes available.';
 
   const footerHtml = `
     <button class="btn btn--danger" onclick="deleteDoc(${id});closeDocModal();">Delete File</button>
-    <button class="btn btn--secondary" onclick="downloadDoc(${id})">📥 Download File</button>
+    <button class="btn btn--secondary" onclick="openEditModal(${id});closeDocModal();">Edit Details</button>
+    <button class="btn btn--secondary" onclick="downloadDoc(${id}, '${doc.file_path}')">📥 Download File</button>
     <button class="btn btn--primary" onclick="closeDocModal()">Close</button>
   `;
 
@@ -289,17 +308,33 @@ window.closeDocModal = function() {
   document.getElementById('viewDocModal').classList.remove('lc-appt-modal--open');
 };
 
-window.downloadDoc = function(id) {
-  const doc = DEMO_DOCUMENTS.find(d => d.doc_id === id);
+// ── Edit Document (UPDATE) ────────────────────────────────────────────────────
+window.openEditModal = function(id) {
+  const doc = documentsData.find(d => d.doc_id === id);
+  if (!doc) return;
+  
+  document.getElementById('editDocId').value = doc.doc_id;
+  document.getElementById('editDocCategory').value = doc.category || 'General';
+  document.getElementById('editDocNotes').value = doc.notes || '';
+  
+  document.getElementById('editDocModal').classList.add('lc-appt-modal--open');
+};
+
+window.closeEditDocModal = function() {
+  document.getElementById('editDocModal').classList.remove('lc-appt-modal--open');
+};
+
+// ── Download Document (Mocked) ────────────────────────────────────────────────
+window.downloadDoc = function(id, path) {
+  const doc = documentsData.find(d => d.doc_id === id);
   if (window.LC?.showToast) {
-    window.LC.showToast(`Downloading "${doc ? doc.file_name : 'document'}"... (Demo Placeholder)`, 'info');
-  } else {
-    alert(`Downloading "${doc ? doc.file_name : 'document'}"... (Demo Placeholder)`);
+    window.LC.showToast(`Downloading "${doc ? doc.file_name : 'document'}"...`, 'info');
   }
 };
 
-window.deleteDoc = function(id) {
-  const doc = DEMO_DOCUMENTS.find(d => d.doc_id === id);
+// ── Delete Document (DELETE) ──────────────────────────────────────────────────
+window.deleteDoc = async function(id) {
+  const doc = documentsData.find(d => d.doc_id === id);
   if (!doc) return;
 
   if (window.LC?.openConfirmModal) {
@@ -307,27 +342,25 @@ window.deleteDoc = function(id) {
       `Are you sure you want to delete "${doc.file_name}"? This action cannot be undone.`,
       'Delete Document',
       'danger'
-    ).then((confirmed) => {
+    ).then(async (confirmed) => {
       if (confirmed) {
-        const index = DEMO_DOCUMENTS.findIndex(d => d.doc_id === id);
-        if (index !== -1) {
-          DEMO_DOCUMENTS.splice(index, 1);
-          if (window.LC?.showToast) {
-            window.LC.showToast('Document deleted (demo)', 'info');
-          }
-          updateDocKPIs();
-          renderDocTable();
-        }
+        await executeDelete(id);
       }
     });
   } else {
     if (confirm(`Delete document ${doc.file_name}?`)) {
-      const index = DEMO_DOCUMENTS.findIndex(d => d.doc_id === id);
-      if (index !== -1) {
-        DEMO_DOCUMENTS.splice(index, 1);
-        updateDocKPIs();
-        renderDocTable();
-      }
+      await executeDelete(id);
     }
   }
 };
+
+async function executeDelete(id) {
+  try {
+    await window.clientDocumentsApi.delete(id, CLIENT_ID);
+    if (window.LC?.showToast) window.LC.showToast('Document deleted', 'success');
+    await loadDocuments();
+  } catch (err) {
+    console.error(err);
+    if (window.LC?.showToast) window.LC.showToast('Failed to delete document', 'error');
+  }
+}

@@ -2,12 +2,15 @@ const API_BASE_URL = window.LEGALCONNECT_API_BASE_URL
   || `${window.location.origin}/legalconnect/backend/public/api`;
 
 async function request(path, options = {}) {
+  const isFormData = options.body instanceof FormData;
+  const headers = {
+    ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+    ...(options.headers || {}),
+  };
+
   const response = await fetch(`${API_BASE_URL}${path}`, {
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {}),
-    },
+    headers,
     ...options,
   });
 
@@ -100,6 +103,17 @@ const notificationsApi = {
   markAllRead: (userId) => request(`/notifications/mark-all-read`, jsonOptions('PUT', { user_id: userId })),
 };
 
+const lawyerSearchApi = {
+  list: () => request('/lawyers'),
+};
+
+const clientDocumentsApi = {
+  list:   (clientId) => request(`/client-documents?client_id=${clientId}`),
+  upload: (formData) => request('/client-documents', { method: 'POST', body: formData }),
+  update: (id, data) => request(`/client-documents/${id}`, jsonOptions('PUT', data)),
+  delete: (id, clientId) => request(`/client-documents/${id}?client_id=${clientId}`, { method: 'DELETE' })
+};
+
 window.legalCategories    = legalCategories;
 window.availabilitySlots  = availabilitySlots;
 window.consultationPackages = consultationPackages;
@@ -109,4 +123,6 @@ window.dashboardApi       = dashboardApi;
 window.lawyerProfileApi   = lawyerProfileApi;
 window.authApi            = authApi;
 window.notificationsApi   = notificationsApi;
+window.lawyerSearchApi    = lawyerSearchApi;
+window.clientDocumentsApi = clientDocumentsApi;
 

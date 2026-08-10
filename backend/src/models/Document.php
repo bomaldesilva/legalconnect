@@ -39,22 +39,83 @@ class Document
     }
 
     /**
+     * Section: Fetch Client Documents
+     */
+    public function getClientDocuments(int $clientId): array
+    {
+        $statement = $this->db->prepare(
+            "SELECT 
+                document_id AS doc_id,
+                file_name,
+                category,
+                file_size,
+                DATE(uploaded_at) AS upload_date,
+                document_status AS status,
+                file_type,
+                notes,
+                file_path
+             FROM documents
+             WHERE uploaded_by_user_id = :client_id
+             ORDER BY uploaded_at DESC"
+        );
+        $statement->execute(['client_id' => $clientId]);
+        
+        return $statement->fetchAll();
+    }
+
+    /**
      * Section: Create Document
      */
     public function create(array $data): int
     {
         $statement = $this->db->prepare(
-            "INSERT INTO documents (case_id, uploaded_by_user_id, file_name, file_path, file_type, document_status)
-             VALUES (:case_id, :user_id, :file_name, :file_path, :file_type, 'Uploaded')"
+            "INSERT INTO documents (case_id, uploaded_by_user_id, file_name, file_path, file_type, category, file_size, notes, document_status)
+             VALUES (:case_id, :user_id, :file_name, :file_path, :file_type, :category, :file_size, :notes, 'Uploaded')"
         );
         $statement->execute([
-            'case_id' => $data['case_id'] ? (int) $data['case_id'] : null,
+            'case_id' => !empty($data['case_id']) ? (int) $data['case_id'] : null,
             'user_id' => (int) $data['uploaded_by_user_id'],
             'file_name' => $data['file_name'],
             'file_path' => $data['file_path'],
-            'file_type' => $data['file_type']
+            'file_type' => $data['file_type'] ?? null,
+            'category'  => $data['category'] ?? null,
+            'file_size' => $data['file_size'] ?? null,
+            'notes'     => $data['notes'] ?? null
         ]);
 
         return (int) $this->db->lastInsertId();
+    }
+
+    /**
+     * Section: Update Document
+     */
+    public function update(int $docId, array $data): bool
+    {
+        $statement = $this->db->prepare(
+            "UPDATE documents 
+             SET category = :category, notes = :notes 
+             WHERE document_id = :doc_id AND uploaded_by_user_id = :client_id"
+        );
+        return $statement->execute([
+            'category' => $data['category'] ?? null,
+            'notes'    => $data['notes'] ?? null,
+            'doc_id'   => $docId,
+            'client_id'=> (int) $data['client_id']
+        ]);
+    }
+
+    /**
+     * Section: Delete Document
+     */
+    public function delete(int $docId, int $clientId): bool
+    {
+        // Delete the database record
+        $statement = $this->db->prepare(
+            "DELETE FROM documents WHERE document_id = :doc_id AND uploaded_by_user_id = :client_id"
+        );
+        return $statement->execute([
+            'doc_id' => $docId,
+            'client_id' => $clientId
+        ]);
     }
 }

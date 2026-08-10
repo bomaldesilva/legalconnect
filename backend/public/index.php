@@ -50,6 +50,7 @@ require_once __DIR__ . '/../src/controllers/LawyerProfileController.php';
 require_once __DIR__ . '/../src/controllers/ClientRecordController.php';
 require_once __DIR__ . '/../src/controllers/CaseController.php';
 require_once __DIR__ . '/../src/controllers/DocumentController.php';
+require_once __DIR__ . '/../src/controllers/ClientDocumentController.php';
 require_once __DIR__ . '/../src/controllers/DocumentTemplateController.php';
 require_once __DIR__ . '/../src/controllers/AuthController.php';
 require_once __DIR__ . '/../src/controllers/NotificationController.php';
@@ -118,6 +119,7 @@ try {
     $clientRecordController      = new ClientRecordController($clientRecordService);
     $caseController              = new CaseController($caseService);
     $documentController          = new DocumentController($documentService);
+    $clientDocumentController    = new ClientDocumentController($documentService);
     $documentTemplateController  = new DocumentTemplateController($documentTemplateService);
     $authController              = new AuthController($authService);
     $notificationController      = new NotificationController($notificationService);
@@ -205,12 +207,23 @@ try {
         exit;
     }
 
+    if (preg_match('#^/api/client-documents/?(\d+)?$#', $path, $matches)) {
+        routeCrud($method, $matches[1] ?? null, $clientDocumentController);
+        exit;
+    }
+
     if (preg_match('#^/api/templates/?(\d+)?$#', $path, $matches)) {
         routeCrud($method, $matches[1] ?? null, $documentTemplateController);
         exit;
     }
 
     // ── Lawyer Profile routes ────────────────────────────────────────────────
+
+    // GET /api/lawyers
+    if (preg_match('#^/api/lawyers$#', $path, $matches) && $method === 'GET') {
+        $lawyerProfileController->index();
+        exit;
+    }
 
     // GET /api/lawyer-profile/{id}/public
     if (preg_match('#^/api/lawyer-profile/(\d+)/public$#', $path, $matches) && $method === 'GET') {

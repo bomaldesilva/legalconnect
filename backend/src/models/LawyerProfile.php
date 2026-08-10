@@ -20,6 +20,33 @@ class LawyerProfile
     // ─── Core profile ─────────────────────────────────────────────────────────
 
     /**
+     * Returns a list of all verified (Active) lawyers, including user details.
+     */
+    public function getAllVerifiedLawyers(): array
+    {
+        $statement = $this->db->prepare(
+            "SELECT
+                u.user_id,
+                u.first_name,
+                u.last_name,
+                u.email,
+                l.lawyer_id,
+                l.bar_registration_no,
+                l.supreme_court_no,
+                l.experience_years,
+                l.education,
+                l.bio,
+                l.rating,
+                l.court,
+                l.status AS lawyer_status
+             FROM lawyers l
+             INNER JOIN users u ON u.user_id = l.lawyer_id
+             WHERE l.status = 'Active' AND u.status = 'Active'"
+        );
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+    /**
      * Returns the combined user + lawyer row for a given lawyer_id,
      * including the latest verification record (if any).
      */

@@ -16,6 +16,23 @@ class LawyerProfileService
     // ─── Read operations ──────────────────────────────────────────────────────
 
     /**
+     * Returns all verified (Active) lawyers with their categories and packages.
+     * Used for the public lawyer discovery/search page.
+     */
+    public function getAllVerifiedProfiles(): array
+    {
+        $lawyers = $this->model->getAllVerifiedLawyers();
+
+        // Attach categories and packages to each lawyer
+        foreach ($lawyers as &$lawyer) {
+            $lawyerId = (int) $lawyer['lawyer_id'];
+            $lawyer['categories'] = $this->model->getCategories($lawyerId);
+            $lawyer['package_summary'] = $this->model->getPackageSummary($lawyerId);
+        }
+        
+        return $lawyers;
+    }
+    /**
      * Returns the full profile for a given lawyer.
      *
      * @throws RuntimeException 404 if the lawyer does not exist.

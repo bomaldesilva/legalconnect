@@ -25,6 +25,20 @@ class LawyerProfileController
     // ─── Profile ──────────────────────────────────────────────────────────────
 
     /**
+     * GET /api/lawyers
+     * Returns all verified lawyers.
+     */
+    public function index(): void
+    {
+        try {
+            Response::success($this->service->getAllVerifiedProfiles(), 'Verified lawyers loaded.');
+        } catch (RuntimeException $exception) {
+            $code = $exception->getCode();
+            $code = (is_int($code) && $code >= 400 && $code <= 599) ? $code : 500;
+            Response::error($exception->getMessage(), $code);
+        }
+    }
+    /**
      * GET /api/lawyer-profile/{id}
      * Returns the full editable profile for the given lawyer.
      */

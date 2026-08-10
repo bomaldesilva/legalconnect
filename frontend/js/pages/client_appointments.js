@@ -6,7 +6,7 @@
 'use strict';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const CLIENT_ID = 3;
+let CLIENT_ID = null;
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let allAppointments = [];
@@ -14,7 +14,14 @@ let activeFilter    = 'All';
 let searchQuery     = '';
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const user = await window.authApi.me();
+    CLIENT_ID = user.user_id;
+  } catch(err) {
+    window.location.href = 'login.html';
+    return;
+  }
   document.getElementById('sidebarToggle')?.addEventListener('click', () => {
     document.getElementById('sidebar').classList.toggle('sidebar--open');
   });
